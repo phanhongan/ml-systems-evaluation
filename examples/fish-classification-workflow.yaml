@@ -1,30 +1,59 @@
 system:
-  name: "Fish Species Classification Pipeline"
+  name: "Echogram Fish Species Classification Pipeline"
   type: "workflow"
-  stages: ["preprocessing", "feature_extraction", "classification", "postprocessing"]
+  stages: ["echogram_preprocessing", "feature_extraction", "species_classification", "catch_optimization"]
+  criticality: "business_critical"
 
 slos:
-  pipeline_accuracy:
+  species_accuracy:
     target: 0.95
     window: "24h"
     error_budget: 0.05
-  end_to_end_latency:
-    target: 500
+    description: "Accuracy of fish species identification from echogram data"
+  
+  real_time_latency:
+    target: 200
     window: "1h"
     error_budget: 0.1
-  data_quality_score:
+    description: "End-to-end processing time for echogram classification (ms)"
+  
+  echogram_quality:
     target: 0.98
     window: "12h"
     error_budget: 0.02
+    description: "Quality score of incoming echogram data from underwater devices"
+  
+  bycatch_prevention:
+    target: 0.99
+    window: "24h"
+    error_budget: 0.01
+    description: "Accuracy in identifying protected species to prevent bycatch"
+
+fishing_conditions:
+  depth_range: [10, 200]  # meters
+  water_temperature: [2, 25]  # celsius
+  device_types: ["trawl_net", "gill_net", "longline"]
 
 collectors:
   - type: "online"
-    endpoint: "http://pipeline-metrics:9090"
+    endpoint: "http://fishing-vessel-metrics:9090"
+    metrics: ["echogram_quality", "species_detection_rate", "processing_latency"]
+  
   - type: "offline"
-    log_paths: ["/var/log/fish-pipeline/"]
+    log_paths: ["/var/log/echogram-pipeline/", "/var/log/fishing-operations/"]
+  
+  - type: "environmental"
+    sources: ["water_temperature", "depth_sensor", "current_speed"]
 
 evaluators:
   - type: "reliability"
     error_budget_window: "30d"
+    critical_metrics: ["species_accuracy", "bycatch_prevention"]
+  
   - type: "performance"
-    metrics: ["accuracy", "latency", "throughput"] 
+    metrics: ["accuracy", "latency", "throughput"]
+    real_time_threshold: 500  # ms
+  
+  - type: "environmental"
+    drift_detection: ["water_conditions", "echogram_characteristics"]
+    adaptation_threshold: 0.1 

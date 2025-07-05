@@ -103,15 +103,6 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **Customer Trust**: Reliable ML systems build user confidence
 - **Innovation Velocity**: Safe experimentation with new ML approaches
 
-## Philosophy
-
-This framework treats ML systems as critical infrastructure, applying SRE concepts:
-- **Error Budgets**: Acceptable failure rates for different system components
-- **SLIs/SLOs**: Service Level Indicators and Objectives for ML performance
-- **Observability**: Comprehensive monitoring and alerting
-- **Reliability**: Focus on system uptime and consistent performance
-- **Incident Response**: Structured approach to handling ML system failures
-
 ## Key Features
 
 - **Multi-Modal Evaluation**: Support for single models and orchestrated workflows

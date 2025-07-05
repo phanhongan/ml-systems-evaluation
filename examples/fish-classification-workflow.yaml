@@ -1,0 +1,30 @@
+system:
+  name: "Fish Species Classification Pipeline"
+  type: "workflow"
+  stages: ["preprocessing", "feature_extraction", "classification", "postprocessing"]
+
+slos:
+  pipeline_accuracy:
+    target: 0.95
+    window: "24h"
+    error_budget: 0.05
+  end_to_end_latency:
+    target: 500
+    window: "1h"
+    error_budget: 0.1
+  data_quality_score:
+    target: 0.98
+    window: "12h"
+    error_budget: 0.02
+
+collectors:
+  - type: "online"
+    endpoint: "http://pipeline-metrics:9090"
+  - type: "offline"
+    log_paths: ["/var/log/fish-pipeline/"]
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+  - type: "performance"
+    metrics: ["accuracy", "latency", "throughput"] 

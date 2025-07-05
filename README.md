@@ -58,23 +58,38 @@ This framework treats ML systems as critical infrastructure, applying SRE concep
 ## Quick Start
 
 ### Installation
+
 ```bash
-pip install ml-eval
+# Clone the repository
+git clone <repository-url>
+cd ml-systems-evaluation
+
+# Install in development mode
+pip install -e .
 ```
 
 ### Basic Usage
-```bash
-# Evaluate workflow (Fish Species Classification)
-ml-eval evaluate --config fish-classification-workflow.yaml --mode workflow
 
-# Evaluate single model (Aircraft Landing)
-ml-eval evaluate --config aircraft-landing-model.yaml --mode single
+```bash
+# Show available commands
+ml-eval --help
+
+# Show example configurations
+ml-eval example --type fish-workflow
+ml-eval example --type aircraft-model
 
 # Generate reliability report
 ml-eval report --type reliability --period 30d
+
+# Evaluate workflow (Fish Species Classification)
+ml-eval evaluate --config examples/fish-classification-workflow.yaml --mode workflow
+
+# Evaluate single model (Aircraft Landing)
+ml-eval evaluate --config examples/aircraft-landing-model.yaml --mode single
 ```
 
 ### Configuration Example
+
 ```yaml
 # fish-classification-workflow.yaml
 system:
@@ -167,6 +182,35 @@ class DomainSpecificCollector(CustomCollector):
     def collect(self) -> Dict[str, float]:
         # Custom metric collection logic
         return {"custom_metric": value}
+```
+
+## Development
+
+### Project Structure
+```
+ml-systems-evaluation/
+├── ml_eval/                 # Main package
+│   ├── __init__.py         # Package initialization
+│   ├── cli.py              # Command-line interface
+│   ├── core.py             # Core framework classes
+│   ├── collectors.py       # Metric collection interfaces
+│   ├── evaluators.py       # Evaluation logic
+│   ├── reports.py          # Report generation
+│   └── examples.py         # Example configurations
+├── examples/               # Example configuration files
+├── setup.py               # Package installation
+├── requirements.txt        # Dependencies
+└── README.md              # This file
+```
+
+### Running Tests
+```bash
+# Basic functionality test
+python -c "
+from ml_eval.core import EvaluationFramework, SLOConfig
+from ml_eval.reports import ReliabilityReport
+print('✅ Framework imports successfully')
+"
 ```
 
 ## Contributing

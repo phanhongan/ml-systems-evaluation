@@ -1,14 +1,17 @@
-"""Pytest configuration and common fixtures for ML Systems Evaluation Framework tests"""
+"""Test configuration and fixtures for ML Systems Evaluation Framework"""
+
+import tempfile
+from datetime import datetime, timedelta
+from typing import Any, Dict, List
 
 import pytest
-import tempfile
-import os
 import yaml
-from datetime import datetime, timedelta
-from typing import Dict, Any, List
 
-from ml_eval.core.types import SystemType, CriticalityLevel, ComplianceStandard
-from ml_eval.core.config import SLOConfig, ErrorBudget, MetricData
+from ml_eval.core.config import (
+    ErrorBudget,
+    MetricData,
+    SLOConfig,
+)
 
 
 @pytest.fixture
@@ -189,6 +192,17 @@ def safety_slos():
 
 
 @pytest.fixture
+def error_budget():
+    """Sample error budget for testing"""
+    return ErrorBudget(
+        slo_name="accuracy",
+        budget_remaining=0.03,
+        burn_rate=0.001,
+        alerts=["Budget consumption rate is high"],
+    )
+
+
+@pytest.fixture
 def temp_config_file():
     """Create a temporary configuration file"""
 
@@ -252,33 +266,24 @@ def mock_evaluator():
 
 
 @pytest.fixture
-def error_budget():
-    """Sample error budget for testing"""
-    return ErrorBudget(
-        slo_name="accuracy",
-        budget_remaining=0.03,
-        burn_rate=0.001,
-        alerts=["Budget consumption rate is high"],
-    )
-
-
-@pytest.fixture
 def evaluation_result():
     """Sample evaluation result for testing"""
-    from ml_eval.core.config import EvaluationResult
-
-    return EvaluationResult(
-        system_name="test_system",
-        evaluation_time=datetime.now(),
-        slo_compliance={"accuracy": True, "latency": True},
-        error_budgets={},
-        incidents=[],
-        recommendations=["Test recommendation"],
-        safety_violations=[],
-        regulatory_violations=[],
-        environmental_alerts=[],
-        business_impact_assessment={},
-    )
+    return {
+        "system_name": "test_system",
+        "timestamp": datetime.now(),
+        "overall_compliance": 0.95,
+        "has_critical_violations": False,
+        "requires_emergency_shutdown": False,
+        "evaluator_results": {
+            "PerformanceEvaluator": {
+                "compliance_score": 0.95,
+                "recommendations": ["Monitor performance trends"],
+                "alerts": [],
+            }
+        },
+        "recommendations": ["Monitor performance trends"],
+        "alerts": [],
+    }
 
 
 @pytest.fixture

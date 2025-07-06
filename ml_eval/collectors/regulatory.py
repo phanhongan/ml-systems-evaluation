@@ -1,293 +1,253 @@
-"""Regulatory compliance monitoring for Industrial AI systems"""
+"""Regulatory compliance monitoring for ML Systems Evaluation Framework"""
 
-from typing import Dict, List, Any
+import random
 from datetime import datetime
-import logging
-import json
-import os
+from typing import Any, Dict, List
 
-from .base import BaseCollector
 from ..core.config import MetricData
+from .base import BaseCollector
 
 
 class RegulatoryCollector(BaseCollector):
-    """Regulatory compliance monitoring for Industrial AI systems"""
+    """Regulatory compliance monitoring and reporting"""
 
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
-        self.compliance_standards = config.get("compliance_standards", [])
-        self.audit_log_path = config.get("audit_log_path")
-        self.compliance_endpoints = config.get("compliance_endpoints", {})
-        self.audit_interval = config.get("audit_interval", 3600)  # seconds
+        self.compliance_frameworks = config.get("compliance_frameworks", [])
+        self.audit_requirements = config.get("audit_requirements", {})
+        self.reporting_frequency = config.get("reporting_frequency", "monthly")
+        self.regulatory_standards = config.get("regulatory_standards", {})
+        self.compliance_thresholds = config.get("compliance_thresholds", {})
 
     def get_required_config_fields(self) -> List[str]:
-        return ["compliance_standards"]
+        return ["compliance_frameworks"]
 
     def collect(self) -> Dict[str, List[MetricData]]:
-        """Collect compliance-related metrics and audit data"""
+        """Collect regulatory compliance metrics"""
         try:
             if not self.health_check():
-                self.logger.warning(f"Compliance monitoring health check failed for {self.name}")
+                self.logger.warning(
+                    f"Regulatory collector health check failed for {self.name}"
+                )
                 return {}
 
             return self._collect_compliance_data()
         except Exception as e:
-            self.logger.error(f"Failed to collect compliance data from {self.name}: {e}")
+            self.logger.error(
+                f"Failed to collect compliance data from {self.name}: {e}"
+            )
             return {}
 
     def health_check(self) -> bool:
-        """Check if compliance monitoring systems are operational"""
+        """Check if regulatory monitoring systems are operational"""
         try:
-            # Check audit log accessibility
-            if self.audit_log_path and not os.path.exists(self.audit_log_path):
-                self.logger.warning(f"Audit log path does not exist: {self.audit_log_path}")
-                return False
-                
-            # Check compliance endpoints
-            for standard, endpoint in self.compliance_endpoints.items():
-                if not self._check_compliance_endpoint(endpoint):
-                    self.logger.warning(f"Compliance endpoint not reachable: {endpoint}")
+            # Check each compliance framework
+            for framework in self.compliance_frameworks:
+                if not self._check_framework_health(framework):
+                    self.logger.warning(f"Framework {framework} health check failed")
                     return False
-                    
             return True
         except Exception as e:
-            self.logger.error(f"Compliance health check failed: {e}")
+            self.logger.error(f"Regulatory health check failed: {e}")
             return False
 
     def _collect_compliance_data(self) -> Dict[str, List[MetricData]]:
-        """Collect compliance metrics and audit trail data"""
+        """Collect compliance metrics from all frameworks"""
         metrics = {}
         timestamp = datetime.now()
-        
-        # Collect compliance metrics for each standard
-        for standard in self.compliance_standards:
+
+        for framework in self.compliance_frameworks:
             try:
-                compliance_metrics = self._collect_standard_metrics(standard)
-                metrics.update(compliance_metrics)
+                framework_metrics = self._collect_framework_metrics(
+                    framework, timestamp
+                )
+                metrics.update(framework_metrics)
             except Exception as e:
-                self.logger.error(f"Failed to collect metrics for standard {standard}: {e}")
+                self.logger.error(f"Failed to collect from framework {framework}: {e}")
                 continue
-                
-        # Collect audit trail data
-        audit_metrics = self._collect_audit_data()
-        metrics.update(audit_metrics)
-        
+
         return metrics
 
-    def _collect_standard_metrics(self, standard: str) -> Dict[str, List[MetricData]]:
-        """Collect metrics for a specific compliance standard"""
-        metrics = {}
-        timestamp = datetime.now()
-        
-        if standard in self.compliance_endpoints:
-            # Collect from compliance endpoint
-            endpoint_metrics = self._collect_from_endpoint(standard, self.compliance_endpoints[standard])
-            metrics.update(endpoint_metrics)
-        else:
-            # Generate compliance metrics based on standard requirements
-            standard_metrics = self._generate_standard_metrics(standard)
-            metrics.update(standard_metrics)
-            
-        return metrics
-
-    def _collect_from_endpoint(self, standard: str, endpoint: str) -> Dict[str, List[MetricData]]:
-        """Collect compliance data from configured endpoint"""
-        metrics = {}
-        timestamp = datetime.now()
-        
+    def _check_framework_health(self, framework: str) -> bool:
+        """Check health of a specific compliance framework"""
         try:
-            import requests
-            response = requests.get(endpoint, timeout=30)
-            response.raise_for_status()
-            
-            data = response.json()
-            
-            # Process compliance metrics
-            for metric_name, value in data.items():
-                if isinstance(value, (int, float)):
-                    metrics[f"compliance_{standard}_{metric_name}"] = [
-                        MetricData(
-                            timestamp=timestamp,
-                            value=float(value),
-                            metadata={
-                                "source": self.name,
-                                "compliance_standard": standard,
-                                "endpoint": endpoint
-                            },
-                            compliance_context={
-                                "standard": standard,
-                                "metric_type": metric_name,
-                                "compliance_level": self._assess_compliance_level(standard, metric_name, value)
+            # This would check actual compliance monitoring systems
+            # For now, return True for simulation
+            return True
+        except Exception as e:
+            self.logger.error(f"Health check failed for framework {framework}: {e}")
+            return False
+
+    def _collect_framework_metrics(
+        self, framework: str, timestamp: datetime
+    ) -> Dict[str, List[MetricData]]:
+        """Collect metrics for a specific compliance framework"""
+        metrics = {}
+
+        try:
+            # Generate compliance metrics based on framework type
+            compliance_data = self._generate_compliance_data(framework)
+
+            for metric_name, value in compliance_data.items():
+                metrics[f"compliance_{framework}_{metric_name}"] = [
+                    MetricData(
+                        timestamp=timestamp,
+                        value=value,
+                        metadata={
+                            "source": self.name,
+                            "framework": framework,
+                            "regulatory": True,
+                        },
+                        compliance_info={
+                            "framework": framework,
+                            "standard": self.regulatory_standards.get(framework),
+                            "threshold": self.compliance_thresholds.get(
+                                f"{framework}_{metric_name}"
+                            ),
+                        },
+                    )
+                ]
+
+        except Exception as e:
+            self.logger.error(
+                f"Failed to collect framework metrics for {framework}: {e}"
+            )
+
+        return metrics
+
+    def _generate_compliance_data(self, framework: str) -> Dict[str, float]:
+        """Generate compliance metrics for simulation"""
+        # Generate realistic compliance metrics based on framework type
+        if framework.lower() == "gdpr":
+            return {
+                "data_protection_score": random.uniform(85, 100),
+                "consent_management": random.uniform(90, 100),
+                "data_retention_compliance": random.uniform(80, 95),
+                "breach_notification_time": random.uniform(1, 72),  # hours
+            }
+        elif framework.lower() == "sox":
+            return {
+                "financial_accuracy": random.uniform(95, 100),
+                "audit_trail_completeness": random.uniform(90, 100),
+                "access_control_effectiveness": random.uniform(85, 100),
+                "change_management_compliance": random.uniform(80, 95),
+            }
+        elif framework.lower() == "iso27001":
+            return {
+                "information_security_score": random.uniform(85, 100),
+                "risk_assessment_coverage": random.uniform(80, 95),
+                "incident_response_time": random.uniform(1, 24),  # hours
+                "security_awareness_level": random.uniform(70, 100),
+            }
+        elif framework.lower() == "hipaa":
+            return {
+                "phi_protection_score": random.uniform(90, 100),
+                "privacy_rule_compliance": random.uniform(85, 100),
+                "security_rule_compliance": random.uniform(85, 100),
+                "breach_risk_assessment": random.uniform(1, 10),  # scale 1-10
+            }
+        else:
+            # Generic compliance metrics
+            return {
+                "compliance_score": random.uniform(80, 100),
+                "audit_readiness": random.uniform(75, 100),
+                "policy_adherence": random.uniform(80, 100),
+                "risk_mitigation": random.uniform(70, 95),
+            }
+
+    def check_compliance_status(self, framework: str) -> Dict[str, Any]:
+        """Check compliance status for a specific framework"""
+        try:
+            compliance_data = self._generate_compliance_data(framework)
+            thresholds = self.compliance_thresholds.get(framework, {})
+
+            status: Dict[str, Any] = {
+                "framework": framework,
+                "overall_score": sum(compliance_data.values()) / len(compliance_data),
+                "metrics": compliance_data,
+                "violations": [],
+                "recommendations": [],
+            }
+
+            # Check for violations
+            for metric, value in compliance_data.items():
+                threshold = thresholds.get(metric)
+                if threshold and value < threshold:
+                    violations = status["violations"]
+                    if isinstance(violations, list):
+                        violations.append(
+                            {
+                                "metric": metric,
+                                "value": value,
+                                "threshold": threshold,
+                                "severity": (
+                                    "high" if value < threshold * 0.8 else "medium"
+                                ),
                             }
                         )
-                    ]
-                    
-        except Exception as e:
-            self.logger.error(f"Failed to collect from compliance endpoint {endpoint}: {e}")
-            
-        return metrics
 
-    def _generate_standard_metrics(self, standard: str) -> Dict[str, List[MetricData]]:
-        """Generate compliance metrics based on standard requirements"""
-        metrics = {}
-        timestamp = datetime.now()
-        
-        # Define compliance metrics for different standards
-        standard_requirements = {
-            "DO-178C": {
-                "safety_level": 1.0,
-                "documentation_completeness": 0.95,
-                "test_coverage": 0.90,
-                "code_quality": 0.85
-            },
-            "ISO-26262": {
-                "asil_level": 1.0,
-                "safety_mechanisms": 0.95,
-                "fault_tolerance": 0.90
-            },
-            "IEC-61508": {
-                "sil_level": 1.0,
-                "safety_integrity": 0.95,
-                "reliability": 0.90
-            },
-            "FDA-510K": {
-                "clinical_validation": 0.95,
-                "safety_assessment": 0.90,
-                "regulatory_compliance": 0.85
-            },
-            "SOX": {
-                "financial_accuracy": 0.99,
-                "audit_trail": 0.95,
-                "data_integrity": 0.90
-            },
-            "GDPR": {
-                "data_protection": 0.95,
-                "privacy_compliance": 0.90,
-                "consent_management": 0.85
+            return status
+
+        except Exception as e:
+            self.logger.error(f"Failed to check compliance status for {framework}: {e}")
+            return {"framework": framework, "error": str(e)}
+
+    def generate_compliance_report(self) -> Dict[str, Any]:
+        """Generate comprehensive compliance report"""
+        try:
+            report: Dict[str, Any] = {
+                "timestamp": datetime.now().isoformat(),
+                "collector": self.name,
+                "frameworks": {},
+                "overall_compliance_score": 0,
+                "critical_violations": [],
+                "recommendations": [],
             }
-        }
-        
-        if standard in standard_requirements:
-            requirements = standard_requirements[standard]
-            for metric_name, target_value in requirements.items():
-                # Simulate compliance level (replace with actual compliance assessment)
-                compliance_level = self._simulate_compliance_level(target_value)
-                
-                metrics[f"compliance_{standard}_{metric_name}"] = [
-                    MetricData(
-                        timestamp=timestamp,
-                        value=compliance_level,
-                        metadata={
-                            "source": self.name,
-                            "compliance_standard": standard,
-                            "target": target_value
-                        },
-                        compliance_context={
-                            "standard": standard,
-                            "metric_type": metric_name,
-                            "target_value": target_value,
-                            "compliance_level": self._assess_compliance_level(standard, metric_name, compliance_level)
-                        }
-                    )
-                ]
-                
-        return metrics
 
-    def _simulate_compliance_level(self, target_value: float) -> float:
-        """Simulate compliance level for development/testing"""
-        import random
-        
-        # Generate compliance level around target value with some variance
-        variance = 0.05  # 5% variance
-        min_val = max(0.0, target_value - variance)
-        max_val = min(1.0, target_value + variance)
-        
-        return random.uniform(min_val, max_val)
+            total_score = 0
+            framework_count = 0
 
-    def _assess_compliance_level(self, standard: str, metric_name: str, value: float) -> str:
-        """Assess compliance level based on metric value"""
-        if value >= 0.95:
-            return "compliant"
-        elif value >= 0.85:
-            return "warning"
-        else:
-            return "non_compliant"
+            for framework in self.compliance_frameworks:
+                status = self.check_compliance_status(framework)
+                report["frameworks"][framework] = status
 
-    def _collect_audit_data(self) -> Dict[str, List[MetricData]]:
-        """Collect audit trail data"""
-        metrics = {}
-        timestamp = datetime.now()
-        
-        if self.audit_log_path and os.path.exists(self.audit_log_path):
-            try:
-                audit_metrics = self._parse_audit_log()
-                metrics.update(audit_metrics)
-            except Exception as e:
-                self.logger.error(f"Failed to parse audit log: {e}")
-                
-        return metrics
+                if "overall_score" in status:
+                    total_score += status["overall_score"]
+                    framework_count += 1
 
-    def _parse_audit_log(self) -> Dict[str, List[MetricData]]:
-        """Parse audit log for compliance metrics"""
-        metrics = {}
-        timestamp = datetime.now()
-        
-        try:
-            with open(self.audit_log_path, 'r') as f:
-                audit_entries = f.readlines()
-                
-            # Count different types of audit events
-            event_counts = {}
-            for entry in audit_entries:
-                if "compliance" in entry.lower():
-                    event_type = "compliance_check"
-                elif "audit" in entry.lower():
-                    event_type = "audit_event"
-                elif "violation" in entry.lower():
-                    event_type = "compliance_violation"
-                else:
-                    event_type = "other"
-                    
-                event_counts[event_type] = event_counts.get(event_type, 0) + 1
-                
-            # Create metrics from audit data
-            for event_type, count in event_counts.items():
-                metrics[f"audit_{event_type}_count"] = [
-                    MetricData(
-                        timestamp=timestamp,
-                        value=float(count),
-                        metadata={
-                            "source": self.name,
-                            "audit_log": self.audit_log_path
-                        },
-                        compliance_context={
-                            "audit_event_type": event_type,
-                            "total_events": len(audit_entries)
-                        }
-                    )
-                ]
-                
+                # Collect critical violations
+                for violation in status.get("violations", []):
+                    if violation.get("severity") == "high":
+                        critical_violations = report["critical_violations"]
+                        if isinstance(critical_violations, list):
+                            critical_violations.append(
+                                {
+                                    "framework": framework,
+                                    "metric": violation["metric"],
+                                    "value": violation["value"],
+                                    "threshold": violation["threshold"],
+                                }
+                            )
+
+            if framework_count > 0:
+                report["overall_compliance_score"] = total_score / framework_count
+
+            return report
+
         except Exception as e:
-            self.logger.error(f"Failed to parse audit log {self.audit_log_path}: {e}")
-            
-        return metrics
-
-    def _check_compliance_endpoint(self, endpoint: str) -> bool:
-        """Check if compliance endpoint is reachable"""
-        try:
-            import requests
-            response = requests.get(endpoint, timeout=10)
-            return response.status_code == 200
-        except Exception:
-            return False
+            self.logger.error(f"Failed to generate compliance report: {e}")
+            return {"error": str(e)}
 
     def get_collector_info(self) -> Dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
-        info.update({
-            "compliance_standards": self.compliance_standards,
-            "audit_log_path": self.audit_log_path,
-            "compliance_endpoints": self.compliance_endpoints,
-            "audit_interval": self.audit_interval,
-        })
-        return info 
+        info.update(
+            {
+                "compliance_frameworks": self.compliance_frameworks,
+                "audit_requirements": self.audit_requirements,
+                "reporting_frequency": self.reporting_frequency,
+                "regulatory_standards": self.regulatory_standards,
+                "compliance_thresholds": self.compliance_thresholds,
+            }
+        )
+        return info

@@ -1,12 +1,11 @@
-"""Environmental condition monitoring for Industrial AI systems"""
+"""Environmental condition monitoring for harsh industrial environments"""
 
-from typing import Dict, List, Any
+import random
 from datetime import datetime
-import logging
-import random  # For simulation - replace with actual sensor libraries
+from typing import Any, Dict, List
 
-from .base import BaseCollector
 from ..core.config import MetricData
+from .base import BaseCollector
 
 
 class EnvironmentalCollector(BaseCollector):
@@ -14,7 +13,9 @@ class EnvironmentalCollector(BaseCollector):
 
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
-        self.sensor_types = config.get("sensor_types", ["temperature", "pressure", "humidity"])
+        self.sensor_types = config.get(
+            "sensor_types", ["temperature", "pressure", "humidity"]
+        )
         self.sampling_interval = config.get("sampling_interval", 60)  # seconds
         self.alert_thresholds = config.get("alert_thresholds", {})
         self.sensor_endpoints = config.get("sensor_endpoints", {})
@@ -26,12 +27,16 @@ class EnvironmentalCollector(BaseCollector):
         """Collect environmental metrics from sensors and monitoring systems"""
         try:
             if not self.health_check():
-                self.logger.warning(f"Environmental sensors health check failed for {self.name}")
+                self.logger.warning(
+                    f"Environmental sensors health check failed for " f"{self.name}"
+                )
                 return {}
 
             return self._collect_environmental_data()
         except Exception as e:
-            self.logger.error(f"Failed to collect environmental data from {self.name}: {e}")
+            self.logger.error(
+                f"Failed to collect environmental data from {self.name}: {e}"
+            )
             return {}
 
     def health_check(self) -> bool:
@@ -51,7 +56,7 @@ class EnvironmentalCollector(BaseCollector):
         """Collect environmental data (temperature, pressure, humidity, etc.)"""
         metrics = {}
         timestamp = datetime.now()
-        
+
         for sensor_type in self.sensor_types:
             try:
                 value = self._read_sensor(sensor_type)
@@ -63,23 +68,25 @@ class EnvironmentalCollector(BaseCollector):
                             metadata={
                                 "source": self.name,
                                 "sensor_type": sensor_type,
-                                "environmental": True
+                                "environmental": True,
                             },
                             environmental_conditions={
                                 "sensor_type": sensor_type,
                                 "location": self.config.get("location", "unknown"),
-                                "alert_threshold": self.alert_thresholds.get(sensor_type)
-                            }
+                                "alert_threshold": self.alert_thresholds.get(
+                                    sensor_type
+                                ),
+                            },
                         )
                     ]
-                    
+
                     # Check for environmental alerts
                     self._check_environmental_alerts(sensor_type, value)
-                    
+
             except Exception as e:
                 self.logger.error(f"Failed to read sensor {sensor_type}: {e}")
                 continue
-                
+
         return metrics
 
     def _check_sensor_health(self, sensor_type: str) -> bool:
@@ -87,14 +94,14 @@ class EnvironmentalCollector(BaseCollector):
         try:
             # In a real implementation, this would check actual sensor connectivity
             # For now, we'll simulate sensor health checks
-            
+
             if sensor_type in self.sensor_endpoints:
                 # Check if sensor endpoint is reachable
                 return self._check_endpoint_health(self.sensor_endpoints[sensor_type])
             else:
                 # Simulate sensor health (replace with actual sensor library calls)
-                return random.random() > 0.1  # 90% uptime simulation
-                
+                return True  # Always healthy for simulation
+
         except Exception as e:
             self.logger.error(f"Health check failed for sensor {sensor_type}: {e}")
             return False
@@ -103,34 +110,38 @@ class EnvironmentalCollector(BaseCollector):
         """Check if sensor endpoint is reachable"""
         try:
             import requests
+
             response = requests.get(endpoint, timeout=5)
             return response.status_code == 200
         except Exception:
             return False
 
-    def _read_sensor(self, sensor_type: str) -> float:
+    def _read_sensor(self, sensor_type: str) -> float | None:
         """Read value from a specific environmental sensor"""
         try:
             if sensor_type in self.sensor_endpoints:
-                return self._read_from_endpoint(sensor_type, self.sensor_endpoints[sensor_type])
+                return self._read_from_endpoint(
+                    sensor_type, self.sensor_endpoints[sensor_type]
+                )
             else:
-                # Simulate sensor readings (replace with actual sensor library)
+                # For simulation - replace with actual sensor libraries
                 return self._simulate_sensor_reading(sensor_type)
-                
+
         except Exception as e:
             self.logger.error(f"Failed to read sensor {sensor_type}: {e}")
             return None
 
-    def _read_from_endpoint(self, sensor_type: str, endpoint: str) -> float:
+    def _read_from_endpoint(self, sensor_type: str, endpoint: str) -> float | None:
         """Read sensor data from configured endpoint"""
         try:
             import requests
+
             response = requests.get(endpoint, timeout=10)
             response.raise_for_status()
-            
+
             data = response.json()
             return float(data.get("value", 0))
-            
+
         except Exception as e:
             self.logger.error(f"Failed to read from endpoint {endpoint}: {e}")
             return None
@@ -139,7 +150,7 @@ class EnvironmentalCollector(BaseCollector):
         """Simulate sensor readings for development/testing"""
         # Real implementation would use actual sensor libraries
         # These are realistic ranges for industrial environments
-        
+
         if sensor_type == "temperature":
             # Industrial temperature range: -40 to 85°C
             return random.uniform(-20, 60)
@@ -165,24 +176,28 @@ class EnvironmentalCollector(BaseCollector):
         if threshold:
             min_val = threshold.get("min")
             max_val = threshold.get("max")
-            
+
             if min_val is not None and value < min_val:
                 self.logger.warning(
-                    f"Environmental alert: {sensor_type} = {value} below minimum {min_val}"
+                    f"Environmental alert: {sensor_type} = {value} "
+                    f"below minimum {min_val}"
                 )
-                
+
             if max_val is not None and value > max_val:
                 self.logger.warning(
-                    f"Environmental alert: {sensor_type} = {value} above maximum {max_val}"
+                    f"Environmental alert: {sensor_type} = {value} "
+                    f"above maximum {max_val}"
                 )
 
     def get_collector_info(self) -> Dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
-        info.update({
-            "sensor_types": self.sensor_types,
-            "sampling_interval": self.sampling_interval,
-            "alert_thresholds": self.alert_thresholds,
-            "sensor_endpoints": self.sensor_endpoints,
-        })
-        return info 
+        info.update(
+            {
+                "sensor_types": self.sensor_types,
+                "sampling_interval": self.sampling_interval,
+                "alert_thresholds": self.alert_thresholds,
+                "sensor_endpoints": self.sensor_endpoints,
+            }
+        )
+        return info

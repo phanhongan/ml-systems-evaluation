@@ -1,130 +1,164 @@
 """Main CLI entry point for ML Systems Evaluation Framework"""
 
+import argparse
 import sys
-import logging
-import click
-from .commands import (
-    template_command,
-    quickstart_command,
-    example_command,
-    dev_command,
-    evaluate_command,
-    monitor_command,
-    report_command
-)
+from typing import List
 
-def setup_logging(verbose: bool = False):
-    level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[logging.StreamHandler(sys.stdout)]
+
+def create_parser() -> argparse.ArgumentParser:
+    """Create the main argument parser"""
+    parser = argparse.ArgumentParser(
+        description="ML Systems Evaluation Framework CLI",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  ml-eval run config.yaml
+  ml-eval validate config.yaml
+  ml-eval collect config.yaml --output data.json
+  ml-eval evaluate config.yaml --data data.json --output results.json
+  ml-eval report config.yaml --results results.json --output reports.json
+        """,
     )
 
-@click.group(
-    context_settings={"help_option_names": ["-h", "--help"]},
-    invoke_without_command=True
-)
-@click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
-@click.version_option("0.1.0", prog_name="ML Systems Evaluation Framework")
-@click.pass_context
-def cli(ctx, verbose):
-    setup_logging(verbose)
-    ctx.ensure_object(dict)
-    ctx.obj['VERBOSE'] = verbose
-    if ctx.invoked_subcommand is None:
-        click.echo(ctx.get_help())
-        ctx.exit(2)
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-@cli.command(help="Generate industry-specific configuration templates")
-@click.option('--industry', '-i', required=True, type=click.Choice(["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"]), help="Target industry for template")
-@click.option('--type', '-t', required=True, help="Template type (use 'list' to see available types)")
-@click.option('--output', '-o', help="Output file path (default: stdout)")
-@click.pass_context
-def template(ctx, industry, type, output):
-    class Args: pass
-    args = Args()
-    args.industry = industry
-    args.type = type
-    args.output = output
-    sys.exit(template_command(args))
+    # Run evaluation command
+    run_parser = subparsers.add_parser("run", help="Run complete evaluation pipeline")
+    run_parser.add_argument("config", help="Configuration file path")
+    run_parser.add_argument(
+        "--output", help="Output file for results (default: stdout)"
+    )
 
-@cli.command(help="Get started with industry-specific examples")
-@click.option('--industry', '-i', required=True, type=click.Choice(["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"]), help="Target industry for quickstart")
-@click.pass_context
-def quickstart(ctx, industry):
-    class Args: pass
-    args = Args()
-    args.industry = industry
-    sys.exit(quickstart_command(args))
+    # Validate configuration command
+    validate_parser = subparsers.add_parser(
+        "validate", help="Validate configuration file"
+    )
+    validate_parser.add_argument("config", help="Configuration file path")
 
-@cli.command(help="Show detailed examples and use cases")
-@click.option('--type', '-t', required=True, help="Example type to show")
-@click.option('--detailed', '-d', is_flag=True, help="Show detailed example with configuration")
-@click.pass_context
-def example(ctx, type, detailed):
-    class Args: pass
-    args = Args()
-    args.type = type
-    args.detailed = detailed
-    sys.exit(example_command(args))
+    # List components commands
+    list_collectors_parser = subparsers.add_parser(
+        "list-collectors", help="List configured collectors"
+    )
+    list_collectors_parser.add_argument("config", help="Configuration file path")
 
-@cli.command(help="Development and validation tools")
-@click.option('--config', '-c', required=True, help="Configuration file path")
-@click.option('--mode', '-m', type=click.Choice(["validation", "test", "simulation"]), default="validation", show_default=True, help="Development mode")
-@click.option('--strict', '-s', is_flag=True, help="Enable strict validation")
-@click.pass_context
-def dev(ctx, config, mode, strict):
-    class Args: pass
-    args = Args()
-    args.config = config
-    args.mode = mode
-    args.strict = strict
-    sys.exit(dev_command(args))
+    list_evaluators_parser = subparsers.add_parser(
+        "list-evaluators", help="List configured evaluators"
+    )
+    list_evaluators_parser.add_argument("config", help="Configuration file path")
 
-@cli.command(help="Run evaluation on ML system")
-@click.option('--config', '-c', required=True, help="Configuration file path")
-@click.option('--mode', '-m', type=click.Choice(["single", "continuous", "workflow"]), default="single", show_default=True, help="Evaluation mode")
-@click.option('--output', '-o', help="Output file path for results")
-@click.pass_context
-def evaluate(ctx, config, mode, output):
-    class Args: pass
-    args = Args()
-    args.config = config
-    args.mode = mode
-    args.output = output
-    sys.exit(evaluate_command(args))
+    list_reports_parser = subparsers.add_parser(
+        "list-reports", help="List configured reports"
+    )
+    list_reports_parser.add_argument("config", help="Configuration file path")
 
-@cli.command(help="Continuous monitoring of ML system")
-@click.option('--config', '-c', required=True, help="Configuration file path")
-@click.option('--interval', '-i', type=int, default=300, show_default=True, help="Monitoring interval in seconds")
-@click.option('--duration', '-d', type=int, help="Monitoring duration in seconds (default: run indefinitely)")
-@click.pass_context
-def monitor(ctx, config, interval, duration):
-    class Args: pass
-    args = Args()
-    args.config = config
-    args.interval = interval
-    args.duration = duration
-    sys.exit(monitor_command(args))
+    # Collect data command
+    collect_parser = subparsers.add_parser(
+        "collect", help="Collect data using configured collectors"
+    )
+    collect_parser.add_argument("config", help="Configuration file path")
+    collect_parser.add_argument(
+        "--output", help="Output file for collected data (default: stdout)"
+    )
 
-@cli.command(help="Generate evaluation reports")
-@click.option('--type', '-t', required=True, type=click.Choice(["reliability", "safety", "compliance", "business_impact", "trend", "incident"]), help="Report type")
-@click.option('--period', '-p', default="30d", show_default=True, help="Report period (e.g., 7d, 30d, 90d)")
-@click.option('--output', '-o', help="Output file path for report")
-@click.pass_context
-def report(ctx, type, period, output):
-    class Args: pass
-    args = Args()
-    args.type = type
-    args.period = period
-    args.output = output
-    sys.exit(report_command(args))
+    # Evaluate metrics command
+    evaluate_parser = subparsers.add_parser(
+        "evaluate", help="Evaluate metrics using configured evaluators"
+    )
+    evaluate_parser.add_argument("config", help="Configuration file path")
+    evaluate_parser.add_argument("--data", help="Input data file (optional)")
+    evaluate_parser.add_argument(
+        "--output", help="Output file for results (default: stdout)"
+    )
+
+    # Generate reports command
+    report_parser = subparsers.add_parser(
+        "report", help="Generate reports using configured report generators"
+    )
+    report_parser.add_argument("config", help="Configuration file path")
+    report_parser.add_argument("--results", help="Input results file (optional)")
+    report_parser.add_argument(
+        "--output", help="Output file for reports (default: stdout)"
+    )
+
+    # Health check command
+    health_parser = subparsers.add_parser(
+        "health", help="Perform health check on configured components"
+    )
+    health_parser.add_argument("config", help="Configuration file path")
+    health_parser.add_argument(
+        "--output", help="Output file for health check results " "(default: stdout)"
+    )
+
+    # Create configuration command
+    create_parser = subparsers.add_parser(
+        "create-config", help="Create a new configuration file"
+    )
+    create_parser.add_argument("--output", required=True, help="Output file path")
+    create_parser.add_argument("--system-name", required=True, help="System name")
+    create_parser.add_argument(
+        "--system-type",
+        default="single_model",
+        choices=["single_model", "workflow", "ensemble"],
+        help="System type (default: single_model)",
+    )
+    create_parser.add_argument(
+        "--criticality",
+        default="operational",
+        choices=["operational", "business_critical", "safety_critical"],
+        help="System criticality level (default: operational)",
+    )
+    create_parser.add_argument("--industry", help="Industry type (optional)")
+
+    return parser
+
+
+def main(args: List[str] | None = None) -> int:
+    """Main CLI entry point"""
+    parser = create_parser()
+    parsed_args = parser.parse_args(args)
+
+    if not parsed_args.command:
+        parser.print_help()
+        return 1
+
+    # Import commands here to avoid circular imports
+    from .commands import (
+        collect_data_command,
+        create_config_command,
+        evaluate_metrics_command,
+        generate_reports_command,
+        health_check_command,
+        list_collectors_command,
+        list_evaluators_command,
+        list_reports_command,
+        run_evaluation_command,
+        validate_config_command,
+    )
+
+    # Route to appropriate command handler
+    command_handlers = {
+        "run": run_evaluation_command,
+        "validate": validate_config_command,
+        "list-collectors": list_collectors_command,
+        "list-evaluators": list_evaluators_command,
+        "list-reports": list_reports_command,
+        "collect": collect_data_command,
+        "evaluate": evaluate_metrics_command,
+        "report": generate_reports_command,
+        "health": health_check_command,
+        "create-config": create_config_command,
+    }
+
+    handler = command_handlers.get(parsed_args.command)
+    if handler:
+        return handler(parsed_args)
+    else:
+        print(f"Unknown command: {parsed_args.command}", file=sys.stderr)
+        return 1
+
 
 if __name__ == "__main__":
-    cli() 
+    sys.exit(main())
 
-# Add this for Poetry CLI entry point
 
-def main():
-    cli() 
+cli = main

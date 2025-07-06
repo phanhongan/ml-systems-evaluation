@@ -1,15 +1,14 @@
 """Core framework components for ML Systems Evaluation"""
 
+from .config import ErrorBudget, SLOConfig
 from .framework import EvaluationFramework
-from .config import SLOConfig, ErrorBudget, EvaluationResult
-from .types import SystemType, CriticalityLevel, ComplianceStandard
+from .types import ComplianceStandard, CriticalityLevel, SystemType
 
 __all__ = [
     "EvaluationFramework",
-    "SLOConfig", 
+    "SLOConfig",
     "ErrorBudget",
-    "EvaluationResult",
     "SystemType",
-    "CriticalityLevel", 
+    "CriticalityLevel",
     "ComplianceStandard",
-] 
+]

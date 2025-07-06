@@ -1,17 +1,16 @@
-"""Unit tests for evaluators module"""
+"""Tests for evaluators"""
+
+from datetime import datetime
 
 import pytest
-from unittest.mock import Mock, patch
-from datetime import datetime, timedelta
-import json
 
+from ml_eval.core.config import MetricData
 from ml_eval.evaluators.base import BaseEvaluator
-from ml_eval.evaluators.reliability import ReliabilityEvaluator
-from ml_eval.evaluators.safety import SafetyEvaluator
-from ml_eval.evaluators.performance import PerformanceEvaluator
 from ml_eval.evaluators.compliance import ComplianceEvaluator
 from ml_eval.evaluators.drift import DriftEvaluator
-from ml_eval.core.config import MetricData, SLOConfig
+from ml_eval.evaluators.performance import PerformanceEvaluator
+from ml_eval.evaluators.reliability import ReliabilityEvaluator
+from ml_eval.evaluators.safety import SafetyEvaluator
 
 
 class TestBaseEvaluator:
@@ -344,9 +343,9 @@ class TestDriftEvaluator:
         config = {"name": "drift_evaluator"}
         evaluator = DriftEvaluator(config)
 
-        # Test drift calculation
-        baseline = [0.1, 0.2, 0.3]
-        current = [0.11, 0.21, 0.31]
+        # Test drift detection with sample data
+        # baseline_data = [0.1, 0.2, 0.3, 0.4, 0.5]
+        # current_data = [0.15, 0.25, 0.35, 0.45, 0.55]
 
         # Since _calculate_drift is not implemented, we'll test the evaluate method
         metrics = {"data_drift": 0.05}

@@ -1,222 +1,150 @@
-"""Configuration loading utilities for ML Systems Evaluation"""
+"""Configuration loader for ML Systems Evaluation Framework"""
 
-import os
-import yaml
 import json
-import logging
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, List
 
-from ..core.types import IndustryType, SystemType, CriticalityLevel
+import yaml
 
 
 class ConfigLoader:
-    """Configuration loader with validation for Industrial AI systems"""
-    
+    """Load configuration from various file formats"""
+
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        self.supported_formats = ['.yaml', '.yml', '.json']
-        
+        self.supported_formats = [".yaml", ".yml", ".json"]
+        self.template_dir = Path(__file__).parent.parent / "templates"
+
     def load_config(self, config_path: str) -> Dict[str, Any]:
-        """Load configuration from file with validation"""
-        try:
-            path = Path(config_path)
-            
-            if not path.exists():
-                raise FileNotFoundError(f"Configuration file not found: {config_path}")
-                
-            if path.suffix not in self.supported_formats:
-                raise ValueError(f"Unsupported file format: {path.suffix}")
-                
-            with open(path, 'r', encoding='utf-8') as f:
-                if path.suffix in ['.yaml', '.yml']:
-                    config = yaml.safe_load(f)
-                elif path.suffix == '.json':
-                    config = json.load(f)
-                else:
-                    raise ValueError(f"Unsupported file format: {path.suffix}")
-                    
-            # Validate and normalize configuration
-            config = self._normalize_config(config)
-            self._validate_basic_structure(config)
-            
-            self.logger.info(f"Successfully loaded configuration from {config_path}")
-            return config
-            
-        except Exception as e:
-            self.logger.error(f"Failed to load configuration from {config_path}: {e}")
-            raise
-            
-    def _normalize_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
-        """Normalize configuration structure"""
-        # Ensure required top-level sections exist
-        if 'system' not in config:
-            config['system'] = {}
-            
-        if 'slos' not in config:
-            config['slos'] = {}
-            
-        if 'collectors' not in config:
-            config['collectors'] = []
-            
-        if 'evaluators' not in config:
-            config['evaluators'] = []
-            
-        # Set defaults for system configuration
-        system = config['system']
-        system.setdefault('name', 'Unknown System')
-        system.setdefault('type', 'single_model')
-        system.setdefault('criticality', 'operational')
-        
-        return config
-        
-    def _validate_basic_structure(self, config: Dict[str, Any]):
-        """Validate basic configuration structure"""
-        required_sections = ['system', 'slos']
-        missing_sections = [section for section in required_sections if section not in config]
-        
-        if missing_sections:
-            raise ValueError(f"Missing required configuration sections: {missing_sections}")
-            
-        # Validate system configuration
-        system = config['system']
-        if not isinstance(system, dict):
-            raise ValueError("System configuration must be a dictionary")
-            
-        # Validate SLOs
-        slos = config['slos']
-        if not isinstance(slos, dict):
-            raise ValueError("SLOs configuration must be a dictionary")
-            
-        # Validate collectors
-        collectors = config.get('collectors', [])
-        if not isinstance(collectors, list):
-            raise ValueError("Collectors configuration must be a list")
-            
-        # Validate evaluators
-        evaluators = config.get('evaluators', [])
-        if not isinstance(evaluators, list):
-            raise ValueError("Evaluators configuration must be a list")
-            
-    def load_template(self, industry: str, template_type: str) -> Dict[str, Any]:
-        """Load industry-specific template configuration"""
-        try:
-            # This would load from template files
-            # For now, return a basic template structure
-            template = self._get_basic_template(industry, template_type)
-            self.logger.info(f"Loaded template for {industry}/{template_type}")
-            return template
-            
-        except Exception as e:
-            self.logger.error(f"Failed to load template {industry}/{template_type}: {e}")
-            raise
-            
-    def _get_basic_template(self, industry: str, template_type: str) -> Dict[str, Any]:
-        """Get basic template structure for industry and type"""
-        # This is a simplified template - in practice, these would be loaded from files
-        templates = {
-            'manufacturing': {
-                'quality_control': {
-                    'system': {
-                        'name': 'Manufacturing Quality Control System',
-                        'type': 'workflow',
-                        'criticality': 'business_critical'
-                    },
-                    'slos': {
-                        'defect_detection_accuracy': {
-                            'target': 0.98,
-                            'window': '24h',
-                            'error_budget': 0.02,
-                            'description': 'Accuracy in detecting manufacturing defects'
-                        },
-                        'prediction_latency': {
-                            'target': 100,
-                            'window': '1h',
-                            'error_budget': 0.05,
-                            'description': 'Time to predict quality issues (ms)'
-                        }
-                    },
-                    'collectors': [
-                        {
-                            'type': 'online',
-                            'endpoint': 'http://manufacturing-metrics:9090'
-                        }
-                    ],
-                    'evaluators': [
-                        {
-                            'type': 'reliability',
-                            'error_budget_window': '30d'
-                        }
-                    ]
-                }
-            },
-            'aviation': {
-                'safety_decision': {
-                    'system': {
-                        'name': 'Aviation Safety Decision System',
-                        'type': 'single_model',
-                        'criticality': 'safety_critical'
-                    },
-                    'slos': {
-                        'decision_accuracy': {
-                            'target': 0.9999,
-                            'window': '24h',
-                            'error_budget': 0.0001,
-                            'description': 'Accuracy of safety-critical decisions',
-                            'compliance_standard': 'DO-178C',
-                            'safety_critical': True
-                        },
-                        'response_time': {
-                            'target': 50,
-                            'window': '1h',
-                            'error_budget': 0.01,
-                            'description': 'Decision response time (ms)',
-                            'safety_critical': True
-                        }
-                    },
-                    'collectors': [
-                        {
-                            'type': 'online',
-                            'endpoint': 'http://aviation-system:8080/metrics'
-                        }
-                    ],
-                    'evaluators': [
-                        {
-                            'type': 'reliability',
-                            'error_budget_window': '7d'
-                        },
-                        {
-                            'type': 'safety',
-                            'compliance_standards': ['DO-178C']
-                        }
-                    ]
-                }
-            }
-        }
-        
-        if industry in templates and template_type in templates[industry]:
-            return templates[industry][template_type]
+        """Load configuration from file or directory"""
+        path = Path(config_path)
+
+        if path.is_file():
+            return self._load_single_file(path)
+        elif path.is_dir():
+            return self._load_directory(path)
         else:
-            raise ValueError(f"Template not found: {industry}/{template_type}")
-            
-    def save_config(self, config: Dict[str, Any], output_path: str):
-        """Save configuration to file"""
+            raise FileNotFoundError(f"Configuration path not found: {config_path}")
+
+    def load_template(self, template_name: str) -> Dict[str, Any]:
+        """Load configuration template by name"""
+        template_path = self.template_dir / f"{template_name}.yaml"
+
+        if not template_path.exists():
+            raise FileNotFoundError(f"Template not found: {template_name}")
+
+        return self._load_single_file(template_path)
+
+    def _load_single_file(self, file_path: Path) -> Dict[str, Any]:
+        """Load configuration from a single file"""
+        if not file_path.exists():
+            raise FileNotFoundError(f"Configuration file not found: {file_path}")
+
+        file_extension = file_path.suffix.lower()
+
+        if file_extension not in self.supported_formats:
+            raise ValueError(
+                f"Unsupported file format: {file_extension}. "
+                f"Supported formats: {self.supported_formats}"
+            )
+
         try:
-            path = Path(output_path)
-            
-            # Ensure directory exists
-            path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(path, 'w', encoding='utf-8') as f:
-                if path.suffix in ['.yaml', '.yml']:
-                    yaml.dump(config, f, default_flow_style=False, indent=2)
-                elif path.suffix == '.json':
-                    json.dump(config, f, indent=2)
+            with open(file_path, "r", encoding="utf-8") as f:
+                if file_extension in [".yaml", ".yml"]:
+                    return yaml.safe_load(f) or {}
+                elif file_extension == ".json":
+                    return json.load(f)
                 else:
-                    raise ValueError(f"Unsupported output format: {path.suffix}")
-                    
-            self.logger.info(f"Configuration saved to {output_path}")
-            
+                    raise ValueError(f"Unsupported file format: {file_extension}")
+
+        except yaml.YAMLError as e:
+            raise ValueError(f"Invalid YAML in {file_path}: {e}")
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON in {file_path}: {e}")
         except Exception as e:
-            self.logger.error(f"Failed to save configuration to {output_path}: {e}")
-            raise 
+            raise ValueError(f"Failed to load configuration from {file_path}: {e}")
+
+    def _load_directory(self, dir_path: Path) -> Dict[str, Any]:
+        """Load configuration from a directory (merge all config files)"""
+        config: Dict[str, Any] = {}
+
+        # Find all configuration files in the directory
+        config_files = []
+        for file_path in dir_path.iterdir():
+            if (
+                file_path.is_file()
+                and file_path.suffix.lower() in self.supported_formats
+            ):
+                config_files.append(file_path)
+
+        # Sort files to ensure consistent loading order
+        config_files.sort(key=lambda x: x.name)
+
+        # Load and merge all configuration files
+        for file_path in config_files:
+            try:
+                file_config = self._load_single_file(file_path)
+                config = self._merge_configs(config, file_config)
+            except Exception as e:
+                raise ValueError(f"Failed to load configuration from {file_path}: {e}")
+
+        return config
+
+    def _merge_configs(
+        self, base_config: Dict[str, Any], new_config: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Merge two configuration dictionaries"""
+        merged = base_config.copy()
+
+        for key, value in new_config.items():
+            if (
+                key in merged
+                and isinstance(merged[key], dict)
+                and isinstance(value, dict)
+            ):
+                # Recursively merge nested dictionaries
+                merged[key] = self._merge_configs(merged[key], value)
+            else:
+                # Overwrite or add the value
+                merged[key] = value
+
+        return merged
+
+    def list_templates(self) -> List[str]:
+        """List available configuration templates"""
+        templates = []
+
+        if self.template_dir.exists():
+            for template_file in self.template_dir.glob("*.yaml"):
+                templates.append(template_file.stem)
+
+        return templates
+
+    def validate_file_format(self, file_path: str) -> bool:
+        """Validate if a file has a supported configuration format"""
+        path = Path(file_path)
+        return path.suffix.lower() in self.supported_formats
+
+    def get_file_info(self, file_path: str) -> Dict[str, Any]:
+        """Get information about a configuration file"""
+        path = Path(file_path)
+
+        if not path.exists():
+            return {"error": "File not found"}
+
+        info = {
+            "path": str(path),
+            "size": path.stat().st_size,
+            "format": path.suffix.lower(),
+            "supported": path.suffix.lower() in self.supported_formats,
+        }
+
+        if info["supported"]:
+            try:
+                config = self._load_single_file(path)
+                info["valid"] = True
+                info["keys"] = list(config.keys()) if isinstance(config, dict) else []
+            except Exception as e:
+                info["valid"] = False
+                info["error"] = str(e)
+
+        return info

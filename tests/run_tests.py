@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Test runner for ML Systems Evaluation Framework"""
 
-import sys
-import os
 import argparse
 import subprocess
+import sys
 from pathlib import Path
 
 

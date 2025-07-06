@@ -1,32 +1,147 @@
-name: Tests
+name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          poetry install --only main,dev
+      - name: Lint with flake8
+        run: |
+          poetry run flake8 ml_eval tests
+      - name: Check formatting with black
+        run: |
+          poetry run black --check ml_eval tests
+      - name: Check import order with isort
+        run: |
+          poetry run isort --check-only ml_eval tests
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.13'
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          poetry install --only main,dev
+      - name: Type check with mypy
+        run: |
+          poetry run mypy ml_eval
 
-    - name: Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          poetry install --only main,dev
+      - name: Build package
+        run: |
+          poetry build
 
-    - name: Install dependencies
-      run: |
-        poetry install --only main,dev
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11, 3.12, 3.13]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Cache Poetry
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/pypoetry
+            ~/.cache/pip
+          key: poetry-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-${{ runner.os }}-${{ matrix.python-version }}-
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          poetry install --only main,dev
+      - name: Run all tests
+        run: |
+          poetry run pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
+      - name: Upload coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: ./coverage.xml
 
-    - name: Run all tests
-      run: |
-        poetry run pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
+#   docs:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Set up Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: '3.11'
+#       - name: Install Poetry
+#         run: |
+#           curl -sSL https://install.python-poetry.org | python3 -
+#           echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+#       - name: Install dependencies
+#         run: |
+#           poetry install --only main,dev,docs
+#       - name: Build docs
+#         run: |
+#           poetry run mkdocs build
 
-    - name: Upload coverage
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
+#   publish:
+#     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Set up Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: '3.11'
+#       - name: Install Poetry
+#         run: |
+#           curl -sSL https://install.python-poetry.org | python3 -
+#           echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+#       - name: Install dependencies
+#         run: |
+#           poetry install --only main
+#       - name: Publish to PyPI
+#         env:
+#           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+#         run: |
+#           poetry publish --build

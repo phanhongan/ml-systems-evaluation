@@ -123,3 +123,8 @@ def report(ctx, type, period, output):
 
 if __name__ == "__main__":
     cli() 
+
+# Add this for Poetry CLI entry point
+
+def main():
+    cli() 

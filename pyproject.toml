@@ -46,3 +46,6 @@ build-backend = "poetry.core.masonry.api"
 
 [[tool.poetry.packages]]
 include = "ml_eval"
+
+[tool.poetry.scripts]
+ml-eval = "ml_eval.cli.main:main"

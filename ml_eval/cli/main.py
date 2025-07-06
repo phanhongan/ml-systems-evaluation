@@ -21,7 +21,10 @@ def setup_logging(verbose: bool = False):
         handlers=[logging.StreamHandler(sys.stdout)]
     )
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]})
+@click.group(
+    context_settings={"help_option_names": ["-h", "--help"]},
+    invoke_without_command=True
+)
 @click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
 @click.version_option("0.1.0", prog_name="ML Systems Evaluation Framework")
 @click.pass_context
@@ -29,6 +32,9 @@ def cli(ctx, verbose):
     setup_logging(verbose)
     ctx.ensure_object(dict)
     ctx.obj['VERBOSE'] = verbose
+    if ctx.invoked_subcommand is None:
+        click.echo(ctx.get_help())
+        ctx.exit(2)
 
 @cli.command(help="Generate industry-specific configuration templates")
 @click.option('--industry', '-i', required=True, type=click.Choice(["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"]), help="Target industry for template")

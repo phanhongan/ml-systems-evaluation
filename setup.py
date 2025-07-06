@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Setup script for ML Systems Evaluation Framework - Industrial AI Reliability Assessment"""
-
-from setuptools import setup, find_packages
 import os
+
+from setuptools import find_packages, setup  # noqa: E501
 
 
 # Read the README file for long description

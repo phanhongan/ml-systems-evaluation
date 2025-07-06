@@ -23,7 +23,7 @@ jobs:
           poetry install --only main,dev
       - name: Lint with flake8
         run: |
-          poetry run flake8 ml_eval tests
+          poetry run flake8 ml_eval tests --max-line-length=88 --extend-ignore=E203,W503
       - name: Check formatting with black
         run: |
           poetry run black --check ml_eval tests

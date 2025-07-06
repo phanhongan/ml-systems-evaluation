@@ -1,19 +1,15 @@
-"""Unit tests for reports module"""
+"""Tests for report generators"""
 
-import pytest
-import tempfile
-import json
-from unittest.mock import Mock, patch
-from datetime import datetime, timedelta
 import os
-from typing import Dict, Any
+from datetime import datetime
+from unittest.mock import Mock, patch
 
+from ml_eval.core.config import EvaluationResult
 from ml_eval.reports.base import BaseReport, ReportData
+from ml_eval.reports.business import BusinessImpactReport
+from ml_eval.reports.compliance import ComplianceReport
 from ml_eval.reports.reliability import ReliabilityReport
 from ml_eval.reports.safety import SafetyReport
-from ml_eval.reports.compliance import ComplianceReport
-from ml_eval.reports.business import BusinessImpactReport
-from ml_eval.core.config import EvaluationResult, SLOConfig
 
 
 class TestBaseReport:
@@ -458,23 +454,22 @@ class TestReportIntegration:
 
         # Generate report
         report_data = report.generate(data)
-        report_content = report.format_report(report_data)
 
         # Test writing to file
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-            f.write(report_content)
-            temp_file = f.name
+        with patch("tempfile.NamedTemporaryFile") as mock_tempfile:
+            mock_tempfile.return_value.__enter__.return_value.name = "test_file.json"
+            report.save_report(report_data, "test_file.json")
 
         try:
             # Verify file was written
-            with open(temp_file, "r") as f:
+            with open("test_file.json", "r") as f:
                 content = f.read()
                 assert len(content) > 0
         finally:
             # Clean up
             import os
 
-            os.unlink(temp_file)
+            os.unlink("test_file.json")
 
     def test_report_format_consistency(self):
         """Test that all reports provide consistent format options"""
@@ -519,19 +514,20 @@ class TestReportIntegration:
         report_data = report.generate(data)
 
         # Test saving to file
-        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as f:
-            temp_file = f.name
-
         try:
-            success = report.save_report(report_data, temp_file)
-            assert success is True
+            with patch("tempfile.NamedTemporaryFile") as mock_tempfile:
+                mock_tempfile.return_value.__enter__.return_value.name = (
+                    "test_file.json"
+                )
+                success = report.save_report(report_data, "test_file.json")
+                assert success is True
 
-            # Verify file was created
-            assert os.path.exists(temp_file)
-            with open(temp_file, "r") as f:
-                content = f.read()
-                assert len(content) > 0
+                # Verify file was created
+                assert os.path.exists("test_file.json")
+                with open("test_file.json", "r") as f:
+                    content = f.read()
+                    assert len(content) > 0
         finally:
             # Clean up
-            if os.path.exists(temp_file):
-                os.unlink(temp_file)
+            if os.path.exists("test_file.json"):
+                os.unlink("test_file.json")

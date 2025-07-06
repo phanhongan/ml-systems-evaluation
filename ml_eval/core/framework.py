@@ -1,14 +1,10 @@
 """Main evaluation framework for Industrial AI systems"""
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
+from datetime import datetime
+from typing import Any, Dict, List
 
-import logging
-
-from .config import SLOConfig, ErrorBudget, EvaluationResult, MetricData
-from .types import SystemType, CriticalityLevel
+from .config import EvaluationResult, MetricData, SLOConfig
+from .types import CriticalityLevel, SystemType
 
 
 class EvaluationFramework:
@@ -16,10 +12,13 @@ class EvaluationFramework:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.logger = logging.getLogger(__name__)
         self.system_name = config.get("system", {}).get("name", "Unknown")
-        self.system_type = SystemType(config.get("system", {}).get("type", "single_model"))
-        self.criticality = CriticalityLevel(config.get("system", {}).get("criticality", "operational"))
+        self.system_type = SystemType(
+            config.get("system", {}).get("type", "single_model")
+        )
+        self.criticality = CriticalityLevel(
+            config.get("system", {}).get("criticality", "operational")
+        )
         self.slos = self._parse_slos(config.get("slos", {}))
         self.collectors = []
         self.evaluators = []
@@ -35,186 +34,140 @@ class EvaluationFramework:
                     try:
                         target = float(target)
                     except ValueError:
-                        self.logger.error(f"Invalid target value for SLO '{name}': {target}")
                         continue  # Skip this SLO instead of raising
-                
+
                 slo = SLOConfig(
                     name=name,
                     target=target,
                     window=config.get("window", "30d"),
                     error_budget=config.get("error_budget", 0.05),
                     description=config.get("description", ""),
-                    compliance_standard=config.get("compliance_standard"),
                     safety_critical=config.get("safety_critical", False),
-                    business_impact=config.get("business_impact"),
-                    environmental_conditions=config.get("environmental_conditions"),
                 )
                 slos.append(slo)
-            except ValueError as e:
-                self.logger.error(f"Invalid SLO configuration for '{name}': {e}")
+            except ValueError:
                 # Continue with other SLOs instead of raising
+                pass
 
         return slos
 
     def add_collector(self, collector):
         """Add a metric collector to the framework"""
         self.collectors.append(collector)
-        self.logger.info(f"Added collector: {collector.__class__.__name__}")
 
     def add_evaluator(self, evaluator):
         """Add an evaluator to the framework"""
         self.evaluators.append(evaluator)
-        self.logger.info(f"Added evaluator: {evaluator.__class__.__name__}")
 
     def evaluate(self) -> EvaluationResult:
         """Run complete evaluation pipeline for Industrial AI systems"""
-        self.logger.info(f"Starting evaluation for system: {self.system_name}")
-        
+
         try:
             metrics = self._collect_all_metrics()
             results = self._run_all_evaluations(metrics)
             evaluation_result = self._build_result(results)
-            
-            # Log critical findings
-            if evaluation_result.has_critical_violations:
-                self.logger.critical(
-                    f"Critical violations detected in system: {self.system_name}"
-                )
-            
-            if evaluation_result.requires_emergency_shutdown:
-                self.logger.critical(
-                    f"Emergency shutdown required for system: {self.system_name}"
-                )
-            
+
             return evaluation_result
-            
-        except Exception as e:
-            self.logger.error(f"Evaluation failed for system {self.system_name}: {e}")
+
+        except Exception:
             raise
 
     def _collect_all_metrics(self) -> Dict[str, List[MetricData]]:
         """Collect metrics from all collectors with error handling"""
         all_metrics = {}
-        
+
         for collector in self.collectors:
             try:
                 metrics = collector.collect()
                 all_metrics.update(metrics)
-                self.logger.debug(f"Collected {len(metrics)} metrics from {collector.__class__.__name__}")
-            except Exception as e:
-                self.logger.error(f"Failed to collect metrics from {collector.__class__.__name__}: {e}")
-                # Continue with other collectors for resilience
-                continue
-                
+            except Exception:
+                # Log error but continue with other collectors
+                pass
+
         return all_metrics
 
     def _run_all_evaluations(
         self, metrics: Dict[str, List[MetricData]]
-    ) -> List[Dict[str, Any]]:
-        """Run all evaluators with error handling"""
-        results = []
-        
+    ) -> Dict[str, Any]:
+        """Run all evaluators on collected metrics"""
+        results = {}
+
         for evaluator in self.evaluators:
             try:
-                # Convert MetricData to simple values for evaluators
-                simple_metrics = {}
-                for key, metric_list in metrics.items():
-                    if metric_list:
-                        simple_metrics[key] = metric_list[0].value
-                
-                result = evaluator.evaluate(simple_metrics)
-                results.append(result)
-                self.logger.debug(f"Completed evaluation with {evaluator.__class__.__name__}")
-            except Exception as e:
-                self.logger.error(f"Failed to run evaluator {evaluator.__class__.__name__}: {e}")
-                # Continue with other evaluators for resilience
-                continue
-                
+                result = evaluator.evaluate(metrics)
+                results[evaluator.__class__.__name__] = result
+            except Exception:
+                # Log error but continue with other evaluators
+                pass
+
         return results
 
-    def _build_result(
-        self, evaluation_results: List[Dict[str, Any]]
-    ) -> EvaluationResult:
-        """Build final evaluation result for Industrial AI systems"""
-        # Aggregate results from all evaluators
-        slo_compliance = {}
-        error_budgets = {}
-        incidents = []
-        recommendations = []
-        safety_violations = []
-        regulatory_violations = []
-        environmental_alerts = []
-        business_impact_assessment = {}
+    def _build_result(self, results: Dict[str, Any]) -> EvaluationResult:
+        """Build final evaluation result from all evaluator results"""
+        # Determine overall system status
+        has_critical_violations = any(
+            result.get("critical_violations", False)
+            or ("safety_violations" in result and result["safety_violations"])
+            for result in results.values()
+        )
 
-        for result in evaluation_results:
-            slo_compliance.update(result.get("slo_compliance", {}))
-            error_budgets.update(result.get("error_budgets", {}))
-            incidents.extend(result.get("incidents", []))
-            recommendations.extend(result.get("recommendations", []))
-            
-            # Industrial AI specific aggregations
-            safety_violations.extend(result.get("safety_violations", []))
-            regulatory_violations.extend(result.get("regulatory_violations", []))
-            environmental_alerts.extend(result.get("environmental_alerts", []))
-            
-            # Merge business impact assessments
-            business_impact_assessment.update(result.get("business_impact_assessment", {}))
+        requires_emergency_shutdown = any(
+            result.get("emergency_shutdown", False) for result in results.values()
+        )
+
+        # Calculate overall compliance score
+        compliance_scores = [
+            result.get("compliance_score", 0.0) for result in results.values()
+        ]
+        overall_compliance = (
+            sum(compliance_scores) / len(compliance_scores)
+            if compliance_scores
+            else 0.0
+        )
+
+        # Build recommendations
+        recommendations = []
+        for evaluator_name, result in results.items():
+            if result.get("recommendations"):
+                recommendations.extend(result["recommendations"])
+
+        # Build alerts
+        alerts = []
+        for evaluator_name, result in results.items():
+            if result.get("alerts"):
+                alerts.extend(result["alerts"])
 
         return EvaluationResult(
             system_name=self.system_name,
-            evaluation_time=datetime.now(),
-            slo_compliance=slo_compliance,
-            error_budgets=error_budgets,
-            incidents=incidents,
+            timestamp=datetime.now(),
+            overall_compliance=overall_compliance,
+            has_critical_violations=has_critical_violations,
+            requires_emergency_shutdown=requires_emergency_shutdown,
+            evaluator_results=results,
             recommendations=recommendations,
-            safety_violations=safety_violations,
-            regulatory_violations=regulatory_violations,
-            environmental_alerts=environmental_alerts,
-            business_impact_assessment=business_impact_assessment,
+            alerts=alerts,
         )
 
-    def validate_configuration(self) -> bool:
-        """Validate framework configuration for industrial requirements"""
-        errors = []
-        
-        # Must have at least one valid SLO
-        if not self.slos:
-            errors.append("No valid SLOs found in configuration.")
-        
-        # Check for safety-critical systems
-        if self.criticality == CriticalityLevel.SAFETY_CRITICAL:
-            safety_slos = [slo for slo in self.slos if slo.safety_critical]
-            if not safety_slos:
-                errors.append("Safety-critical system must have at least one safety-critical SLO")
-        
-        # Check for compliance standards
-        compliance_slos = [slo for slo in self.slos if slo.compliance_standard]
-        if compliance_slos and not any(collector.__class__.__name__ == "RegulatoryCollector" 
-                                     for collector in self.collectors):
-            errors.append("System with compliance standards should include RegulatoryCollector")
-        
-        # Check for environmental monitoring
-        environmental_slos = [slo for slo in self.slos if slo.environmental_conditions]
-        if environmental_slos and not any(collector.__class__.__name__ == "EnvironmentalCollector" 
-                                        for collector in self.collectors):
-            errors.append("System with environmental conditions should include EnvironmentalCollector")
-        
-        if errors:
-            for error in errors:
-                self.logger.error(f"Configuration validation error: {error}")
-            return False
-        
-        return True
-
-    def get_system_summary(self) -> Dict[str, Any]:
-        """Get a summary of the system configuration"""
+    def get_system_info(self) -> Dict[str, Any]:
+        """Get information about the configured system"""
         return {
             "name": self.system_name,
             "type": self.system_type.value,
             "criticality": self.criticality.value,
             "slo_count": len(self.slos),
-            "safety_critical_slos": len([slo for slo in self.slos if slo.safety_critical]),
-            "compliance_standards": list(set(slo.compliance_standard for slo in self.slos if slo.compliance_standard)),
             "collector_count": len(self.collectors),
             "evaluator_count": len(self.evaluators),
-        } 
+        }
+
+    def get_slo_summary(self) -> List[Dict[str, Any]]:
+        """Get summary of all SLOs"""
+        return [
+            {
+                "name": slo.name,
+                "target": slo.target,
+                "window": slo.window,
+                "safety_critical": slo.safety_critical,
+                "compliance_standard": slo.compliance_standard,
+            }
+            for slo in self.slos
+        ]

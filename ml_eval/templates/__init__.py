@@ -2,4 +2,4 @@
 
 from .factory import TemplateFactory
 
-__all__ = ["TemplateFactory"] 
+__all__ = ["TemplateFactory"]

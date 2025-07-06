@@ -1,191 +1,290 @@
 """Template factory for generating industry-specific configurations"""
 
-import logging
-from typing import Dict, Any, Optional
-
-from ..core.types import IndustryType, SystemType, CriticalityLevel
+from typing import Any, Dict
 
 
 class TemplateFactory:
     """Factory for creating industry-specific configuration templates"""
-    
+
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
         self.templates = self._load_templates()
-        
-    def _load_templates(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
-        """Load all available templates"""
+
+    def _load_templates(self) -> Dict[str, Dict[str, Any]]:
+        """Load industry-specific templates"""
         return {
-            "manufacturing": {
-                "quality_control": self._manufacturing_quality_control(),
-                "predictive_maintenance": self._manufacturing_predictive_maintenance()
-            },
             "aviation": {
-                "safety_decision": self._aviation_safety_decision(),
-                "flight_control": self._aviation_flight_control()
+                "basic": self._create_aviation_basic(),
+                "advanced": self._create_aviation_advanced(),
             },
             "energy": {
-                "grid_optimization": self._energy_grid_optimization(),
-                "demand_prediction": self._energy_demand_prediction()
-            }
+                "basic": self._create_energy_basic(),
+                "advanced": self._create_energy_advanced(),
+            },
+            "manufacturing": {
+                "basic": self._create_manufacturing_basic(),
+                "advanced": self._create_manufacturing_advanced(),
+            },
+            "maritime": {
+                "basic": self._create_maritime_basic(),
+                "advanced": self._create_maritime_advanced(),
+            },
         }
-        
-    def get_template(self, industry: str, template_type: str) -> Optional[Dict[str, Any]]:
+
+    def get_template(self, industry: str, template_type: str) -> Dict[str, Any]:
         """Get a specific template"""
-        try:
-            return self.templates[industry][template_type]
-        except KeyError:
-            self.logger.error(f"Template not found: {industry}/{template_type}")
-            return None
-            
+        if industry not in self.templates:
+            raise ValueError(f"Unknown industry: {industry}")
+
+        if template_type not in self.templates[industry]:
+            raise ValueError(f"Unknown template type: {template_type}")
+
+        return self.templates[industry][template_type]
+
     def list_industries(self) -> list:
-        """List all available industries"""
+        """List available industries"""
         return list(self.templates.keys())
-        
-    def list_templates(self, industry: str) -> list:
-        """List all templates for an industry"""
-        try:
-            return list(self.templates[industry].keys())
-        except KeyError:
+
+    def list_template_types(self, industry: str) -> list:
+        """List available template types for an industry"""
+        if industry not in self.templates:
             return []
-            
-    def _manufacturing_quality_control(self) -> Dict[str, Any]:
-        """Manufacturing quality control template"""
+        return list(self.templates[industry].keys())
+
+    def _create_aviation_basic(self) -> Dict[str, Any]:
+        """Create basic aviation template"""
         return {
             "system": {
-                "name": "Manufacturing Quality Control System",
-                "type": "workflow",
-                "stages": ["data_collection", "quality_prediction", "defect_detection", "alert_generation"],
-                "criticality": "business_critical"
+                "name": "Aviation ML System",
+                "type": "single_model",
+                "criticality": "safety_critical",
             },
             "slos": {
-                "defect_detection_accuracy": {
-                    "target": 0.98,
+                "accuracy": {
+                    "target": 0.99,
                     "window": "24h",
-                    "error_budget": 0.02,
-                    "description": "Accuracy in detecting manufacturing defects"
+                    "error_budget": 0.001,
+                    "description": "Model accuracy for flight safety",
+                    "safety_critical": True,
+                    "compliance_standard": "DO-178C",
                 },
-                "prediction_latency": {
+                "latency": {
                     "target": 100,
                     "window": "1h",
-                    "error_budget": 0.05,
-                    "description": "Time to predict quality issues (ms)"
-                },
-                "false_positive_rate": {
-                    "target": 0.01,
-                    "window": "24h",
                     "error_budget": 0.01,
-                    "description": "Rate of false defect alerts"
-                }
+                    "description": "Inference latency (ms)",
+                    "safety_critical": True,
+                },
             },
             "collectors": [
                 {
                     "type": "online",
-                    "endpoint": "http://manufacturing-metrics:9090"
+                    "endpoint": "http://aviation-system:8080/metrics",
                 },
                 {
-                    "type": "offline",
-                    "log_paths": ["/var/log/quality-control/"]
-                }
+                    "type": "environmental",
+                    "sensor_types": ["temperature", "pressure", "humidity"],
+                },
             ],
             "evaluators": [
                 {
-                    "type": "reliability",
-                    "error_budget_window": "30d"
+                    "type": "safety",
+                    "compliance_standards": ["DO-178C"],
                 },
                 {
-                    "type": "performance",
-                    "metrics": ["accuracy", "latency"]
-                }
-            ]
+                    "type": "reliability",
+                    "error_budget_window": "7d",
+                },
+            ],
         }
-        
-    def _aviation_safety_decision(self) -> Dict[str, Any]:
-        """Aviation safety decision template"""
+
+    def _create_aviation_advanced(self) -> Dict[str, Any]:
+        """Create advanced aviation template"""
+        basic = self._create_aviation_basic()
+        basic["system"]["name"] = "Advanced Aviation ML System"
+        basic["collectors"].append(
+            {
+                "type": "regulatory",
+                "compliance_standards": ["DO-178C", "ISO-26262"],
+            }
+        )
+        return basic
+
+    def _create_energy_basic(self) -> Dict[str, Any]:
+        """Create basic energy template"""
         return {
             "system": {
-                "name": "Aviation Safety Decision System",
-                "type": "single_model",
-                "criticality": "safety_critical"
+                "name": "Energy Grid ML System",
+                "type": "workflow",
+                "criticality": "safety_critical",
             },
             "slos": {
-                "decision_accuracy": {
-                    "target": 0.9999,
-                    "window": "24h",
-                    "error_budget": 0.0001,
-                    "description": "Accuracy of safety-critical decisions",
-                    "compliance_standard": "DO-178C",
-                    "safety_critical": True
+                "grid_stability": {
+                    "target": 0.995,
+                    "window": "1h",
+                    "error_budget": 0.005,
+                    "description": "Grid stability prediction accuracy",
+                    "safety_critical": True,
+                    "compliance_standard": "IEC-61508",
                 },
                 "response_time": {
                     "target": 50,
-                    "window": "1h",
-                    "error_budget": 0.01,
-                    "description": "Decision response time (ms)",
-                    "safety_critical": True
-                }
+                    "window": "5m",
+                    "error_budget": 0.001,
+                    "description": "Emergency response time (ms)",
+                    "safety_critical": True,
+                },
             },
             "collectors": [
                 {
                     "type": "online",
-                    "endpoint": "http://aviation-system:8080/metrics"
-                }
+                    "endpoint": "http://energy-grid:9090",
+                },
+                {
+                    "type": "environmental",
+                    "sensor_types": ["temperature", "pressure"],
+                },
             ],
             "evaluators": [
-                {
-                    "type": "reliability",
-                    "error_budget_window": "7d"
-                },
                 {
                     "type": "safety",
-                    "compliance_standards": ["DO-178C"]
-                }
-            ]
+                    "compliance_standards": ["IEC-61508"],
+                },
+                {
+                    "type": "reliability",
+                    "error_budget_window": "30d",
+                },
+            ],
         }
-        
-    def _energy_grid_optimization(self) -> Dict[str, Any]:
-        """Energy grid optimization template"""
+
+    def _create_energy_advanced(self) -> Dict[str, Any]:
+        """Create advanced energy template"""
+        basic = self._create_energy_basic()
+        basic["system"]["name"] = "Advanced Energy Grid ML System"
+        basic["collectors"].append(
+            {
+                "type": "regulatory",
+                "compliance_standards": ["IEC-61508", "ISO-13849"],
+            }
+        )
+        return basic
+
+    def _create_manufacturing_basic(self) -> Dict[str, Any]:
+        """Create basic manufacturing template"""
         return {
             "system": {
-                "name": "Energy Grid Optimization System",
+                "name": "Manufacturing ML System",
                 "type": "workflow",
-                "stages": ["demand_prediction", "supply_optimization", "grid_balancing"],
-                "criticality": "business_critical"
+                "criticality": "business_critical",
             },
             "slos": {
-                "prediction_accuracy": {
+                "quality_control": {
                     "target": 0.95,
-                    "window": "24h",
+                    "window": "8h",
                     "error_budget": 0.05,
-                    "description": "Demand prediction accuracy"
+                    "description": "Quality control accuracy",
+                    "safety_critical": False,
+                    "compliance_standard": "ISO-13485",
                 },
-                "optimization_latency": {
-                    "target": 300,
+                "throughput": {
+                    "target": 1000,
                     "window": "1h",
-                    "error_budget": 0.02,
-                    "description": "Grid optimization response time (ms)"
-                }
+                    "error_budget": 0.1,
+                    "description": "Production throughput (units/hour)",
+                    "safety_critical": False,
+                },
             },
             "collectors": [
                 {
                     "type": "online",
-                    "endpoint": "http://energy-metrics:9090"
-                }
+                    "endpoint": "http://manufacturing-metrics:9090",
+                },
+                {
+                    "type": "environmental",
+                    "sensor_types": ["temperature", "humidity", "vibration"],
+                },
             ],
             "evaluators": [
                 {
+                    "type": "performance",
+                    "thresholds": {
+                        "quality_control": {"target": 0.95, "warning": 0.90},
+                        "throughput": {"target": 1000, "warning": 900},
+                    },
+                },
+                {
                     "type": "reliability",
-                    "error_budget_window": "30d"
-                }
-            ]
+                    "error_budget_window": "30d",
+                },
+            ],
         }
-        
-    # Additional template methods would be implemented here
-    def _manufacturing_predictive_maintenance(self) -> Dict[str, Any]:
-        return {"system": {"name": "Predictive Maintenance System"}}
-        
-    def _aviation_flight_control(self) -> Dict[str, Any]:
-        return {"system": {"name": "Flight Control System"}}
-        
-    def _energy_demand_prediction(self) -> Dict[str, Any]:
-        return {"system": {"name": "Demand Prediction System"}} 
+
+    def _create_manufacturing_advanced(self) -> Dict[str, Any]:
+        """Create advanced manufacturing template"""
+        basic = self._create_manufacturing_basic()
+        basic["system"]["name"] = "Advanced Manufacturing ML System"
+        basic["collectors"].append(
+            {
+                "type": "regulatory",
+                "compliance_standards": ["ISO-13485", "FDA-510K"],
+            }
+        )
+        return basic
+
+    def _create_maritime_basic(self) -> Dict[str, Any]:
+        """Create basic maritime template"""
+        return {
+            "system": {
+                "name": "Maritime ML System",
+                "type": "workflow",
+                "criticality": "safety_critical",
+            },
+            "slos": {
+                "collision_avoidance": {
+                    "target": 0.99,
+                    "window": "1h",
+                    "error_budget": 0.001,
+                    "description": "Collision avoidance accuracy",
+                    "safety_critical": True,
+                    "compliance_standard": "SOLAS",
+                },
+                "navigation_accuracy": {
+                    "target": 0.98,
+                    "window": "24h",
+                    "error_budget": 0.02,
+                    "description": "Navigation system accuracy",
+                    "safety_critical": True,
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoint": "http://maritime-system:8080/metrics",
+                },
+                {
+                    "type": "environmental",
+                    "sensor_types": ["temperature", "humidity", "pressure"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "safety",
+                    "compliance_standards": ["SOLAS", "MARPOL"],
+                },
+                {
+                    "type": "reliability",
+                    "error_budget_window": "7d",
+                },
+            ],
+        }
+
+    def _create_maritime_advanced(self) -> Dict[str, Any]:
+        """Create advanced maritime template"""
+        basic = self._create_maritime_basic()
+        basic["system"]["name"] = "Advanced Maritime ML System"
+        basic["collectors"].append(
+            {
+                "type": "regulatory",
+                "compliance_standards": ["SOLAS", "MARPOL"],
+            }
+        )
+        return basic

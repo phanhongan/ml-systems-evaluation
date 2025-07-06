@@ -2,4 +2,4 @@
 
 from .registry import ExampleRegistry
 
-__all__ = ["ExampleRegistry"] 
+__all__ = ["ExampleRegistry"]

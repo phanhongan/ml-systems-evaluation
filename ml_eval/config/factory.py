@@ -1,252 +1,228 @@
-"""Configuration factory patterns for ML Systems Evaluation Framework"""
+"""Configuration factory for ML Systems Evaluation Framework"""
 
-import logging
-from typing import Dict, Any, Optional
+import os
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from .loader import ConfigLoader
 from .validator import ConfigValidator
 
 
 class ConfigFactory:
-    """Factory for creating and managing configurations"""
-    
-    def __init__(self):
+    """Factory for creating and managing configuration objects"""
+
+    def __init__(self, config_dir: Optional[str] = None):
+        self.config_dir = config_dir or os.getcwd()
         self.loader = ConfigLoader()
         self.validator = ConfigValidator()
-        self.logger = logging.getLogger(__name__)
-        
-    def create_config(self, 
-                     system_name: str,
-                     system_type: str = "single_model",
-                     criticality: str = "operational",
-                     industry: Optional[str] = None) -> Dict[str, Any]:
-        """Create a new configuration with basic structure"""
-        
-        config = {
-            "system": {
-                "name": system_name,
-                "type": system_type,
-                "criticality": criticality
-            },
-            "slos": {},
-            "collectors": [],
-            "evaluators": []
-        }
-        
-        # Add industry-specific defaults
-        if industry:
-            config = self._add_industry_defaults(config, industry)
-            
-        return config
-        
-    def create_from_template(self, industry: str, template_type: str) -> Dict[str, Any]:
-        """Create configuration from industry template"""
+        self._config_cache = {}
+
+    def create_config(self, config_path: str) -> Dict[str, Any]:
+        """Create configuration from file or directory"""
         try:
-            template = self.loader.load_template(industry, template_type)
-            
-            # Validate the template
-            if not self.validator.validate_config(template):
-                self.logger.error("Template validation failed")
-                return {}
-                
-            return template
-            
+            # Check if config is already cached
+            if config_path in self._config_cache:
+                return self._config_cache[config_path]
+
+            # Load configuration
+            config = self.loader.load_config(config_path)
+
+            # Validate configuration
+            validation_result = self.validator.validate_config(config)
+            if not validation_result["valid"]:
+                raise ValueError(
+                    f"Configuration validation failed: "
+                    f"{validation_result['errors']}"
+                )
+
+            # Cache the configuration
+            self._config_cache[config_path] = config
+
+            return config
+
         except Exception as e:
-            self.logger.error(f"Failed to create config from template {industry}/{template_type}: {e}")
-            return {}
-            
-    def create_safety_critical_config(self, system_name: str) -> Dict[str, Any]:
-        """Create a safety-critical system configuration"""
-        
-        config = self.create_config(
-            system_name=system_name,
-            system_type="single_model",
-            criticality="safety_critical"
+            raise ConfigFactoryError(f"Failed to create config from {config_path}: {e}")
+
+    def create_collector_config(self, collector_type: str, **kwargs) -> Dict[str, Any]:
+        """Create configuration for a specific collector type"""
+        base_config = self._get_base_collector_config(collector_type)
+
+        # Merge with provided kwargs
+        config = {**base_config, **kwargs}
+
+        # Validate collector-specific configuration
+        validation_result = self.validator.validate_collector_config(
+            collector_type, config
         )
-        
-        # Add safety-critical SLOs
-        config["slos"].update({
-            "safety_accuracy": {
-                "target": 0.9999,
-                "window": "24h",
-                "error_budget": 0.0001,
-                "description": "Safety-critical decision accuracy",
-                "safety_critical": True,
-                "compliance_standard": "DO-178C"
-            },
-            "response_time": {
-                "target": 50,
-                "window": "1h",
-                "error_budget": 0.01,
-                "description": "Decision response time (ms)",
-                "safety_critical": True
-            }
-        })
-        
-        # Add safety evaluators
-        config["evaluators"].extend([
-            {
-                "type": "safety",
-                "compliance_standards": ["DO-178C"]
-            },
-            {
-                "type": "reliability",
-                "error_budget_window": "7d"
-            }
-        ])
-        
+        if not validation_result["valid"]:
+            raise ValueError(
+                f"Collector config validation failed: " f"{validation_result['errors']}"
+            )
+
         return config
-        
-    def create_business_critical_config(self, system_name: str) -> Dict[str, Any]:
-        """Create a business-critical system configuration"""
-        
-        config = self.create_config(
-            system_name=system_name,
-            system_type="workflow",
-            criticality="business_critical"
+
+    def create_evaluator_config(self, evaluator_type: str, **kwargs) -> Dict[str, Any]:
+        """Create configuration for a specific evaluator type"""
+        base_config = self._get_base_evaluator_config(evaluator_type)
+
+        # Merge with provided kwargs
+        config = {**base_config, **kwargs}
+
+        # Validate evaluator-specific configuration
+        validation_result = self.validator.validate_evaluator_config(
+            evaluator_type, config
         )
-        
-        # Add business-critical SLOs
-        config["slos"].update({
-            "accuracy": {
-                "target": 0.98,
-                "window": "24h",
-                "error_budget": 0.02,
-                "description": "System accuracy",
-                "business_impact": "millions_per_hour"
+        if not validation_result["valid"]:
+            raise ValueError(
+                f"Evaluator config validation failed: " f"{validation_result['errors']}"
+            )
+
+        return config
+
+    def create_report_config(self, report_type: str, **kwargs) -> Dict[str, Any]:
+        """Create configuration for a specific report type"""
+        base_config = self._get_base_report_config(report_type)
+
+        # Merge with provided kwargs
+        config = {**base_config, **kwargs}
+
+        # Validate report-specific configuration
+        validation_result = self.validator.validate_report_config(report_type, config)
+        if not validation_result["valid"]:
+            raise ValueError(
+                f"Report config validation failed: " f"{validation_result['errors']}"
+            )
+
+        return config
+
+    def _get_base_collector_config(self, collector_type: str) -> Dict[str, Any]:
+        """Get base configuration for a collector type"""
+        base_configs = {
+            "environmental": {
+                "type": "environmental",
+                "sensor_types": ["temperature", "pressure", "humidity"],
+                "sampling_interval": 60,
+                "alert_thresholds": {},
             },
-            "availability": {
-                "target": 0.999,
-                "window": "30d",
-                "error_budget": 0.001,
-                "description": "System availability",
-                "business_impact": "operational_disruption"
-            }
-        })
-        
-        # Add business evaluators
-        config["evaluators"].extend([
-            {
-                "type": "reliability",
-                "error_budget_window": "30d"
+            "offline": {
+                "type": "offline",
+                "data_sources": [],
+                "file_patterns": ["*.json", "*.csv"],
+                "parsing_rules": {},
             },
-            {
+            "online": {
+                "type": "online",
+                "endpoints": [],
+                "polling_interval": 30,
+                "timeout": 10,
+                "retry_attempts": 3,
+            },
+            "regulatory": {
+                "type": "regulatory",
+                "compliance_frameworks": [],
+                "audit_requirements": {},
+                "reporting_frequency": "monthly",
+            },
+        }
+
+        return base_configs.get(collector_type, {"type": collector_type})
+
+    def _get_base_evaluator_config(self, evaluator_type: str) -> Dict[str, Any]:
+        """Get base configuration for an evaluator type"""
+        base_configs = {
+            "performance": {
                 "type": "performance",
-                "metrics": ["accuracy", "latency"]
-            }
-        ])
-        
-        return config
-        
-    def create_operational_config(self, system_name: str) -> Dict[str, Any]:
-        """Create an operational system configuration"""
-        
-        config = self.create_config(
-            system_name=system_name,
-            system_type="single_model",
-            criticality="operational"
-        )
-        
-        # Add operational SLOs
-        config["slos"].update({
-            "accuracy": {
-                "target": 0.95,
-                "window": "24h",
-                "error_budget": 0.05,
-                "description": "System accuracy"
+                "metrics": ["accuracy", "precision", "recall", "f1"],
+                "thresholds": {},
+                "baseline_comparison": True,
             },
-            "latency": {
-                "target": 1000,
-                "window": "1h",
-                "error_budget": 0.1,
-                "description": "Response time (ms)"
-            }
-        })
-        
-        # Add operational evaluators
-        config["evaluators"].extend([
-            {
+            "reliability": {
                 "type": "reliability",
-                "error_budget_window": "30d"
-            }
-        ])
-        
-        return config
-        
-    def _add_industry_defaults(self, config: Dict[str, Any], industry: str) -> Dict[str, Any]:
-        """Add industry-specific defaults to configuration"""
-        
-        industry_defaults = {
-            "manufacturing": {
-                "collectors": [
-                    {
-                        "type": "online",
-                        "endpoint": "http://manufacturing-metrics:9090"
-                    }
-                ],
-                "evaluators": [
-                    {
-                        "type": "reliability",
-                        "error_budget_window": "30d"
-                    }
-                ]
+                "availability_threshold": 0.99,
+                "error_budget": 0.01,
+                "slo_targets": {},
             },
-            "aviation": {
-                "collectors": [
-                    {
-                        "type": "online",
-                        "endpoint": "http://aviation-system:8080/metrics"
-                    }
-                ],
-                "evaluators": [
-                    {
-                        "type": "safety",
-                        "compliance_standards": ["DO-178C"]
-                    },
-                    {
-                        "type": "reliability",
-                        "error_budget_window": "7d"
-                    }
-                ]
+            "safety": {
+                "type": "safety",
+                "safety_thresholds": {},
+                "risk_assessment": True,
+                "incident_tracking": True,
             },
-            "energy": {
-                "collectors": [
-                    {
-                        "type": "online",
-                        "endpoint": "http://energy-grid:9090"
-                    }
-                ],
-                "evaluators": [
-                    {
-                        "type": "reliability",
-                        "error_budget_window": "30d"
-                    }
-                ]
-            }
+            "compliance": {
+                "type": "compliance",
+                "standards": [],
+                "audit_requirements": {},
+                "reporting_frequency": "monthly",
+            },
+            "drift": {
+                "type": "drift",
+                "detection_methods": ["statistical", "ml_based"],
+                "sensitivity": 0.05,
+                "window_size": 1000,
+            },
         }
-        
-        if industry in industry_defaults:
-            defaults = industry_defaults[industry]
-            config["collectors"].extend(defaults.get("collectors", []))
-            config["evaluators"].extend(defaults.get("evaluators", []))
-            
-        return config
-        
-    def validate_and_save(self, config: Dict[str, Any], output_path: str) -> bool:
-        """Validate configuration and save to file"""
-        
-        # Validate configuration
-        if not self.validator.validate_config(config):
-            self.validator.print_validation_report()
-            return False
-            
-        # Save configuration
-        try:
-            self.loader.save_config(config, output_path)
-            self.logger.info(f"Configuration saved to {output_path}")
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Failed to save configuration: {e}")
-            return False 
+
+        return base_configs.get(evaluator_type, {"type": evaluator_type})
+
+    def _get_base_report_config(self, report_type: str) -> Dict[str, Any]:
+        """Get base configuration for a report type"""
+        base_configs = {
+            "business": {
+                "type": "business",
+                "metrics": ["revenue_impact", "cost_savings", "efficiency_gains"],
+                "format": "html",
+                "frequency": "weekly",
+            },
+            "compliance": {
+                "type": "compliance",
+                "standards": [],
+                "audit_trail": True,
+                "format": "pdf",
+                "frequency": "monthly",
+            },
+            "reliability": {
+                "type": "reliability",
+                "slo_metrics": [],
+                "error_budgets": {},
+                "format": "html",
+                "frequency": "daily",
+            },
+            "safety": {
+                "type": "safety",
+                "safety_metrics": [],
+                "incident_reports": True,
+                "format": "html",
+                "frequency": "daily",
+            },
+        }
+
+        return base_configs.get(report_type, {"type": report_type})
+
+    def list_available_configs(self) -> List[str]:
+        """List all available configuration files"""
+        config_files = []
+        config_path = Path(self.config_dir)
+
+        if config_path.exists():
+            for file_path in config_path.rglob("*.yaml"):
+                config_files.append(str(file_path))
+            for file_path in config_path.rglob("*.yml"):
+                config_files.append(str(file_path))
+            for file_path in config_path.rglob("*.json"):
+                config_files.append(str(file_path))
+
+        return config_files
+
+    def clear_cache(self):
+        """Clear the configuration cache"""
+        self._config_cache.clear()
+
+    def get_cached_config(self, config_path: str) -> Optional[Dict[str, Any]]:
+        """Get cached configuration if available"""
+        return self._config_cache.get(config_path)
+
+
+class ConfigFactoryError(Exception):
+    """Exception raised by ConfigFactory"""
+
+    pass

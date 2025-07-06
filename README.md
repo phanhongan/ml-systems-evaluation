@@ -185,10 +185,11 @@ poetry shell
 # For production installs (main dependencies only)
 # poetry install --only main
 
-# Note: This project uses Poetry for dependency management and packaging. 
-# See [pyproject.toml](./pyproject.toml) for the full, up-to-date list of dependencies.
-# For detailed installation instructions, see [docs/getting-started.md](./docs/getting-started.md).
 ```
+
+**Note**: This project uses Poetry for dependency management and packaging. 
+See [pyproject.toml](./pyproject.toml) for the full, up-to-date list of dependencies.
+For detailed installation instructions, see [docs/getting-started.md](./docs/getting-started.md).
 
 ### Getting Started (For Industrial ML Engineers)
 
@@ -542,8 +543,9 @@ pytest tests/ -v
 pytest tests/safety/ -v  # Safety-critical tests
 pytest tests/industry/ -v  # Industry-specific tests
 
-# For detailed testing instructions, see [docs/testing.md](./docs/testing.md)
 ```
+
+**Note**: For detailed testing instructions, see [docs/testing.md](./docs/testing.md)
 
 ## Contributing
 
@@ -554,4 +556,4 @@ pytest tests/industry/ -v  # Industry-specific tests
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](./LICENSE) file for details.

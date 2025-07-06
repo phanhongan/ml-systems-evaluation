@@ -13,6 +13,7 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 - **CLI Reference**: Complete command-line interface documentation
 
 ### 🔧 Developer Guides
+- **Development Guide**: Code quality tools, testing practices, and development workflows
 - **Architecture Overview**: System design and component relationships
 - **API Reference**: Complete API documentation
 - **Extending the Framework**: How to add custom collectors and evaluators
@@ -38,10 +39,11 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 4. Run evaluations with [CLI Reference](cli-reference.md)
 
 ### For Developers
-1. Understand the [Architecture](architecture.md)
-2. Review the [API Reference](api-reference.md)
-3. Learn to [Extend the Framework](extending.md)
-4. Follow [Testing Guidelines](testing.md)
+1. Read the [Development Guide](development.md) for code quality standards and workflows
+2. Understand the [Architecture](architecture.md)
+3. Review the [API Reference](api-reference.md)
+4. Learn to [Extend the Framework](extending.md)
+5. Follow [Testing Guidelines](testing.md)
 
 ### For Industry Specialists
 - **Manufacturing**: [Manufacturing Guide](industries/manufacturing.md)

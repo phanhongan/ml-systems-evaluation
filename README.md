@@ -8,7 +8,7 @@ Industrial AI systems face unique challenges that traditional ML evaluation appr
 
 ### **Safety-Critical Requirements**
 - **Zero Tolerance Failures**: Aircraft landing systems, medical diagnostics, autonomous vehicles where errors can be catastrophic
-- **Regulatory Standards**: Aviation (DO-178C), healthcare (FDA), financial services require continuous compliance validation
+- **Regulatory Standards**: Aviation (DO-178C), healthcare, financial services require continuous compliance validation
 - **Environmental Constraints**: Underwater devices, extreme temperatures, harsh conditions that affect system reliability
 
 ### **Business-Critical Operations**
@@ -106,7 +106,7 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 ## Key Features
 
 - **Safety-Critical Evaluation**: Zero tolerance for catastrophic failures with specialized safety metrics
-- **Regulatory Compliance**: Built-in validation against industry standards (DO-178C, FDA, etc.)
+- **Regulatory Compliance**: Built-in validation against industry standards (DO-178C for aviation)
 - **Environmental Monitoring**: Specialized collectors for harsh operating conditions
 - **Business-Critical Reliability**: SRE principles applied to systems with immediate financial impact
 - **Extensible Architecture**: Plugin-based collectors and evaluators for domain-specific requirements
@@ -487,7 +487,7 @@ The framework is designed with a modular architecture for easy maintenance and e
 
 - **`cli.py`**: Lightweight argument parsing and command routing
 - **`cli_commands.py`**: All command implementations with industrial focus
-- **`templates.py`**: Industry-specific configuration templates (6 industries, multiple template types)
+- **`templates.py`**: Industry-specific configuration templates (3 industries, multiple template types)
 - **`examples.py`**: Detailed examples with challenges, features, and use cases
 - **`core.py`**: Core evaluation framework and data structures
 - **`collectors.py`**: Metric collection interfaces for different data sources
@@ -499,25 +499,25 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **Industry-Specific Templates**
-- Ready-to-use configurations for 3 industrial sectors
+- Ready-to-use configurations for 3 industrial sectors (manufacturing, aviation, energy)
 - Multiple template types per industry (e.g., quality control, predictive maintenance)
-- Automatic validation and guidance for industry-specific requirements
+- Industry-specific SLOs with appropriate safety and compliance standards
 
-#### **Enhanced CLI Experience**
-- Clear, industrial-focused help messages
-- Step-by-step guidance for getting started
-- Detailed examples with explanations
-- Error messages with actionable suggestions
+#### **Industrial-Focused CLI**
+- Clear, industry-specific help messages with manufacturing/aviation/energy examples
+- Step-by-step guidance tailored for ML engineers in industrial sectors
+- Detailed examples with explanations for each industry use case
+- Error messages with actionable suggestions (e.g., "Try running: ml-eval template --industry <your-industry>")
 
 #### **Modular Design**
 - Easy to add new commands or templates
 - Clear separation of concerns
-- Maintainable codebase (CLI reduced from 726 to 231 lines)
+- Maintainable codebase with modular CLI architecture
 - Extensible architecture for custom requirements
 
 #### **Industrial Focus**
 - Safety-critical and business-critical system support
-- Regulatory compliance templates (DO-178C, FDA, etc.)
+- Regulatory compliance templates (DO-178C for aviation safety systems)
 - Environmental monitoring for harsh conditions
 - Business impact assessment and reporting
 

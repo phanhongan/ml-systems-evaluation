@@ -212,7 +212,7 @@ def main(args: Optional[list] = None) -> int:
     try:
         if not parsed_args.command:
             parser.print_help()
-            return 0
+            sys.exit(2)
             
         # Route to appropriate command handler
         if parsed_args.command == "template":

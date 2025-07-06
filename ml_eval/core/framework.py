@@ -16,22 +16,31 @@ class EvaluationFramework:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
+        self.logger = logging.getLogger(__name__)
         self.system_name = config.get("system", {}).get("name", "Unknown")
         self.system_type = SystemType(config.get("system", {}).get("type", "single_model"))
         self.criticality = CriticalityLevel(config.get("system", {}).get("criticality", "operational"))
         self.slos = self._parse_slos(config.get("slos", {}))
         self.collectors = []
         self.evaluators = []
-        self.logger = logging.getLogger(__name__)
 
     def _parse_slos(self, slos_config: Dict[str, Any]) -> List[SLOConfig]:
         """Parse SLO configuration into objects for Industrial AI systems"""
         slos = []
         for name, config in slos_config.items():
             try:
+                # Convert target to float, handle invalid values gracefully
+                target = config.get("target", 0.95)
+                if isinstance(target, str):
+                    try:
+                        target = float(target)
+                    except ValueError:
+                        self.logger.error(f"Invalid target value for SLO '{name}': {target}")
+                        continue  # Skip this SLO instead of raising
+                
                 slo = SLOConfig(
                     name=name,
-                    target=config.get("target", 0.95),
+                    target=target,
                     window=config.get("window", "30d"),
                     error_budget=config.get("error_budget", 0.05),
                     description=config.get("description", ""),
@@ -43,7 +52,7 @@ class EvaluationFramework:
                 slos.append(slo)
             except ValueError as e:
                 self.logger.error(f"Invalid SLO configuration for '{name}': {e}")
-                raise
+                # Continue with other SLOs instead of raising
 
         return slos
 
@@ -107,7 +116,13 @@ class EvaluationFramework:
         
         for evaluator in self.evaluators:
             try:
-                result = evaluator.evaluate(metrics, self.slos)
+                # Convert MetricData to simple values for evaluators
+                simple_metrics = {}
+                for key, metric_list in metrics.items():
+                    if metric_list:
+                        simple_metrics[key] = metric_list[0].value
+                
+                result = evaluator.evaluate(simple_metrics)
                 results.append(result)
                 self.logger.debug(f"Completed evaluation with {evaluator.__class__.__name__}")
             except Exception as e:
@@ -162,6 +177,10 @@ class EvaluationFramework:
         """Validate framework configuration for industrial requirements"""
         errors = []
         
+        # Must have at least one valid SLO
+        if not self.slos:
+            errors.append("No valid SLOs found in configuration.")
+        
         # Check for safety-critical systems
         if self.criticality == CriticalityLevel.SAFETY_CRITICAL:
             safety_slos = [slo for slo in self.slos if slo.safety_critical]
@@ -184,7 +203,7 @@ class EvaluationFramework:
             for error in errors:
                 self.logger.error(f"Configuration validation error: {error}")
             return False
-            
+        
         return True
 
     def get_system_summary(self) -> Dict[str, Any]:

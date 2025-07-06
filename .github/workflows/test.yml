@@ -57,7 +57,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
@@ -73,13 +73,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11, 3.12, 3.13]
+        python-version: [3.11, 3.12, 3.13]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          check-latest: true
+      - name: Debug Python version
+        run: |
+          python --version
+          which python
       - name: Cache Poetry
         uses: actions/cache@v4
         with:
@@ -108,9 +113,9 @@ jobs:
 #   docs:
 #     runs-on: ubuntu-latest
 #     steps:
-#       - uses: actions/checkout@v2
+#       - uses: actions/checkout@v4
 #       - name: Set up Python
-#         uses: actions/setup-python@v2
+#         uses: actions/setup-python@v5
 #         with:
 #           python-version: '3.11'
 #       - name: Install Poetry
@@ -128,9 +133,9 @@ jobs:
 #     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
 #     runs-on: ubuntu-latest
 #     steps:
-#       - uses: actions/checkout@v2
+#       - uses: actions/checkout@v4
 #       - name: Set up Python
-#         uses: actions/setup-python@v2
+#         uses: actions/setup-python@v5
 #         with:
 #           python-version: '3.11'
 #       - name: Install Poetry

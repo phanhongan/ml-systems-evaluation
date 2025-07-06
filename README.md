@@ -6,31 +6,31 @@ A reliability-focused evaluation framework for Industrial AI systems, applying S
 
 Industrial AI systems face unique challenges that traditional ML evaluation approaches don't address:
 
-### **Critical Infrastructure Failures**
-- **Safety-Critical Systems**: Aircraft landing decisions, medical diagnostics, autonomous vehicles
-- **Business-Critical Operations**: Manufacturing quality control, fraud detection, supply chain optimization
-- **Regulatory Compliance**: Financial services, healthcare, aviation require continuous validation
+### **Safety-Critical Requirements**
+- **Zero Tolerance Failures**: Aircraft landing systems, medical diagnostics, autonomous vehicles where errors can be catastrophic
+- **Regulatory Standards**: Aviation (DO-178C), healthcare (FDA), financial services require continuous compliance validation
+- **Environmental Constraints**: Underwater devices, extreme temperatures, harsh conditions that affect system reliability
 
-### **Production Reality Gap**
-- **Model Drift**: Performance degrades over time as data distributions change
-- **Infrastructure Failures**: Hardware issues, network problems, service dependencies
-- **Operational Complexity**: Multi-stage pipelines, real-time constraints, distributed systems
+### **Business-Critical Operations**
+- **Immediate Financial Impact**: Manufacturing quality control, fraud detection where failures cost millions instantly
+- **Real-time Decision Making**: Supply chain optimization, trading systems where delays cause cascading failures
+- **Public Safety**: Systems where failures affect public safety, requiring continuous monitoring and rapid response
 
-### **Traditional ML Evaluation Limitations**
-- **Static Validation**: One-time testing doesn't reflect production dynamics
-- **Isolated Metrics**: Accuracy alone doesn't capture system reliability
-- **Reactive Approach**: Issues discovered only after they impact users
-- **No Feedback Loop**: Evaluation doesn't inform model development and deployment
+### **Traditional ML Evaluation Gaps**
+- **No Safety Validation**: Standard ML evaluation doesn't assess catastrophic failure scenarios
+- **Missing Regulatory Compliance**: No built-in validation against industry-specific standards
+- **Inadequate Environmental Monitoring**: Doesn't account for harsh operating conditions
+- **No Business Impact Metrics**: Technical metrics don't connect to business outcomes
 
 ## Why This Framework Matters
 
-### **SRE Principles for ML Systems**
-This framework treats ML systems as critical infrastructure, applying proven SRE concepts:
-- **Error Budgets**: Acceptable failure rates for different system components
-- **SLIs/SLOs**: Service Level Indicators and Objectives for ML performance
-- **Observability**: Comprehensive monitoring and alerting
-- **Reliability**: Focus on system uptime and consistent performance
-- **Incident Response**: Structured approach to handling ML system failures
+### **SRE Principles for Industrial AI**
+This framework treats Industrial AI systems as critical infrastructure, applying proven SRE concepts:
+- **Safety-First Error Budgets**: Acceptable failure rates with zero tolerance for catastrophic failures
+- **Regulatory SLOs**: Service Level Objectives that include compliance requirements
+- **Environmental Observability**: Monitoring that accounts for harsh operating conditions
+- **Business-Critical Reliability**: Focus on preventing immediate financial and safety impacts
+- **Rapid Incident Response**: Structured approach to handling safety-critical and business-critical failures
 
 ### **Continuous Evaluation Lifecycle**
 Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism that informs every stage of the ML lifecycle:

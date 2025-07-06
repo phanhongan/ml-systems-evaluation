@@ -11,8 +11,8 @@ The framework follows a modular, extensible architecture designed for industrial
 │              ML Systems Evaluation Framework                │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │   CLI       │  │   Web UI*   │  │   API*      │          │
-│  │  Interface  │  │  Dashboard* │  │  Endpoints* │          │
+│  │  CLI        │  │  Web UI /   │  │  API        │          │
+│  │             │  │  Dashboard* │  │  Endpoints* │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
@@ -26,7 +26,7 @@ The framework follows a modular, extensible architecture designed for industrial
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │  Monitoring*│  │  Alerting*  │  │  Scheduling*│          │
+│  │  Monitoring │  │  Alerting   │  │  Scheduling │          │
 │  │  System*    │  │  System*    │  │  System*    │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────────────────────────────────────────────┘

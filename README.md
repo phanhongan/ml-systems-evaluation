@@ -178,11 +178,6 @@ cd ml-systems-evaluation
 
 # Install in development mode
 pip install -e .
-
-# Install with industry-specific dependencies
-pip install -e .[manufacturing]  # For manufacturing systems
-pip install -e .[aviation]       # For aviation systems
-pip install -e .[energy]         # For energy systems
 ```
 
 ### Getting Started (For Industrial ML Engineers)

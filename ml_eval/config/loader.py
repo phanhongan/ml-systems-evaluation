@@ -65,7 +65,7 @@ class ConfigLoader:
 
     def _load_directory(self, dir_path: Path) -> Dict[str, Any]:
         """Load configuration from a directory (merge all config files)"""
-        config = {}
+        config: Dict[str, Any] = {}
 
         # Find all configuration files in the directory
         config_files = []

@@ -161,7 +161,7 @@ class RegulatoryCollector(BaseCollector):
             compliance_data = self._generate_compliance_data(framework)
             thresholds = self.compliance_thresholds.get(framework, {})
 
-            status = {
+            status: Dict[str, Any] = {
                 "framework": framework,
                 "overall_score": sum(compliance_data.values()) / len(compliance_data),
                 "metrics": compliance_data,
@@ -173,14 +173,18 @@ class RegulatoryCollector(BaseCollector):
             for metric, value in compliance_data.items():
                 threshold = thresholds.get(metric)
                 if threshold and value < threshold:
-                    status["violations"].append(
-                        {
-                            "metric": metric,
-                            "value": value,
-                            "threshold": threshold,
-                            "severity": "high" if value < threshold * 0.8 else "medium",
-                        }
-                    )
+                    violations = status["violations"]
+                    if isinstance(violations, list):
+                        violations.append(
+                            {
+                                "metric": metric,
+                                "value": value,
+                                "threshold": threshold,
+                                "severity": (
+                                    "high" if value < threshold * 0.8 else "medium"
+                                ),
+                            }
+                        )
 
             return status
 
@@ -191,7 +195,7 @@ class RegulatoryCollector(BaseCollector):
     def generate_compliance_report(self) -> Dict[str, Any]:
         """Generate comprehensive compliance report"""
         try:
-            report = {
+            report: Dict[str, Any] = {
                 "timestamp": datetime.now().isoformat(),
                 "collector": self.name,
                 "frameworks": {},
@@ -214,14 +218,16 @@ class RegulatoryCollector(BaseCollector):
                 # Collect critical violations
                 for violation in status.get("violations", []):
                     if violation.get("severity") == "high":
-                        report["critical_violations"].append(
-                            {
-                                "framework": framework,
-                                "metric": violation["metric"],
-                                "value": violation["value"],
-                                "threshold": violation["threshold"],
-                            }
-                        )
+                        critical_violations = report["critical_violations"]
+                        if isinstance(critical_violations, list):
+                            critical_violations.append(
+                                {
+                                    "framework": framework,
+                                    "metric": violation["metric"],
+                                    "value": violation["value"],
+                                    "threshold": violation["threshold"],
+                                }
+                            )
 
             if framework_count > 0:
                 report["overall_compliance_score"] = total_score / framework_count

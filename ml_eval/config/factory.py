@@ -15,7 +15,7 @@ class ConfigFactory:
         self.config_dir = config_dir or os.getcwd()
         self.loader = ConfigLoader()
         self.validator = ConfigValidator()
-        self._config_cache = {}
+        self._config_cache: Dict[str, Dict[str, Any]] = {}
 
     def create_config(self, config_path: str) -> Dict[str, Any]:
         """Create configuration from file or directory"""
@@ -29,11 +29,17 @@ class ConfigFactory:
 
             # Validate configuration
             validation_result = self.validator.validate_config(config)
-            if not validation_result["valid"]:
-                raise ValueError(
-                    f"Configuration validation failed: "
-                    f"{validation_result['errors']}"
+            if not (
+                isinstance(validation_result, dict)
+                and validation_result.get("valid", False)
+            ):
+                errors = (
+                    validation_result["errors"]
+                    if isinstance(validation_result, dict)
+                    and "errors" in validation_result
+                    else str(validation_result)
                 )
+                raise ValueError(f"Configuration validation failed: {errors}")
 
             # Cache the configuration
             self._config_cache[config_path] = config
@@ -51,13 +57,17 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate collector-specific configuration
-        validation_result = self.validator.validate_collector_config(
-            collector_type, config
-        )
-        if not validation_result["valid"]:
-            raise ValueError(
-                f"Collector config validation failed: " f"{validation_result['errors']}"
+        validation_result = self.validator.validate_config(config)
+        if not (
+            isinstance(validation_result, dict)
+            and validation_result.get("valid", False)
+        ):
+            errors = (
+                validation_result["errors"]
+                if isinstance(validation_result, dict) and "errors" in validation_result
+                else str(validation_result)
             )
+            raise ValueError(f"Collector config validation failed: {errors}")
 
         return config
 
@@ -69,13 +79,17 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate evaluator-specific configuration
-        validation_result = self.validator.validate_evaluator_config(
-            evaluator_type, config
-        )
-        if not validation_result["valid"]:
-            raise ValueError(
-                f"Evaluator config validation failed: " f"{validation_result['errors']}"
+        validation_result = self.validator.validate_config(config)
+        if not (
+            isinstance(validation_result, dict)
+            and validation_result.get("valid", False)
+        ):
+            errors = (
+                validation_result["errors"]
+                if isinstance(validation_result, dict) and "errors" in validation_result
+                else str(validation_result)
             )
+            raise ValueError(f"Evaluator config validation failed: {errors}")
 
         return config
 
@@ -87,11 +101,17 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate report-specific configuration
-        validation_result = self.validator.validate_report_config(report_type, config)
-        if not validation_result["valid"]:
-            raise ValueError(
-                f"Report config validation failed: " f"{validation_result['errors']}"
+        validation_result = self.validator.validate_config(config)
+        if not (
+            isinstance(validation_result, dict)
+            and validation_result.get("valid", False)
+        ):
+            errors = (
+                validation_result["errors"]
+                if isinstance(validation_result, dict) and "errors" in validation_result
+                else str(validation_result)
             )
+            raise ValueError(f"Report config validation failed: {errors}")
 
         return config
 
@@ -125,7 +145,10 @@ class ConfigFactory:
             },
         }
 
-        return base_configs.get(collector_type, {"type": collector_type})
+        result = base_configs.get(collector_type, {"type": collector_type})
+        if not isinstance(result, dict):
+            result = {"type": collector_type}
+        return result
 
     def _get_base_evaluator_config(self, evaluator_type: str) -> Dict[str, Any]:
         """Get base configuration for an evaluator type"""
@@ -162,7 +185,10 @@ class ConfigFactory:
             },
         }
 
-        return base_configs.get(evaluator_type, {"type": evaluator_type})
+        result = base_configs.get(evaluator_type, {"type": evaluator_type})
+        if not isinstance(result, dict):
+            result = {"type": evaluator_type}
+        return result
 
     def _get_base_report_config(self, report_type: str) -> Dict[str, Any]:
         """Get base configuration for a report type"""
@@ -196,7 +222,10 @@ class ConfigFactory:
             },
         }
 
-        return base_configs.get(report_type, {"type": report_type})
+        result = base_configs.get(report_type, {"type": report_type})
+        if not isinstance(result, dict):
+            result = {"type": report_type}
+        return result
 
     def list_available_configs(self) -> List[str]:
         """List all available configuration files"""

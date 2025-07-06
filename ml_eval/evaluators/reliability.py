@@ -23,7 +23,7 @@ class ReliabilityEvaluator(BaseEvaluator):
         if not self.validate_metrics(metrics):
             return {"error": "Missing required metrics"}
 
-        results = {
+        results: Dict[str, Any] = {
             "slos": {},
             "error_budgets": {},
             "overall_reliability": 0.0,
@@ -43,9 +43,11 @@ class ReliabilityEvaluator(BaseEvaluator):
                 results["error_budgets"][slo_name] = budget_result
 
         # Calculate overall reliability
-        if results["slos"]:
+        if isinstance(results["slos"], dict) and results["slos"]:
             compliant_slos = sum(
-                1 for slo in results["slos"].values() if slo.get("compliant", False)
+                1
+                for slo in results["slos"].values()
+                if isinstance(slo, dict) and slo.get("compliant", False)
             )
             results["overall_reliability"] = compliant_slos / len(results["slos"])
 

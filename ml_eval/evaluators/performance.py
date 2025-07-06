@@ -23,7 +23,7 @@ class PerformanceEvaluator(BaseEvaluator):
         if not self.validate_metrics(metrics):
             return {"error": "Missing required performance metrics"}
 
-        results = {
+        results: Dict[str, Any] = {
             "performance_metrics": {},
             "overall_performance_score": 0.0,
             "bottlenecks": [],
@@ -39,19 +39,26 @@ class PerformanceEvaluator(BaseEvaluator):
                 results["performance_metrics"][metric_name] = perf_result
 
         # Calculate overall performance score
-        if results["performance_metrics"]:
+        if (
+            isinstance(results["performance_metrics"], dict)
+            and results["performance_metrics"]
+        ):
             total_score = sum(
                 metric.get("score", 0)
                 for metric in results["performance_metrics"].values()
+                if isinstance(metric, dict)
             )
             results["overall_performance_score"] = total_score / len(
                 results["performance_metrics"]
             )
 
         # Identify bottlenecks
-        results["bottlenecks"] = self._identify_bottlenecks(
-            results["performance_metrics"]
-        )
+        if isinstance(results["performance_metrics"], dict):
+            results["bottlenecks"] = self._identify_bottlenecks(
+                results["performance_metrics"]
+            )
+        else:
+            results["bottlenecks"] = []
 
         # Generate alerts
         results["alerts"] = self._generate_performance_alerts(results)

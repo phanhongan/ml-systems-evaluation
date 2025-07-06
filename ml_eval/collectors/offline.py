@@ -53,7 +53,7 @@ class OfflineCollector(BaseCollector):
 
     def _collect_offline_data(self) -> Dict[str, List[MetricData]]:
         """Collect data from offline sources"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
         timestamp = datetime.now()
 
         for source in self.data_sources:
@@ -94,7 +94,7 @@ class OfflineCollector(BaseCollector):
         self, source: str, timestamp: datetime
     ) -> Dict[str, List[MetricData]]:
         """Collect data from a specific source"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
 
         if source.startswith("file://"):
             file_path = source[7:]
@@ -111,7 +111,7 @@ class OfflineCollector(BaseCollector):
         self, file_path: str, timestamp: datetime
     ) -> Dict[str, List[MetricData]]:
         """Collect data from a file"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
         path = Path(file_path)
 
         if not path.exists():
@@ -135,7 +135,7 @@ class OfflineCollector(BaseCollector):
         self, file_path: Path, timestamp: datetime
     ) -> Dict[str, List[MetricData]]:
         """Parse JSON file and extract metrics"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
 
         try:
             with open(file_path, "r") as f:
@@ -165,7 +165,7 @@ class OfflineCollector(BaseCollector):
         self, file_path: Path, timestamp: datetime
     ) -> Dict[str, List[MetricData]]:
         """Parse CSV file and extract metrics"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
 
         try:
             with open(file_path, "r") as f:
@@ -200,7 +200,7 @@ class OfflineCollector(BaseCollector):
         self, db_source: str, timestamp: datetime
     ) -> Dict[str, List[MetricData]]:
         """Collect data from database"""
-        metrics = {}
+        metrics: Dict[str, List[MetricData]] = {}
 
         try:
             # This would connect to database and execute queries

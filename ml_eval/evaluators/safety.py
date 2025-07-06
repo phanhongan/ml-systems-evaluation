@@ -18,12 +18,12 @@ class SafetyEvaluator(BaseEvaluator):
         """Get required metrics for safety evaluation"""
         return list(self.safety_thresholds.keys())
 
-    def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def evaluate(self, metrics: Dict[str, float]) -> Dict[str, Any]:
         """Evaluate safety metrics with zero-tolerance checks"""
         if not self.validate_metrics(metrics):
             return {"error": "Missing required safety metrics"}
 
-        results = {
+        results: Dict[str, Any] = {
             "safety_metrics": {},
             "compliance_status": {},
             "safety_violations": [],
@@ -45,11 +45,11 @@ class SafetyEvaluator(BaseEvaluator):
             results["compliance_status"][standard] = compliance_result
 
         # Calculate overall safety score
-        if results["safety_metrics"]:
+        if isinstance(results["safety_metrics"], dict) and results["safety_metrics"]:
             passed_checks = sum(
                 1
                 for metric in results["safety_metrics"].values()
-                if metric.get("passed", False)
+                if isinstance(metric, dict) and metric.get("passed", False)
             )
             results["overall_safety_score"] = passed_checks / len(
                 results["safety_metrics"]
@@ -92,7 +92,7 @@ class SafetyEvaluator(BaseEvaluator):
         }
 
     def _evaluate_compliance(
-        self, standard: str, metrics: Dict[str, Any]
+        self, standard: str, metrics: Dict[str, float]
     ) -> Dict[str, Any]:
         """Evaluate compliance with a specific standard"""
         # This is a simplified compliance check
@@ -115,7 +115,7 @@ class SafetyEvaluator(BaseEvaluator):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _check_do178c_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_do178c_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
         """Check DO-178C aviation safety compliance"""
         # Simplified DO-178C checks
         required_metrics = ["decision_accuracy", "response_time", "false_positive_rate"]
@@ -149,12 +149,12 @@ class SafetyEvaluator(BaseEvaluator):
             ),
         }
 
-    def _check_iso26262_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_iso26262_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
         """Check ISO-26262 automotive safety compliance"""
         # Simplified ISO-26262 checks
         return {"compliant": True, "details": "ISO-26262 compliance check passed"}
 
-    def _check_iec61508_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_iec61508_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
         """Check IEC-61508 industrial safety compliance"""
         # Simplified IEC-61508 checks
         return {"compliant": True, "details": "IEC-61508 compliance check passed"}

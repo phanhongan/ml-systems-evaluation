@@ -116,7 +116,7 @@ class EnvironmentalCollector(BaseCollector):
         except Exception:
             return False
 
-    def _read_sensor(self, sensor_type: str) -> float:
+    def _read_sensor(self, sensor_type: str) -> float | None:
         """Read value from a specific environmental sensor"""
         try:
             if sensor_type in self.sensor_endpoints:
@@ -131,7 +131,7 @@ class EnvironmentalCollector(BaseCollector):
             self.logger.error(f"Failed to read sensor {sensor_type}: {e}")
             return None
 
-    def _read_from_endpoint(self, sensor_type: str, endpoint: str) -> float:
+    def _read_from_endpoint(self, sensor_type: str, endpoint: str) -> float | None:
         """Read sensor data from configured endpoint"""
         try:
             import requests

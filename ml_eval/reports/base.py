@@ -16,7 +16,7 @@ class ReportData:
     metrics: Dict[str, Any]
     summary: Dict[str, Any]
     recommendations: List[str]
-    alerts: List[str] = None
+    alerts: List[str] | None = None
 
 
 class BaseReport(ABC):

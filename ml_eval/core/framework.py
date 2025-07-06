@@ -20,8 +20,8 @@ class EvaluationFramework:
             config.get("system", {}).get("criticality", "operational")
         )
         self.slos = self._parse_slos(config.get("slos", {}))
-        self.collectors = []
-        self.evaluators = []
+        self.collectors: List[Any] = []
+        self.evaluators: List[Any] = []
 
     def _parse_slos(self, slos_config: Dict[str, Any]) -> List[SLOConfig]:
         """Parse SLO configuration into objects for Industrial AI systems"""
@@ -167,7 +167,129 @@ class EvaluationFramework:
                 "target": slo.target,
                 "window": slo.window,
                 "safety_critical": slo.safety_critical,
-                "compliance_standard": slo.compliance_standard,
+                "business_impact": slo.business_impact,
             }
             for slo in self.slos
         ]
+
+    def generate_reports(self, results: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate reports from evaluation results"""
+        try:
+            from ..reports import (
+                BusinessImpactReport,
+                ComplianceReport,
+                ReliabilityReport,
+                SafetyReport,
+            )
+
+            reports = {}
+            report_configs = self.config.get("reports", [])
+
+            for report_config in report_configs:
+                report_type = report_config.get("type", "reliability")
+                report_name = report_config.get("name", f"{report_type}_report")
+
+                # Create appropriate report instance
+                report: Any
+                if report_type == "business":
+                    report = BusinessImpactReport(report_config)
+                elif report_type == "compliance":
+                    report = ComplianceReport(report_config)
+                elif report_type == "safety":
+                    report = SafetyReport(report_config)
+                else:  # Default to reliability
+                    report = ReliabilityReport(report_config)
+
+                # Generate report data
+                report_data = report.generate(results)
+                reports[report_name] = {
+                    "title": report_data.title,
+                    "generated_at": report_data.generated_at.isoformat(),
+                    "period": report_data.period,
+                    "summary": report_data.summary,
+                    "recommendations": report_data.recommendations,
+                    "alerts": report_data.alerts,
+                }
+
+            return reports
+
+        except Exception as e:
+            return {"error": f"Failed to generate reports: {str(e)}"}
+
+    def health_check(self) -> Dict[str, Any]:
+        """Perform health check on all components"""
+        try:
+            health_status = {
+                "overall_healthy": True,
+                "timestamp": datetime.now().isoformat(),
+                "system": self.get_system_info(),
+                "collectors": [],
+                "evaluators": [],
+                "errors": [],
+            }
+
+            # Check collectors
+            for collector in self.collectors:
+                try:
+                    collector_health = collector.health_check()
+                    collectors = health_status["collectors"]
+                    if isinstance(collectors, list):
+                        collectors.append(
+                            {
+                                "name": getattr(collector, "name", "unknown"),
+                                "healthy": collector_health,
+                            }
+                        )
+                    if not collector_health:
+                        health_status["overall_healthy"] = False
+                except Exception as e:
+                    collectors = health_status["collectors"]
+                    if isinstance(collectors, list):
+                        collectors.append(
+                            {
+                                "name": getattr(collector, "name", "unknown"),
+                                "healthy": False,
+                                "error": str(e),
+                            }
+                        )
+                    health_status["overall_healthy"] = False
+                    errors = health_status["errors"]
+                    if isinstance(errors, list):
+                        errors.append(f"Collector error: {str(e)}")
+
+            # Check evaluators (basic check)
+            for evaluator in self.evaluators:
+                try:
+                    evaluator_name = evaluator.__class__.__name__
+                    evaluators = health_status["evaluators"]
+                    if isinstance(evaluators, list):
+                        evaluators.append(
+                            {
+                                "name": evaluator_name,
+                                # Basic check - evaluators are stateless
+                                "healthy": True,
+                            }
+                        )
+                except Exception as e:
+                    evaluators = health_status["evaluators"]
+                    if isinstance(evaluators, list):
+                        evaluators.append(
+                            {
+                                "name": evaluator.__class__.__name__,
+                                "healthy": False,
+                                "error": str(e),
+                            }
+                        )
+                    health_status["overall_healthy"] = False
+                    errors = health_status["errors"]
+                    if isinstance(errors, list):
+                        errors.append(f"Evaluator error: {str(e)}")
+
+            return health_status
+
+        except Exception as e:
+            return {
+                "overall_healthy": False,
+                "timestamp": datetime.now().isoformat(),
+                "error": f"Health check failed: {str(e)}",
+            }

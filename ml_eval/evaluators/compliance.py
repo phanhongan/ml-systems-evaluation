@@ -22,7 +22,7 @@ class ComplianceEvaluator(BaseEvaluator):
 
     def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
         """Evaluate compliance with regulatory standards"""
-        results = {
+        results: Dict[str, Any] = {
             "compliance_metrics": {},
             "audit_trail": [],
             "overall_compliance_score": 0.0,
@@ -36,23 +36,34 @@ class ComplianceEvaluator(BaseEvaluator):
             results["compliance_metrics"][standard] = compliance_result
 
         # Generate audit trail
-        results["audit_trail"] = self._generate_audit_trail(
-            results["compliance_metrics"]
-        )
+        if isinstance(results["compliance_metrics"], dict):
+            results["audit_trail"] = self._generate_audit_trail(
+                results["compliance_metrics"]
+            )
+        else:
+            results["audit_trail"] = []
 
         # Calculate overall compliance score
-        if results["compliance_metrics"]:
+        if (
+            isinstance(results["compliance_metrics"], dict)
+            and results["compliance_metrics"]
+        ):
             compliant_standards = sum(
                 1
                 for standard in results["compliance_metrics"].values()
-                if standard.get("compliant", False)
+                if isinstance(standard, dict) and standard.get("compliant", False)
             )
             results["overall_compliance_score"] = compliant_standards / len(
                 results["compliance_metrics"]
             )
 
         # Identify violations
-        results["violations"] = self._identify_violations(results["compliance_metrics"])
+        if isinstance(results["compliance_metrics"], dict):
+            results["violations"] = self._identify_violations(
+                results["compliance_metrics"]
+            )
+        else:
+            results["violations"] = []
 
         # Generate alerts
         results["alerts"] = self._generate_compliance_alerts(results)

@@ -23,7 +23,7 @@ class DriftEvaluator(BaseEvaluator):
         if not self.validate_metrics(metrics):
             return {"error": "Missing required drift metrics"}
 
-        results = {
+        results: Dict[str, Any] = {
             "drift_metrics": {},
             "business_impact": {},
             "drift_alerts": [],
@@ -40,20 +40,29 @@ class DriftEvaluator(BaseEvaluator):
                 results["drift_metrics"][metric_name] = drift_result
 
         # Assess business impact
-        results["business_impact"] = self._assess_business_impact(
-            results["drift_metrics"]
-        )
+        if isinstance(results["drift_metrics"], dict):
+            results["business_impact"] = self._assess_business_impact(
+                results["drift_metrics"]
+            )
+        else:
+            results["business_impact"] = {}
 
         # Calculate overall drift score
-        if results["drift_metrics"]:
+        if isinstance(results["drift_metrics"], dict) and results["drift_metrics"]:
             total_drift = sum(
                 metric.get("drift_score", 0)
                 for metric in results["drift_metrics"].values()
+                if isinstance(metric, dict)
             )
             results["overall_drift_score"] = total_drift / len(results["drift_metrics"])
 
         # Generate drift alerts
-        results["drift_alerts"] = self._generate_drift_alerts(results["drift_metrics"])
+        if isinstance(results["drift_metrics"], dict):
+            results["drift_alerts"] = self._generate_drift_alerts(
+                results["drift_metrics"]
+            )
+        else:
+            results["drift_alerts"] = []
 
         # Generate overall alerts
         results["alerts"] = self._generate_overall_alerts(results)

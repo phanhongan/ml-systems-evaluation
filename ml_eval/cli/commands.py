@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 from ..config.factory import ConfigFactory
 from ..core.framework import EvaluationFramework
@@ -20,7 +21,7 @@ def run_evaluation_command(args: argparse.Namespace) -> int:
         framework = EvaluationFramework(config)
 
         # Run evaluation
-        results = framework.run_evaluation()
+        results = framework.evaluate()
 
         # Output results
         if args.output:
@@ -144,8 +145,8 @@ def collect_data_command(args: argparse.Namespace) -> int:
         # Initialize framework
         framework = EvaluationFramework(config)
 
-        # Collect data
-        data = framework.collect_data()
+        # Collect data using internal method
+        data = framework._collect_all_metrics()
 
         # Output data
         if args.output:
@@ -181,8 +182,8 @@ def evaluate_metrics_command(args: argparse.Namespace) -> int:
             with open(args.data, "r") as f:
                 data = json.load(f)
 
-        # Evaluate metrics
-        results = framework.evaluate_metrics(data)
+        # Evaluate metrics using internal method
+        results = framework._run_all_evaluations(data)
 
         # Output results
         if args.output:
@@ -279,7 +280,7 @@ def create_config_command(args: argparse.Namespace) -> int:
     """Create a new configuration file"""
     try:
         # Create basic configuration
-        config = {
+        config: Dict[str, Any] = {
             "system": {
                 "name": args.system_name,
                 "type": args.system_type,
@@ -292,7 +293,9 @@ def create_config_command(args: argparse.Namespace) -> int:
 
         # Add industry-specific defaults if specified
         if args.industry:
-            config["system"]["industry"] = args.industry
+            system_config = config["system"]
+            if isinstance(system_config, dict):
+                system_config["industry"] = args.industry
 
         # Save configuration
         output_path = Path(args.output)

@@ -185,7 +185,9 @@ poetry shell
 # For production installs (main dependencies only)
 # poetry install --only main
 
-# Note: This project uses Poetry for dependency management and packaging. See https://python-poetry.org/docs/ for more details.
+# Note: This project uses Poetry for dependency management and packaging. 
+# See [pyproject.toml](./pyproject.toml) for the full, up-to-date list of dependencies.
+# For detailed installation instructions, see [docs/getting-started.md](./docs/getting-started.md).
 ```
 
 ### Getting Started (For Industrial ML Engineers)
@@ -482,60 +484,7 @@ class SafetyCriticalImprovement:
 ## Development
 
 ### Project Structure
-```
-ml-systems-evaluation/
-├── ml_eval/                 # Main package
-│   ├── __init__.py         # Package initialization with clean API
-│   ├── core/               # Core framework components
-│   │   ├── __init__.py     # Core module exports
-│   │   ├── types.py        # Type definitions and enums
-│   │   ├── config.py       # Configuration classes
-│   │   └── framework.py    # Main evaluation framework
-│   ├── collectors/         # Data collection modules
-│   │   ├── __init__.py     # Collector module exports
-│   │   ├── base.py         # Base collector interface
-│   │   ├── online.py       # Real-time metric collection
-│   │   ├── offline.py      # Historical data collection
-│   │   ├── environmental.py # Environmental condition monitoring
-│   │   └── regulatory.py   # Compliance monitoring
-│   ├── evaluators/         # Evaluation engines
-│   │   ├── __init__.py     # Evaluator module exports
-│   │   ├── base.py         # Base evaluator interface
-│   │   ├── reliability.py  # Reliability and SLO evaluation
-│   │   ├── safety.py       # Safety-critical evaluation
-│   │   ├── performance.py  # Performance metrics evaluation
-│   │   ├── compliance.py   # Regulatory compliance evaluation
-│   │   └── drift.py        # Data and model drift detection
-│   ├── reports/            # Report generation
-│   │   ├── __init__.py     # Report module exports
-│   │   ├── base.py         # Base report interface
-│   │   ├── reliability.py  # Reliability reports
-│   │   ├── safety.py       # Safety reports
-│   │   ├── compliance.py   # Compliance reports
-│   │   └── business.py     # Business impact reports
-│   ├── cli/                # Command-line interface
-│   │   ├── __init__.py     # CLI module exports
-│   │   ├── main.py         # Main CLI entry point
-│   │   └── commands.py     # Command implementations
-│   ├── config/             # Configuration management
-│   │   ├── __init__.py     # Config module exports
-│   │   ├── loader.py       # Configuration loading utilities
-│   │   ├── validator.py    # Configuration validation
-│   │   └── factory.py      # Configuration factory patterns
-│   ├── templates/          # Industry-specific templates
-│   │   ├── __init__.py     # Template module exports
-│   │   └── factory.py      # Template factory patterns
-│   ├── examples/           # Example configurations
-│   │   ├── __init__.py     # Examples module exports
-│   │   └── registry.py     # Example registry
-│   └── utils/              # Utility functions
-├── docs/                   # Comprehensive documentation
-├── tests/                  # Test suite
-├── examples/               # Example configuration files
-├── setup.py               # Package installation
-├── requirements.txt        # Dependencies
-└── README.md              # This file
-```
+See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) for the most up-to-date and detailed project structure.
 
 ### Modular Architecture
 
@@ -592,23 +541,9 @@ python -m ml_eval.cli.main quickstart --industry aviation
 pytest tests/ -v
 pytest tests/safety/ -v  # Safety-critical tests
 pytest tests/industry/ -v  # Industry-specific tests
+
+# For detailed testing instructions, see [docs/testing.md](./docs/testing.md)
 ```
-
-## Dependencies
-
-### Core Dependencies
-- **PyYAML>=6.0.1**: Configuration file parsing
-- **requests>=2.31.0**: HTTP client for metric collection
-- **pydantic>=2.0.0**: Data validation and settings management
-- **structlog>=23.1.0**: Structured logging
-- **click>=8.1.0**: CLI framework
-
-### Development Dependencies
-- **pytest>=7.4.0**: Testing framework
-- **black>=23.7.0**: Code formatting
-- **flake8>=6.0.0**: Linting
-- **mypy>=1.5.0**: Type checking
-- **sphinx>=7.0.0**: Documentation generation
 
 ## Contributing
 

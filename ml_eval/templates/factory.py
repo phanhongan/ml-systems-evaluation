@@ -27,18 +27,6 @@ class TemplateFactory:
             "energy": {
                 "grid_optimization": self._energy_grid_optimization(),
                 "demand_prediction": self._energy_demand_prediction()
-            },
-            "healthcare": {
-                "medical_diagnosis": self._healthcare_medical_diagnosis(),
-                "patient_monitoring": self._healthcare_patient_monitoring()
-            },
-            "financial": {
-                "fraud_detection": self._financial_fraud_detection(),
-                "risk_assessment": self._financial_risk_assessment()
-            },
-            "automotive": {
-                "autonomous_driving": self._automotive_autonomous_driving(),
-                "vehicle_safety": self._automotive_vehicle_safety()
             }
         }
         
@@ -200,22 +188,4 @@ class TemplateFactory:
         return {"system": {"name": "Flight Control System"}}
         
     def _energy_demand_prediction(self) -> Dict[str, Any]:
-        return {"system": {"name": "Demand Prediction System"}}
-        
-    def _healthcare_medical_diagnosis(self) -> Dict[str, Any]:
-        return {"system": {"name": "Medical Diagnosis System"}}
-        
-    def _healthcare_patient_monitoring(self) -> Dict[str, Any]:
-        return {"system": {"name": "Patient Monitoring System"}}
-        
-    def _financial_fraud_detection(self) -> Dict[str, Any]:
-        return {"system": {"name": "Fraud Detection System"}}
-        
-    def _financial_risk_assessment(self) -> Dict[str, Any]:
-        return {"system": {"name": "Risk Assessment System"}}
-        
-    def _automotive_autonomous_driving(self) -> Dict[str, Any]:
-        return {"system": {"name": "Autonomous Driving System"}}
-        
-    def _automotive_vehicle_safety(self) -> Dict[str, Any]:
-        return {"system": {"name": "Vehicle Safety System"}} 
+        return {"system": {"name": "Demand Prediction System"}} 

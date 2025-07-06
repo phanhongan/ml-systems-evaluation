@@ -2,6 +2,8 @@
 
 This directory contains comprehensive documentation for the ML Systems Evaluation Framework, designed specifically for system engineers working with Industrial AI systems.
 
+> **Note**: This is the documentation index. For the main project overview, installation instructions, and quick start guide, see the [main README.md](../README.md) in the project root.
+
 ## Documentation Structure
 
 ### 📚 User Guides
@@ -18,11 +20,8 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 
 ### 🏭 Industry-Specific Guides
 - **Manufacturing**: Quality control and predictive maintenance
-- **Aviation**: Safety-critical systems and compliance
+- **Aviation**: Safety-critical systems and compliance  
 - **Energy**: Grid optimization and demand prediction
-- **Healthcare**: Medical diagnostics and patient monitoring
-- **Financial**: Fraud detection and risk assessment
-- **Automotive**: Autonomous driving and vehicle safety
 
 ### 📋 Reference Materials
 - **SLO Configuration**: Service Level Objective definitions
@@ -48,16 +47,15 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 - **Manufacturing**: [Manufacturing Guide](industries/manufacturing.md)
 - **Aviation**: [Aviation Guide](industries/aviation.md)
 - **Energy**: [Energy Guide](industries/energy.md)
-- **Healthcare**: [Healthcare Guide](industries/healthcare.md)
-- **Financial**: [Financial Guide](industries/financial.md)
-- **Automotive**: [Automotive Guide](industries/automotive.md)
 
 ## Key Concepts
+
+For detailed explanations of key concepts, see the main [README.md](../README.md) in the project root.
 
 ### Safety-Critical Systems
 Systems where failures can result in loss of life, serious injury, or environmental damage.
 
-### Business-Critical Systems
+### Business-Critical Systems  
 Systems where failures can result in significant financial loss or operational disruption.
 
 ### Service Level Objectives (SLOs)
@@ -85,4 +83,4 @@ When contributing to documentation:
 - Include code examples where appropriate
 - Provide step-by-step instructions for complex procedures
 - Include troubleshooting sections for common issues
-- Maintain consistency in terminology and formatting 
+- Maintain consistency in terminology and formatting

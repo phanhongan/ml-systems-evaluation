@@ -206,7 +206,7 @@ ml-eval evaluate --config quality-system.yaml --mode single
 # 6. Set up continuous monitoring
 ml-eval monitor --config quality-system.yaml --interval 300
 
-# 7. Generate compliance reports
+# 7. Generate reports
 ml-eval report --type reliability --period 30d
 ```
 
@@ -224,6 +224,7 @@ The framework provides ready-to-use templates for these industrial sectors:
 
 #### **Energy Industry**
 - **grid_optimization**: Power grid optimization system for demand prediction and supply management
+- **demand_prediction**: Energy demand forecasting system
 
 ### Quick Commands
 
@@ -241,11 +242,11 @@ ml-eval template --industry energy --type grid_optimization --output grid-system
 
 # Advanced development and production
 ml-eval dev --config production-system.yaml --mode validation --strict
-ml-eval evaluate --config production-system.yaml --mode workflow
+ml-eval evaluate --config production-system.yaml --mode single
 ml-eval monitor --config production-system.yaml --interval 60
 
 # Additional reporting
-ml-eval report --type compliance --period 30d
+ml-eval report --type safety --period 30d
 ```
 
 ### Configuration Examples
@@ -407,34 +408,44 @@ slos = {
 }
 
 # Continuous evaluation during development
-evaluator = EvaluationFramework(slos)
-evaluator.add_collector(SafetyCollector())
-evaluator.add_evaluator(RegulatoryEvaluator())
+from ml_eval import EvaluationFramework
+from ml_eval.collectors import OnlineCollector
+from ml_eval.evaluators import SafetyEvaluator
+
+framework = EvaluationFramework({"system": {"name": "Safety System"}})
+framework.add_collector(OnlineCollector({"endpoint": "http://safety-metrics:8080"}))
+framework.add_evaluator(SafetyEvaluator({"compliance_standards": ["DO-178C"]}))
 
 # Real-time safety validation during training
 while training:
-    metrics = evaluator.collect_metrics()
-    if not evaluator.meets_safety_slos(metrics):
+    result = framework.evaluate()
+    if result.safety_violations:
         # Halt development if safety thresholds are violated
-        raise SafetyViolationError("Model violates safety requirements")
+        raise Exception("Model violates safety requirements")
 ```
 
 ### Workflow Evaluation
 ```python
-from ml_eval import WorkflowEvaluator
+from ml_eval import EvaluationFramework
 
-evaluator = WorkflowEvaluator()
-evaluator.add_stage("preprocessing", slo_config)
-evaluator.add_stage("inference", slo_config)
-evaluator.add_stage("postprocessing", slo_config)
-result = evaluator.evaluate()
+# Create framework for workflow evaluation
+config = {
+    "system": {
+        "name": "Workflow System",
+        "type": "workflow",
+        "stages": ["preprocessing", "inference", "postprocessing"]
+    },
+    "slos": slo_config
+}
+framework = EvaluationFramework(config)
+result = framework.evaluate()
 ```
 
 ### Custom Metrics
 ```python
-from ml_eval.collectors import CustomCollector
+from ml_eval.collectors import BaseCollector
 
-class DomainSpecificCollector(CustomCollector):
+class DomainSpecificCollector(BaseCollector):
     def collect(self) -> Dict[str, float]:
         # Custom metric collection logic
         return {"custom_metric": value}
@@ -486,9 +497,19 @@ ml-systems-evaluation/
 │   │   └── regulatory.py   # Compliance monitoring
 │   ├── evaluators/         # Evaluation engines
 │   │   ├── __init__.py     # Evaluator module exports
-│   │   └── base.py         # Base evaluator interface
+│   │   ├── base.py         # Base evaluator interface
+│   │   ├── reliability.py  # Reliability and SLO evaluation
+│   │   ├── safety.py       # Safety-critical evaluation
+│   │   ├── performance.py  # Performance metrics evaluation
+│   │   ├── compliance.py   # Regulatory compliance evaluation
+│   │   └── drift.py        # Data and model drift detection
 │   ├── reports/            # Report generation
-│   │   └── __init__.py     # Report module exports
+│   │   ├── __init__.py     # Report module exports
+│   │   ├── base.py         # Base report interface
+│   │   ├── reliability.py  # Reliability reports
+│   │   ├── safety.py       # Safety reports
+│   │   ├── compliance.py   # Compliance reports
+│   │   └── business.py     # Business impact reports
 │   ├── cli/                # Command-line interface
 │   │   ├── __init__.py     # CLI module exports
 │   │   ├── main.py         # Main CLI entry point
@@ -499,14 +520,17 @@ ml-systems-evaluation/
 │   │   ├── validator.py    # Configuration validation
 │   │   └── factory.py      # Configuration factory patterns
 │   ├── templates/          # Industry-specific templates
+│   │   ├── __init__.py     # Template module exports
+│   │   └── factory.py      # Template factory patterns
 │   ├── examples/           # Example configurations
+│   │   ├── __init__.py     # Examples module exports
+│   │   └── registry.py     # Example registry
 │   └── utils/              # Utility functions
 ├── docs/                   # Comprehensive documentation
 ├── tests/                  # Test suite
 ├── examples/               # Example configuration files
 ├── setup.py               # Package installation
 ├── requirements.txt        # Dependencies
-├── requirements-test.txt   # Test dependencies
 └── README.md              # This file
 ```
 
@@ -552,8 +576,7 @@ The refactored framework provides several developer-friendly features:
 ```bash
 # Basic functionality test
 python -c "
-from ml_eval.core import EvaluationFramework, SLOConfig
-from ml_eval.reports import ReliabilityReport
+from ml_eval import EvaluationFramework, SLOConfig, ReliabilityReport
 print('✅ Framework imports successfully')
 "
 
@@ -583,14 +606,6 @@ pytest tests/industry/ -v  # Industry-specific tests
 - **flake8>=6.0.0**: Linting
 - **mypy>=1.5.0**: Type checking
 - **sphinx>=7.0.0**: Documentation generation
-
-### Industry-Specific Dependencies (Optional)
-- **manufacturing**: scikit-learn, opencv-python
-- **aviation**: pymavlink
-- **energy**: pvlib
-- **healthcare**: pydicom
-- **financial**: yfinance
-- **automotive**: opencv-python, tensorflow
 
 ## Contributing
 

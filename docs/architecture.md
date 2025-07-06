@@ -7,30 +7,37 @@ This document provides a comprehensive overview of the ML Systems Evaluation Fra
 The framework follows a modular, extensible architecture designed for industrial AI systems. The architecture consists of several key components that work together to provide comprehensive ML system evaluation.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    ML Systems Evaluation Framework              │
-├─────────────────────────────────────────────────────────────────┤
+┌─────────────────────────────────────────────────────────────┐
+│              ML Systems Evaluation Framework                │
+├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │   CLI       │  │   Web UI    │  │   API       │          │
-│  │  Interface  │  │  Dashboard  │  │  Endpoints  │          │
+│  │   CLI       │  │   Web UI*   │  │   API*      │          │
+│  │  Interface  │  │  Dashboard* │  │  Endpoints* │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
-├─────────────────────────────────────────────────────────────────┤
+├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
 │  │  Config     │  │  Template   │  │  Validation │          │
 │  │  Manager    │  │  Engine     │  │  Engine     │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
-├─────────────────────────────────────────────────────────────────┤
+├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
 │  │  Data       │  │  Evaluation │  │  Reporting  │          │
 │  │  Collection │  │  Engine     │  │  Engine     │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
-├─────────────────────────────────────────────────────────────────┤
+├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │  Monitoring │  │  Alerting   │  │  Scheduling │          │
-│  │  System     │  │  System     │  │  System     │          │
+│  │  Monitoring*│  │  Alerting*  │  │  Scheduling*│          │
+│  │  System*    │  │  System*    │  │  System*    │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
-└─────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────┘
 ```
+
+> *\* Note: The following components are planned but have not been implemented yet. This section describes their intended design:
+> - Web UI / Dashboard
+> - API Endpoints
+> - Monitoring System
+> - Alerting System
+> - Scheduling System
 
 ## Core Components
 
@@ -131,6 +138,8 @@ The reporting system generates various types of reports for different stakeholde
 - **Trend Analysis**: Historical trends and patterns
 
 ### 5. Monitoring and Alerting
+
+> **Note:** The Monitoring System, Alerting System, and Scheduling System are planned for future releases and are not yet implemented. The following describes their intended design.
 
 The monitoring system provides continuous monitoring and alerting capabilities.
 

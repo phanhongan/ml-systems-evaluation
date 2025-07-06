@@ -29,19 +29,19 @@ The framework follows a multi-layered testing approach to ensure reliability, pe
 
 Unit tests focus on testing individual components in isolation. Each component should have comprehensive unit tests covering all functionality.
 
-For real test implementations and examples, see the `/tests` directory in the project.
+For real test implementations and examples, see the [`/tests`](../tests/) directory in the project.
 
 ### Test Structure
 
-See `/tests` for actual test class and function implementations.
+See [`/tests`](../tests/) for actual test class and function implementations.
 
 ### Test Configuration
 
-Test fixtures and configuration examples are available in `/tests/conftest.py` and related files.
+Test fixtures and configuration examples are available in [`/tests/conftest.py`](../tests/conftest.py) and related files.
 
 ### Testing Custom Components
 
-Refer to `/tests` for examples of testing custom collectors, evaluators, and other components.
+Refer to [`/tests`](../tests/) for examples of testing custom collectors, evaluators, and other components.
 
 ## Integration Testing
 
@@ -49,15 +49,15 @@ Refer to `/tests` for examples of testing custom collectors, evaluators, and oth
 
 Integration tests verify that components work together correctly and that the overall system functions as expected.
 
-See `/tests` for integration test implementations.
+See [`/tests`](../tests/) for integration test implementations.
 
 ### Test Structure
 
-Integration test classes and workflows are implemented in `/tests`.
+Integration test classes and workflows are implemented in [`/tests`](../tests/).
 
 ### Database Integration Testing
 
-Database integration tests are also located in `/tests`.
+Database integration tests: **To be implemented.**
 
 ## End-to-End Testing
 
@@ -65,11 +65,11 @@ Database integration tests are also located in `/tests`.
 
 End-to-end tests verify that the complete system works correctly from start to finish, including all components and external dependencies.
 
-See `/tests` for end-to-end test implementations.
+See [`/tests`](../tests/) for end-to-end test implementations.
 
 ### Test Structure
 
-End-to-end test classes and CLI/API integration tests are implemented in `/tests`.
+End-to-end test classes and CLI/API integration tests are implemented in [`/tests`](../tests/).
 
 ## Performance Testing
 
@@ -77,11 +77,11 @@ End-to-end test classes and CLI/API integration tests are implemented in `/tests
 
 Performance tests verify that the system meets performance requirements under various load conditions.
 
-See `/tests` for performance test implementations.
+See [`/tests`](../tests/) for performance test implementations.
 
 ### Test Structure
 
-Performance test classes and concurrent evaluation tests are implemented in `/tests`.
+Performance test classes and concurrent evaluation tests are implemented in [`/tests`](../tests/).
 
 ## Security Testing
 
@@ -89,11 +89,11 @@ Performance test classes and concurrent evaluation tests are implemented in `/te
 
 Security tests verify that the system handles sensitive data appropriately and is protected against common security vulnerabilities.
 
-See `/tests` for security test implementations.
+See [`/tests`](../tests/) for security test implementations.
 
 ### Test Structure
 
-Security test classes and input validation tests are implemented in `/tests`.
+Security test classes and input validation tests are implemented in [`/tests`](../tests/).
 
 ## Test Automation
 
@@ -101,13 +101,13 @@ Security test classes and input validation tests are implemented in `/tests`.
 
 The project uses GitHub Actions for continuous integration and automated testing. For the latest CI/CD workflow configuration, refer to the workflow file at:
 
-`.github/workflows/test.yml`
+[.github/workflows/test.yml](../.github/workflows/test.yml)
 
 This workflow runs tests, checks coverage, and uploads results automatically on every push and pull request.
 
 ### Test Configuration
 
-Test configuration is managed in `pytest.ini` and related files in the project root.
+Test configuration is managed in [`pytest.ini`](../pytest.ini) and related files in the project root.
 
 ## Best Practices
 

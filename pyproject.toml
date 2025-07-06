@@ -32,8 +32,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 88
-skip-string-normalization = false
-target_version = ["py39"]
 
 [tool.isort]
 profile = "black"

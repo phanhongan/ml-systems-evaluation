@@ -81,19 +81,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           check-latest: true
-      - name: Debug Python version
-        run: |
-          echo "Matrix python-version: ${{ matrix.python-version }}"
-          python --version
-          which python
-          echo "Python executable: $(which python)"
-          echo "Python version: $(python --version)"
-      - name: Debug pyproject.toml
-        run: |
-          echo "Checking pyproject.toml content around line 56:"
-          sed -n '50,60p' pyproject.toml
-          echo "Line 56 specifically:"
-          sed -n '56p' pyproject.toml
+
       - name: Cache Poetry
         uses: actions/cache@v4
         with:

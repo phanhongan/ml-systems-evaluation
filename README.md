@@ -180,78 +180,157 @@ cd ml-systems-evaluation
 pip install -e .
 ```
 
-### Basic Usage
+### Getting Started (For Industrial ML Engineers)
 
 ```bash
-# Show available commands
-ml-eval --help
+# 1. List available templates for your industry
+ml-eval template --industry manufacturing --type list
 
-# Show example configurations
-ml-eval example --type fish-workflow
-ml-eval example --type aircraft-model
+# 2. Get a specific template for your industry
+ml-eval template --industry manufacturing --type quality_control > quality-system.yaml
 
-# Generate reliability report
+# 3. Customize your configuration
+# Edit the generated .yaml file with your specific requirements
+
+# 4. Test your configuration
+ml-eval dev --config quality-system.yaml --mode validation
+
+# 5. Evaluate your production system
+ml-eval evaluate --config quality-system.yaml --mode single
+
+# 6. Set up continuous monitoring
+ml-eval monitor --config quality-system.yaml --interval 300
+
+# 7. Generate compliance reports
 ml-eval report --type reliability --period 30d
-
-# Evaluate workflow (Echogram Fish Species Classification)
-ml-eval evaluate --config examples/fish-classification-workflow.yaml --mode workflow
-
-# Evaluate single model (Aircraft Landing)
-ml-eval evaluate --config examples/aircraft-landing-model.yaml --mode single
-
-# Continuous monitoring
-ml-eval monitor --config examples/fish-classification-workflow.yaml --interval 60
-
-# Development evaluation
-ml-eval dev --config examples/aircraft-landing-model.yaml --mode training
-ml-eval dev --config examples/aircraft-landing-model.yaml --mode validation
 ```
 
-### Configuration Example
+### Available Industries and Templates
+
+The framework provides ready-to-use templates for these industrial sectors:
+
+#### **Manufacturing Industry**
+- **quality_control**: Quality control system for defect detection and inspection
+- **predictive_maintenance**: Predictive maintenance system for equipment monitoring
+
+#### **Aviation Industry**  
+- **safety_decision**: Safety-critical decision system for aviation safety
+- **flight_control**: Flight control assistance system for aircraft control
+
+#### **Energy Industry**
+- **grid_optimization**: Power grid optimization system for demand prediction and supply management
+
+### Quick Commands
+
+```bash
+# Get help and examples
+ml-eval quickstart --industry aviation
+ml-eval example --type aircraft-model --detailed
+
+# Show all available commands
+ml-eval --help
+
+# Additional template examples
+ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
+ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
+
+# Advanced development and production
+ml-eval dev --config production-system.yaml --mode validation --strict
+ml-eval evaluate --config production-system.yaml --mode workflow
+ml-eval monitor --config production-system.yaml --interval 60
+
+# Additional reporting
+ml-eval report --type compliance --period 30d
+```
+
+### Configuration Examples
+
+#### **Using Industry Templates (Recommended)**
+
+```bash
+# List available templates
+ml-eval template --industry manufacturing --type list
+
+# Get a specific template
+ml-eval template --industry manufacturing --type quality_control > quality-control.yaml
+```
+
+#### **Manufacturing Quality Control Example**
 
 ```yaml
-# echogram-fish-classification-workflow.yaml
+# quality-control.yaml (generated from template)
 system:
-  name: "Echogram Fish Species Classification Pipeline"
+  name: "Manufacturing Quality Control System"
   type: "workflow"
-  stages: ["echogram_preprocessing", "feature_extraction", "species_classification", "catch_optimization"]
+  stages: ["data_collection", "quality_prediction", "defect_detection", "alert_generation"]
   criticality: "business_critical"
   
 slos:
-  species_accuracy:
-    target: 0.95
+  defect_detection_accuracy:
+    target: 0.98
     window: "24h"
-    error_budget: 0.05
-    description: "Accuracy of fish species identification from echogram data"
+    error_budget: 0.02
+    description: "Accuracy in detecting manufacturing defects"
   
-  real_time_latency:
-    target: 200
+  prediction_latency:
+    target: 100
     window: "1h"
-    error_budget: 0.1
-    description: "End-to-end processing time for echogram classification (ms)"
+    error_budget: 0.05
+    description: "Time to predict quality issues (ms)"
   
-  bycatch_prevention:
-    target: 0.99
+  false_positive_rate:
+    target: 0.01
     window: "24h"
     error_budget: 0.01
-    description: "Accuracy in identifying protected species to prevent bycatch"
+    description: "Rate of false defect alerts"
 
 collectors:
   - type: "online"
-    endpoint: "http://fishing-vessel-metrics:9090"
-    metrics: ["echogram_quality", "species_detection_rate", "processing_latency"]
-  
-  - type: "environmental"
-    sources: ["water_temperature", "depth_sensor", "current_speed"]
+    endpoint: "http://manufacturing-metrics:9090"
+  - type: "offline"
+    log_paths: ["/var/log/quality-control/"]
 
 evaluators:
   - type: "reliability"
     error_budget_window: "30d"
-    critical_metrics: ["species_accuracy", "bycatch_prevention"]
+  - type: "performance"
+    metrics: ["accuracy", "latency"]
+```
+
+#### **Aviation Safety System Example**
+
+```yaml
+# safety-system.yaml (generated from template)
+system:
+  name: "Aviation Safety Decision System"
+  type: "single_model"
+  criticality: "safety_critical"
   
-  - type: "environmental"
-    drift_detection: ["water_conditions", "echogram_characteristics"]
-    adaptation_threshold: 0.1
+slos:
+  decision_accuracy:
+    target: 0.9999
+    window: "24h"
+    error_budget: 0.0001
+    description: "Accuracy of safety-critical decisions"
+    compliance_standard: "DO-178C"
+    safety_critical: True
+  
+  response_time:
+    target: 50
+    window: "1h"
+    error_budget: 0.01
+    description: "Decision response time (ms)"
+    safety_critical: True
+
+collectors:
+  - type: "online"
+    endpoint: "http://aviation-system:8080/metrics"
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "7d"
+  - type: "safety"
+    compliance_standards: ["DO-178C"]
 ```
 
 ## Core Components
@@ -388,17 +467,59 @@ class SafetyCriticalImprovement:
 ml-systems-evaluation/
 ├── ml_eval/                 # Main package
 │   ├── __init__.py         # Package initialization
-│   ├── cli.py              # Command-line interface
+│   ├── cli.py              # Command-line interface (refactored)
+│   ├── cli_commands.py     # Command implementations
+│   ├── templates.py         # Industry-specific templates
+│   ├── examples.py          # Enhanced examples with metadata
 │   ├── core.py             # Core framework classes
 │   ├── collectors.py       # Metric collection interfaces
 │   ├── evaluators.py       # Evaluation logic
-│   ├── reports.py          # Report generation
-│   └── examples.py         # Example configurations
+│   └── reports.py          # Report generation
 ├── examples/               # Example configuration files
 ├── setup.py               # Package installation
 ├── requirements.txt        # Dependencies
 └── README.md              # This file
 ```
+
+### Modular Architecture
+
+The framework is designed with a modular architecture for easy maintenance and extension:
+
+- **`cli.py`**: Lightweight argument parsing and command routing
+- **`cli_commands.py`**: All command implementations with industrial focus
+- **`templates.py`**: Industry-specific configuration templates (6 industries, multiple template types)
+- **`examples.py`**: Detailed examples with challenges, features, and use cases
+- **`core.py`**: Core evaluation framework and data structures
+- **`collectors.py`**: Metric collection interfaces for different data sources
+- **`evaluators.py`**: Evaluation logic for reliability, safety, and compliance
+- **`reports.py`**: Report generation for different stakeholders
+
+### Developer-Friendly Features
+
+The refactored framework provides several developer-friendly features:
+
+#### **Industry-Specific Templates**
+- Ready-to-use configurations for 3 industrial sectors
+- Multiple template types per industry (e.g., quality control, predictive maintenance)
+- Automatic validation and guidance for industry-specific requirements
+
+#### **Enhanced CLI Experience**
+- Clear, industrial-focused help messages
+- Step-by-step guidance for getting started
+- Detailed examples with explanations
+- Error messages with actionable suggestions
+
+#### **Modular Design**
+- Easy to add new commands or templates
+- Clear separation of concerns
+- Maintainable codebase (CLI reduced from 726 to 231 lines)
+- Extensible architecture for custom requirements
+
+#### **Industrial Focus**
+- Safety-critical and business-critical system support
+- Regulatory compliance templates (DO-178C, FDA, etc.)
+- Environmental monitoring for harsh conditions
+- Business impact assessment and reporting
 
 ### Running Tests
 ```bash
@@ -408,6 +529,11 @@ from ml_eval.core import EvaluationFramework, SLOConfig
 from ml_eval.reports import ReliabilityReport
 print('✅ Framework imports successfully')
 "
+
+# Test CLI functionality
+python -m ml_eval.cli --help
+python -m ml_eval.cli template --industry manufacturing
+python -m ml_eval.cli quickstart --industry aviation
 ```
 
 ## Contributing

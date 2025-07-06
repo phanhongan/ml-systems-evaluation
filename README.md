@@ -178,6 +178,11 @@ cd ml-systems-evaluation
 
 # Install in development mode
 pip install -e .
+
+# Install with industry-specific dependencies
+pip install -e .[manufacturing]  # For manufacturing systems
+pip install -e .[aviation]       # For aviation systems
+pip install -e .[energy]         # For energy systems
 ```
 
 ### Getting Started (For Industrial ML Engineers)
@@ -466,18 +471,42 @@ class SafetyCriticalImprovement:
 ```
 ml-systems-evaluation/
 ├── ml_eval/                 # Main package
-│   ├── __init__.py         # Package initialization
-│   ├── cli.py              # Command-line interface (refactored)
-│   ├── cli_commands.py     # Command implementations
-│   ├── templates.py         # Industry-specific templates
-│   ├── examples.py          # Enhanced examples with metadata
-│   ├── core.py             # Core framework classes
-│   ├── collectors.py       # Metric collection interfaces
-│   ├── evaluators.py       # Evaluation logic
-│   └── reports.py          # Report generation
+│   ├── __init__.py         # Package initialization with clean API
+│   ├── core/               # Core framework components
+│   │   ├── __init__.py     # Core module exports
+│   │   ├── types.py        # Type definitions and enums
+│   │   ├── config.py       # Configuration classes
+│   │   └── framework.py    # Main evaluation framework
+│   ├── collectors/         # Data collection modules
+│   │   ├── __init__.py     # Collector module exports
+│   │   ├── base.py         # Base collector interface
+│   │   ├── online.py       # Real-time metric collection
+│   │   ├── offline.py      # Historical data collection
+│   │   ├── environmental.py # Environmental condition monitoring
+│   │   └── regulatory.py   # Compliance monitoring
+│   ├── evaluators/         # Evaluation engines
+│   │   ├── __init__.py     # Evaluator module exports
+│   │   └── base.py         # Base evaluator interface
+│   ├── reports/            # Report generation
+│   │   └── __init__.py     # Report module exports
+│   ├── cli/                # Command-line interface
+│   │   ├── __init__.py     # CLI module exports
+│   │   ├── main.py         # Main CLI entry point
+│   │   └── commands.py     # Command implementations
+│   ├── config/             # Configuration management
+│   │   ├── __init__.py     # Config module exports
+│   │   ├── loader.py       # Configuration loading utilities
+│   │   ├── validator.py    # Configuration validation
+│   │   └── factory.py      # Configuration factory patterns
+│   ├── templates/          # Industry-specific templates
+│   ├── examples/           # Example configurations
+│   └── utils/              # Utility functions
+├── docs/                   # Comprehensive documentation
+├── tests/                  # Test suite
 ├── examples/               # Example configuration files
 ├── setup.py               # Package installation
 ├── requirements.txt        # Dependencies
+├── requirements-test.txt   # Test dependencies
 └── README.md              # This file
 ```
 
@@ -485,29 +514,27 @@ ml-systems-evaluation/
 
 The framework is designed with a modular architecture for easy maintenance and extension:
 
-- **`cli.py`**: Lightweight argument parsing and command routing
-- **`cli_commands.py`**: All command implementations with industrial focus
-- **`templates.py`**: Industry-specific configuration templates (3 industries, multiple template types)
-- **`examples.py`**: Detailed examples with challenges, features, and use cases
-- **`core.py`**: Core evaluation framework and data structures
-- **`collectors.py`**: Metric collection interfaces for different data sources
-- **`evaluators.py`**: Evaluation logic for reliability, safety, and compliance
-- **`reports.py`**: Report generation for different stakeholders
+- **`core/`**: Central framework components with type safety and validation
+- **`collectors/`**: Modular data collection with industrial focus
+- **`evaluators/`**: Specialized evaluation engines for different aspects
+- **`reports/`**: Comprehensive reporting for different stakeholders
+- **`cli/`**: User-friendly command-line interface for system engineers
+- **`config/`**: Robust configuration management for complex systems
 
 ### Developer-Friendly Features
 
 The refactored framework provides several developer-friendly features:
 
 #### **Industry-Specific Templates**
-- Ready-to-use configurations for 3 industrial sectors (manufacturing, aviation, energy)
-- Multiple template types per industry (e.g., quality control, predictive maintenance)
+- Ready-to-use configurations for 6 industrial sectors
+- Multiple template types per industry
 - Industry-specific SLOs with appropriate safety and compliance standards
 
 #### **Industrial-Focused CLI**
-- Clear, industry-specific help messages with manufacturing/aviation/energy examples
+- Clear, industry-specific help messages
 - Step-by-step guidance tailored for ML engineers in industrial sectors
 - Detailed examples with explanations for each industry use case
-- Error messages with actionable suggestions (e.g., "Try running: ml-eval template --industry <your-industry>")
+- Error messages with actionable suggestions
 
 #### **Modular Design**
 - Easy to add new commands or templates
@@ -531,10 +558,39 @@ print('✅ Framework imports successfully')
 "
 
 # Test CLI functionality
-python -m ml_eval.cli --help
-python -m ml_eval.cli template --industry manufacturing
-python -m ml_eval.cli quickstart --industry aviation
+python -m ml_eval.cli.main --help
+python -m ml_eval.cli.main template --industry manufacturing
+python -m ml_eval.cli.main quickstart --industry aviation
+
+# Run comprehensive tests
+pytest tests/ -v
+pytest tests/safety/ -v  # Safety-critical tests
+pytest tests/industry/ -v  # Industry-specific tests
 ```
+
+## Dependencies
+
+### Core Dependencies
+- **PyYAML>=6.0.1**: Configuration file parsing
+- **requests>=2.31.0**: HTTP client for metric collection
+- **pydantic>=2.0.0**: Data validation and settings management
+- **structlog>=23.1.0**: Structured logging
+- **click>=8.1.0**: CLI framework
+
+### Development Dependencies
+- **pytest>=7.4.0**: Testing framework
+- **black>=23.7.0**: Code formatting
+- **flake8>=6.0.0**: Linting
+- **mypy>=1.5.0**: Type checking
+- **sphinx>=7.0.0**: Documentation generation
+
+### Industry-Specific Dependencies (Optional)
+- **manufacturing**: scikit-learn, opencv-python
+- **aviation**: pymavlink
+- **energy**: pvlib
+- **healthcare**: pydicom
+- **financial**: yfinance
+- **automotive**: opencv-python, tensorflow
 
 ## Contributing
 

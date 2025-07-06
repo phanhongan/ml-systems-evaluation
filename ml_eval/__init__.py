@@ -39,7 +39,7 @@ from .templates.factory import TemplateFactory
 from .examples.registry import ExampleRegistry
 
 # CLI interface
-from .cli.main import main as cli_main
+from .cli.main import cli as cli_main
 
 __version__ = "0.1.0"
 __author__ = "ML Systems Evaluation Team"

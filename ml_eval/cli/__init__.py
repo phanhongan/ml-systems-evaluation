@@ -1,5 +1,5 @@
 """Command-line interface for ML Systems Evaluation"""
 
-from .main import main
+from .main import cli
 
-__all__ = ["main"] 
+__all__ = ["cli"] 

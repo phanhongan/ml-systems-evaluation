@@ -1,10 +1,8 @@
 """Main CLI entry point for ML Systems Evaluation Framework"""
 
 import sys
-import argparse
 import logging
-from typing import Optional
-
+import click
 from .commands import (
     template_command,
     quickstart_command,
@@ -15,234 +13,107 @@ from .commands import (
     report_command
 )
 
-
 def setup_logging(verbose: bool = False):
-    """Setup logging configuration"""
     level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(
         level=level,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ]
+        handlers=[logging.StreamHandler(sys.stdout)]
     )
 
+@click.group(context_settings={"help_option_names": ["-h", "--help"]})
+@click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
+@click.version_option("0.1.0", prog_name="ML Systems Evaluation Framework")
+@click.pass_context
+def cli(ctx, verbose):
+    setup_logging(verbose)
+    ctx.ensure_object(dict)
+    ctx.obj['VERBOSE'] = verbose
 
-def create_parser() -> argparse.ArgumentParser:
-    """Create the main argument parser"""
-    parser = argparse.ArgumentParser(
-        prog="ml-eval",
-        description="ML Systems Evaluation Framework - Industrial AI Reliability Assessment",
-        epilog="""
-Examples:
-  ml-eval template --industry manufacturing --type quality_control
-  ml-eval quickstart --industry aviation
-  ml-eval evaluate --config system.yaml --mode single
-  ml-eval monitor --config system.yaml --interval 300
-        """,
-        formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose logging"
-    )
-    
-    parser.add_argument(
-        "--version",
-        action="version",
-        version="ML Systems Evaluation Framework v0.1.0"
-    )
-    
-    # Create subparsers for different commands
-    subparsers = parser.add_subparsers(
-        dest="command",
-        help="Available commands",
-        metavar="COMMAND"
-    )
-    
-    # Template command
-    template_parser = subparsers.add_parser(
-        "template",
-        help="Generate industry-specific configuration templates"
-    )
-    template_parser.add_argument(
-        "--industry", "-i",
-        required=True,
-        choices=["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"],
-        help="Target industry for template"
-    )
-    template_parser.add_argument(
-        "--type", "-t",
-        required=True,
-        help="Template type (use 'list' to see available types)"
-    )
-    template_parser.add_argument(
-        "--output", "-o",
-        help="Output file path (default: stdout)"
-    )
-    
-    # Quickstart command
-    quickstart_parser = subparsers.add_parser(
-        "quickstart",
-        help="Get started with industry-specific examples"
-    )
-    quickstart_parser.add_argument(
-        "--industry", "-i",
-        required=True,
-        choices=["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"],
-        help="Target industry for quickstart"
-    )
-    
-    # Example command
-    example_parser = subparsers.add_parser(
-        "example",
-        help="Show detailed examples and use cases"
-    )
-    example_parser.add_argument(
-        "--type", "-t",
-        required=True,
-        help="Example type to show"
-    )
-    example_parser.add_argument(
-        "--detailed", "-d",
-        action="store_true",
-        help="Show detailed example with configuration"
-    )
-    
-    # Development command
-    dev_parser = subparsers.add_parser(
-        "dev",
-        help="Development and validation tools"
-    )
-    dev_parser.add_argument(
-        "--config", "-c",
-        required=True,
-        help="Configuration file path"
-    )
-    dev_parser.add_argument(
-        "--mode", "-m",
-        choices=["validation", "test", "simulation"],
-        default="validation",
-        help="Development mode"
-    )
-    dev_parser.add_argument(
-        "--strict", "-s",
-        action="store_true",
-        help="Enable strict validation"
-    )
-    
-    # Evaluate command
-    evaluate_parser = subparsers.add_parser(
-        "evaluate",
-        help="Run evaluation on ML system"
-    )
-    evaluate_parser.add_argument(
-        "--config", "-c",
-        required=True,
-        help="Configuration file path"
-    )
-    evaluate_parser.add_argument(
-        "--mode", "-m",
-        choices=["single", "continuous", "workflow"],
-        default="single",
-        help="Evaluation mode"
-    )
-    evaluate_parser.add_argument(
-        "--output", "-o",
-        help="Output file path for results"
-    )
-    
-    # Monitor command
-    monitor_parser = subparsers.add_parser(
-        "monitor",
-        help="Continuous monitoring of ML system"
-    )
-    monitor_parser.add_argument(
-        "--config", "-c",
-        required=True,
-        help="Configuration file path"
-    )
-    monitor_parser.add_argument(
-        "--interval", "-i",
-        type=int,
-        default=300,
-        help="Monitoring interval in seconds"
-    )
-    monitor_parser.add_argument(
-        "--duration", "-d",
-        type=int,
-        help="Monitoring duration in seconds (default: run indefinitely)"
-    )
-    
-    # Report command
-    report_parser = subparsers.add_parser(
-        "report",
-        help="Generate evaluation reports"
-    )
-    report_parser.add_argument(
-        "--type", "-t",
-        choices=["reliability", "safety", "compliance", "business_impact", "trend", "incident"],
-        required=True,
-        help="Report type"
-    )
-    report_parser.add_argument(
-        "--period", "-p",
-        default="30d",
-        help="Report period (e.g., 7d, 30d, 90d)"
-    )
-    report_parser.add_argument(
-        "--output", "-o",
-        help="Output file path for report"
-    )
-    
-    return parser
+@cli.command(help="Generate industry-specific configuration templates")
+@click.option('--industry', '-i', required=True, type=click.Choice(["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"]), help="Target industry for template")
+@click.option('--type', '-t', required=True, help="Template type (use 'list' to see available types)")
+@click.option('--output', '-o', help="Output file path (default: stdout)")
+@click.pass_context
+def template(ctx, industry, type, output):
+    class Args: pass
+    args = Args()
+    args.industry = industry
+    args.type = type
+    args.output = output
+    sys.exit(template_command(args))
 
+@cli.command(help="Get started with industry-specific examples")
+@click.option('--industry', '-i', required=True, type=click.Choice(["manufacturing", "aviation", "energy", "healthcare", "financial", "automotive"]), help="Target industry for quickstart")
+@click.pass_context
+def quickstart(ctx, industry):
+    class Args: pass
+    args = Args()
+    args.industry = industry
+    sys.exit(quickstart_command(args))
 
-def main(args: Optional[list] = None) -> int:
-    """Main CLI entry point"""
-    parser = create_parser()
-    parsed_args = parser.parse_args(args)
-    
-    # Setup logging
-    setup_logging(parsed_args.verbose)
-    logger = logging.getLogger(__name__)
-    
-    try:
-        if not parsed_args.command:
-            parser.print_help()
-            sys.exit(2)
-            
-        # Route to appropriate command handler
-        if parsed_args.command == "template":
-            return template_command(parsed_args)
-        elif parsed_args.command == "quickstart":
-            return quickstart_command(parsed_args)
-        elif parsed_args.command == "example":
-            return example_command(parsed_args)
-        elif parsed_args.command == "dev":
-            return dev_command(parsed_args)
-        elif parsed_args.command == "evaluate":
-            return evaluate_command(parsed_args)
-        elif parsed_args.command == "monitor":
-            return monitor_command(parsed_args)
-        elif parsed_args.command == "report":
-            return report_command(parsed_args)
-        else:
-            logger.error(f"Unknown command: {parsed_args.command}")
-            return 1
-            
-    except KeyboardInterrupt:
-        logger.info("Operation cancelled by user")
-        return 130
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        if parsed_args.verbose:
-            import traceback
-            traceback.print_exc()
-        return 1
+@cli.command(help="Show detailed examples and use cases")
+@click.option('--type', '-t', required=True, help="Example type to show")
+@click.option('--detailed', '-d', is_flag=True, help="Show detailed example with configuration")
+@click.pass_context
+def example(ctx, type, detailed):
+    class Args: pass
+    args = Args()
+    args.type = type
+    args.detailed = detailed
+    sys.exit(example_command(args))
 
+@cli.command(help="Development and validation tools")
+@click.option('--config', '-c', required=True, help="Configuration file path")
+@click.option('--mode', '-m', type=click.Choice(["validation", "test", "simulation"]), default="validation", show_default=True, help="Development mode")
+@click.option('--strict', '-s', is_flag=True, help="Enable strict validation")
+@click.pass_context
+def dev(ctx, config, mode, strict):
+    class Args: pass
+    args = Args()
+    args.config = config
+    args.mode = mode
+    args.strict = strict
+    sys.exit(dev_command(args))
+
+@cli.command(help="Run evaluation on ML system")
+@click.option('--config', '-c', required=True, help="Configuration file path")
+@click.option('--mode', '-m', type=click.Choice(["single", "continuous", "workflow"]), default="single", show_default=True, help="Evaluation mode")
+@click.option('--output', '-o', help="Output file path for results")
+@click.pass_context
+def evaluate(ctx, config, mode, output):
+    class Args: pass
+    args = Args()
+    args.config = config
+    args.mode = mode
+    args.output = output
+    sys.exit(evaluate_command(args))
+
+@cli.command(help="Continuous monitoring of ML system")
+@click.option('--config', '-c', required=True, help="Configuration file path")
+@click.option('--interval', '-i', type=int, default=300, show_default=True, help="Monitoring interval in seconds")
+@click.option('--duration', '-d', type=int, help="Monitoring duration in seconds (default: run indefinitely)")
+@click.pass_context
+def monitor(ctx, config, interval, duration):
+    class Args: pass
+    args = Args()
+    args.config = config
+    args.interval = interval
+    args.duration = duration
+    sys.exit(monitor_command(args))
+
+@cli.command(help="Generate evaluation reports")
+@click.option('--type', '-t', required=True, type=click.Choice(["reliability", "safety", "compliance", "business_impact", "trend", "incident"]), help="Report type")
+@click.option('--period', '-p', default="30d", show_default=True, help="Report period (e.g., 7d, 30d, 90d)")
+@click.option('--output', '-o', help="Output file path for report")
+@click.pass_context
+def report(ctx, type, period, output):
+    class Args: pass
+    args = Args()
+    args.type = type
+    args.period = period
+    args.output = output
+    sys.exit(report_command(args))
 
 if __name__ == "__main__":
-    sys.exit(main()) 
+    cli() 

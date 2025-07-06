@@ -2,6 +2,22 @@
 
 This document provides a comprehensive overview of the ML Systems Evaluation Framework architecture, including system design, component relationships, and data flow.
 
+## Scope and Intended Use
+
+**What This Framework Does:**
+- Evaluates, monitors, and reports on deployed ML systems.
+- Provides insights on performance, drift, compliance, safety, and reliability.
+- Integrates with external systems for reporting and alerting.
+
+**What This Framework Does NOT Do:**
+- Does not handle data labeling, preprocessing for training, model training, or deployment.
+- Does not manage model registries, feature stores, or end-to-end ML pipelines.
+- Does not automate business actions based on model outputs.
+
+**How to Use This Framework:**
+- Use it to assess and monitor ML systems in production or pre-production.
+- Use its insights to inform improvements in upstream ML lifecycle stages.
+
 ## System Architecture
 
 The framework follows a modular, extensible architecture designed for industrial AI systems. The architecture consists of several key components that work together to provide comprehensive ML system evaluation.
@@ -72,6 +88,8 @@ The configuration management system handles all configuration aspects of the fra
 ### 2. Data Collection System
 
 The data collection system is responsible for gathering data from various sources.
+
+> **Note:** Data collection and processing in this framework are solely for the purpose of evaluating and monitoring deployed ML systems. They are not intended for model training, feature engineering, or data labeling.
 
 #### Data Sources
 - **Database Sources**: PostgreSQL, MySQL, SQLite, Oracle, SQL Server
@@ -352,4 +370,4 @@ ml_eval/
 - **Developer Guides**: Technical documentation
 - **Architecture Docs**: System architecture documentation
 
-This architecture provides a robust, scalable, and extensible foundation for ML system evaluation, supporting the diverse needs of industrial AI systems while maintaining high standards for security, performance, and reliability. 
+This architecture provides a robust, scalable, and extensible foundation for ML system evaluation, supporting the diverse needs of industrial AI systems while maintaining high standards for security, performance, and reliability.

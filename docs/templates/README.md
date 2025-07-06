@@ -167,6 +167,79 @@ slo:
 **Use Case**: Solar and wind power forecasting
 **Key Metrics**: Forecast accuracy, energy production, cost optimization
 
+### Maritime Templates
+
+#### Maritime Collision Avoidance
+**File**: `maritime-collision-avoidance.yaml`
+**Use Case**: Ship collision avoidance and navigational safety
+**Key Metrics**: Collision avoidance accuracy, alert latency, false alarm rate, STW/SOG discrepancy, system availability
+
+```yaml
+system:
+  name: "Maritime Collision Avoidance System"
+  type: "workflow"
+  persona: "Officer of the Watch"
+  criticality: "safety_critical"
+
+slos:
+  collision_avoidance_accuracy:
+    target: 0.999
+    window: "24h"
+    error_budget: 0.001
+    description: "Accuracy of collision risk detection and avoidance recommendations, considering COLREGs and advanced navigation parameters (TCPA, DCPA, BCR, STW, SOG)"
+  alert_latency:
+    target: 1000
+    window: "1h"
+    error_budget: 0.05
+    description: "Maximum time to alert Officer of the Watch after risk detected (ms)"
+  false_alarm_rate:
+    target: 0.01
+    window: "7d"
+    error_budget: 0.005
+    description: "Proportion of false positive collision alerts"
+  system_availability:
+    target: 0.9999
+    window: "30d"
+    error_budget: 0.0001
+    description: "System uptime for collision avoidance functionality"
+
+safety_thresholds:
+  stw_sog_discrepancy:
+    max: 2  # knots
+    description: "Maximum allowed difference between Speed Through Water (STW) and Speed Over Ground (SOG) before triggering a safety alert. Discrepancies can lead to misclassification of collision scenarios (e.g., crossing vs head-on)."
+
+operating_conditions:
+  vessel_types: ["cargo", "tanker", "passenger", "fishing"]
+  weather_conditions: ["clear", "fog", "storm", "rain"]
+  traffic_density: ["low", "medium", "high"]
+  navigation_parameters:
+    stw: "Speed Through Water (knots)"
+    sog: "Speed Over Ground (knots)"
+    tcpa: "Time to Closest Point of Approach (minutes)"
+    dcpa: "Distance at Closest Point of Approach (nautical miles)"
+    bcr: "Bow Crossing Range (nautical miles)"
+
+collectors:
+  - type: "online"
+    endpoint: "http://bridge-systems:9000/metrics"
+    metrics: ["proximity_alerts", "collision_predictions", "alert_latency"]
+  - type: "offline"
+    log_paths: ["/var/log/bridge-systems/", "/var/log/navigation/alerts/"]
+  - type: "environmental"
+    sources: ["weather_station", "radar", "ais_receiver"]
+
+evaluators:
+  - type: "safety"
+    compliance_standards: ["COLREGs", "IMO Guidelines"]
+    critical_metrics: ["collision_avoidance_accuracy", "false_alarm_rate", "stw_sog_discrepancy"]
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["system_availability"]
+  - type: "performance"
+    metrics: ["alert_latency"]
+    real_time_threshold: 2000  # ms
+```
+
 ## Using Templates
 
 ### 1. List Available Templates

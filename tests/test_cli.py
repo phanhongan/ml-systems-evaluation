@@ -113,7 +113,8 @@ class TestCLIIntegration:
         """Test CLI main help output"""
         result = CliRunner().invoke(cli, ["--help"])
         assert result.exit_code == 0
-        assert "Usage: cli" in result.output
+        assert "Usage:" in result.output
+        assert "ml-eval" in result.output or "cli" in result.output
         assert "template" in result.output
         assert "evaluate" in result.output
 

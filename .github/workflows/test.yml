@@ -13,14 +13,18 @@ jobs:
       with:
         python-version: '3.13'
 
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install -r requirements-test.txt
+        poetry install --only main,dev
 
     - name: Run all tests
       run: |
-        pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
+        poetry run pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
 
     - name: Upload coverage
       uses: codecov/codecov-action@v1

@@ -177,7 +177,15 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install in development mode
-pip install -e .
+poetry install
+
+# (Optional) Activate the virtual environment managed by Poetry
+poetry shell
+
+# For production installs (main dependencies only)
+# poetry install --only main
+
+# Note: This project uses Poetry for dependency management and packaging. See https://python-poetry.org/docs/ for more details.
 ```
 
 ### Getting Started (For Industrial ML Engineers)

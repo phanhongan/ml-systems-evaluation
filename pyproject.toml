@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "ml-systems-evaluation"
+version = "0.1.0"
+description = "ML Systems Evaluation Framework"
+authors = ["Phan Hong An <phanhongan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+PyYAML = ">=6.0.1"
+requests = ">=2.31.0"
+pydantic = ">=2.0.0"
+structlog = ">=23.1.0"
+click = ">=8.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.4.0"
+pytest-cov = ">=4.1.0"
+pytest-mock = ">=3.11.0"
+black = ">=23.7.0"
+flake8 = ">=6.0.0"
+isort = ">=5.12.0"
+mypy = ">=1.5.0"
+types-PyYAML = ">=6.0.12"
+types-requests = ">=2.31.0"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=7.0.0"
+sphinx-rtd-theme = ">=1.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.5.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+# Add black configuration here
+
+[tool.isort]
+# Add isort configuration here
+
+[tool.mypy]
+# Add mypy configuration here
+
+[tool.flake8]
+# Add flake8 configuration here
+
+[[tool.poetry.packages]]
+include = "ml_eval"

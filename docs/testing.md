@@ -105,6 +105,28 @@ The project uses GitHub Actions for continuous integration and automated testing
 
 This workflow runs tests, checks coverage, and uploads results automatically on every push and pull request.
 
+#### Running Tests Locally
+
+```bash
+# Install dependencies
+poetry install
+
+# (Optional) Activate the Poetry-managed virtual environment
+poetry shell
+
+# Run all tests
+poetry run pytest
+
+# Run with coverage
+poetry run pytest --cov=ml_eval --cov-report=html --cov-report=term
+```
+
+#### Updating Dependencies
+
+```bash
+poetry update
+```
+
 ### Test Configuration
 
 Test configuration is managed in [`pytest.ini`](../pytest.ini) and related files in the project root.

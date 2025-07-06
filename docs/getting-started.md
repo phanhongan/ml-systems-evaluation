@@ -4,8 +4,8 @@ This guide will help you quickly set up and run your first evaluation using the 
 
 ## Prerequisites
 
-- Python 3.8 or higher
-- pip package manager
+- Python 3.9 or higher
+- Poetry package manager (https://python-poetry.org/)
 - Access to your ML system's monitoring data
 - Basic understanding of your system's architecture
 
@@ -18,12 +18,11 @@ This guide will help you quickly set up and run your first evaluation using the 
 git clone <repository-url>
 cd ml-systems-evaluation
 
-# Create a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Install dependencies and the framework
+poetry install
 
-# Install the framework
-pip install -e .
+# (Optional) Activate the Poetry-managed virtual environment
+poetry shell
 ```
 
 ### 2. Verify Installation
@@ -151,7 +150,7 @@ The framework automatically alerts you when:
 - **Solution**: Check your evaluator configuration and thresholds
 
 **Issue**: "Template not found"
-- **Solution**: Update to the latest version: `pip install --upgrade ml-eval`
+- **Solution**: Update to the latest version: `poetry update`
 
 ### Getting Help
 

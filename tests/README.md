@@ -32,23 +32,23 @@ This directory contains tests for the ML Systems Evaluation Framework, designed 
 
 ### Prerequisites
 ```bash
-# Install test dependencies
-pip install pytest pytest-cov pytest-mock
+# Install all dependencies (including test dependencies)
+poetry install
 
-# Install the framework in development mode
-pip install -e .
+# (Optional) Activate the Poetry-managed virtual environment
+poetry shell
 ```
 
 ### Basic Test Execution
 ```bash
 # Run all tests
-python -m pytest
+poetry run pytest
 
 # Run with verbose output
-python -m pytest -v
+poetry run pytest -v
 
 # Run with coverage report
-python -m pytest --cov=ml_eval --cov-report=html --cov-report=term
+poetry run pytest --cov=ml_eval --cov-report=html --cov-report=term
 ```
 
 ### Using the Test Runner
@@ -75,22 +75,22 @@ python tests/run_tests.py --coverage
 ### Running Specific Test Files
 ```bash
 # Run core tests only
-python -m pytest tests/test_core.py
+poetry run pytest tests/test_core.py
 
 # Run collectors tests only
-python -m pytest tests/test_collectors.py
+poetry run pytest tests/test_collectors.py
 
 # Run integration tests only
-python -m pytest tests/test_integration.py
+poetry run pytest tests/test_integration.py
 ```
 
 ### Running Specific Test Classes
 ```bash
 # Run specific test class
-python -m pytest tests/test_core.py::TestEvaluationFramework
+poetry run pytest tests/test_core.py::TestEvaluationFramework
 
 # Run specific test method
-python -m pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation
+poetry run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation
 ```
 
 ## Test Categories
@@ -277,13 +277,13 @@ The test suite is designed for continuous integration with:
 ### Debugging
 ```bash
 # Run tests with debug output
-python -m pytest -v -s
+poetry run pytest -v -s
 
 # Run specific failing test
-python -m pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation -v -s
+poetry run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation -v -s
 
 # Run with coverage and debug
-python -m pytest --cov=ml_eval --cov-report=term-missing -v
+poetry run pytest --cov=ml_eval --cov-report=term-missing -v
 ```
 
 ### Test Data

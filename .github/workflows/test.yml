@@ -6,6 +6,30 @@ on:
   pull_request:
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Validate pyproject.toml
+        run: |
+          poetry check
+      - name: Install dependencies
+        run: |
+          poetry install --extras dev
+      - name: Validate dependencies
+        run: |
+          poetry show --tree
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -15,12 +39,14 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --only main,dev
+          poetry install --extras dev
       - name: Lint with flake8
         run: |
           poetry run flake8 ml_eval tests --max-line-length=88 --extend-ignore=E203,W503
@@ -40,12 +66,14 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --only main,dev
+          poetry install --extras dev
       - name: Type check with mypy
         run: |
           poetry run mypy ml_eval
@@ -57,14 +85,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.11'
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --only main,dev
+          poetry install --extras dev
       - name: Build package
         run: |
           poetry build
@@ -88,16 +118,19 @@ jobs:
           path: |
             ~/.cache/pypoetry
             ~/.cache/pip
+            .venv
           key: poetry-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             poetry-${{ runner.os }}-${{ matrix.python-version }}-
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --only main,dev
+          poetry install --extras dev
       - name: Run all tests
         run: |
           poetry run pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
@@ -116,12 +149,14 @@ jobs:
 #         with:
 #           python-version: '3.11'
 #       - name: Install Poetry
-#         run: |
-#           curl -sSL https://install.python-poetry.org | python3 -
-#           echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+#         uses: snok/install-poetry@v1
+#         with:
+#           version: latest
+#           virtualenvs-create: true
+#           virtualenvs-in-project: true
 #       - name: Install dependencies
 #         run: |
-#           poetry install --only main,dev,docs
+#           poetry install --extras dev,docs
 #       - name: Build docs
 #         run: |
 #           poetry run mkdocs build
@@ -136,12 +171,14 @@ jobs:
 #         with:
 #           python-version: '3.11'
 #       - name: Install Poetry
-#         run: |
-#           curl -sSL https://install.python-poetry.org | python3 -
-#           echo "export PATH=\"$HOME/.local/bin:$PATH\"" >> $GITHUB_ENV
+#         uses: snok/install-poetry@v1
+#         with:
+#           version: latest
+#           virtualenvs-create: true
+#           virtualenvs-in-project: true
 #       - name: Install dependencies
 #         run: |
-#           poetry install --only main
+#           poetry install --extras main
 #       - name: Publish to PyPI
 #         env:
 #           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}

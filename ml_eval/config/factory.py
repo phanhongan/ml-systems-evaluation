@@ -28,17 +28,8 @@ class ConfigFactory:
             config = self.loader.load_config(config_path)
 
             # Validate configuration
-            validation_result = self.validator.validate_config(config)
-            if not (
-                isinstance(validation_result, dict)
-                and validation_result.get("valid", False)
-            ):
-                errors = (
-                    validation_result["errors"]
-                    if isinstance(validation_result, dict)
-                    and "errors" in validation_result
-                    else str(validation_result)
-                )
+            if not self.validator.validate_config(config):
+                errors = self.validator.get_errors()
                 raise ValueError(f"Configuration validation failed: {errors}")
 
             # Cache the configuration
@@ -57,16 +48,8 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate collector-specific configuration
-        validation_result = self.validator.validate_config(config)
-        if not (
-            isinstance(validation_result, dict)
-            and validation_result.get("valid", False)
-        ):
-            errors = (
-                validation_result["errors"]
-                if isinstance(validation_result, dict) and "errors" in validation_result
-                else str(validation_result)
-            )
+        if not self.validator.validate_config(config):
+            errors = self.validator.get_errors()
             raise ValueError(f"Collector config validation failed: {errors}")
 
         return config
@@ -79,16 +62,8 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate evaluator-specific configuration
-        validation_result = self.validator.validate_config(config)
-        if not (
-            isinstance(validation_result, dict)
-            and validation_result.get("valid", False)
-        ):
-            errors = (
-                validation_result["errors"]
-                if isinstance(validation_result, dict) and "errors" in validation_result
-                else str(validation_result)
-            )
+        if not self.validator.validate_config(config):
+            errors = self.validator.get_errors()
             raise ValueError(f"Evaluator config validation failed: {errors}")
 
         return config
@@ -101,16 +76,8 @@ class ConfigFactory:
         config = {**base_config, **kwargs}
 
         # Validate report-specific configuration
-        validation_result = self.validator.validate_config(config)
-        if not (
-            isinstance(validation_result, dict)
-            and validation_result.get("valid", False)
-        ):
-            errors = (
-                validation_result["errors"]
-                if isinstance(validation_result, dict) and "errors" in validation_result
-                else str(validation_result)
-            )
+        if not self.validator.validate_config(config):
+            errors = self.validator.get_errors()
             raise ValueError(f"Report config validation failed: {errors}")
 
         return config
@@ -162,8 +129,15 @@ class ConfigFactory:
             "reliability": {
                 "type": "reliability",
                 "availability_threshold": 0.99,
-                "error_budget": 0.01,
-                "slo_targets": {},
+                "slo_targets": {
+                    "slos": {
+                        "availability": {
+                            "target": 0.99,
+                            "window": "24h",
+                            "description": "System availability",
+                        },
+                    },
+                },
             },
             "safety": {
                 "type": "safety",
@@ -242,13 +216,25 @@ class ConfigFactory:
 
         return config_files
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear the configuration cache"""
         self._config_cache.clear()
 
     def get_cached_config(self, config_path: str) -> Optional[Dict[str, Any]]:
         """Get cached configuration if available"""
         return self._config_cache.get(config_path)
+
+    def _validate_collector(self, collector: Dict[str, Any]) -> bool:
+        """Validate a collector configuration"""
+        return isinstance(collector, dict)
+
+    def _validate_evaluator(self, evaluator: Dict[str, Any]) -> bool:
+        """Validate an evaluator configuration"""
+        return isinstance(evaluator, dict)
+
+    def _validate_report(self, report: Dict[str, Any]) -> bool:
+        """Validate a report configuration"""
+        return isinstance(report, dict)
 
 
 class ConfigFactoryError(Exception):

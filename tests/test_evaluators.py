@@ -81,8 +81,8 @@ class TestReliabilityEvaluator:
         """Test reliability evaluation"""
         config = {
             "slos": {
-                "availability": {"target": 0.99, "window": "24h", "error_budget": 0.01},
-                "latency": {"target": 0.1, "window": "24h", "error_budget": 0.01},
+                "availability": {"target": 0.99, "window": "24h"},
+                "latency": {"target": 0.1, "window": "24h"},
             }
         }
         evaluator = ReliabilityEvaluator(config)
@@ -106,7 +106,7 @@ class TestReliabilityEvaluator:
 
     def test_reliability_evaluator_error_budget_calculation(self):
         """Test error budget calculation"""
-        config = {"slos": {"availability": {"target": 0.99, "error_budget": 0.01}}}
+        config = {"slos": {"availability": {"target": 0.99}}}
         evaluator = ReliabilityEvaluator(config)
 
         # Test with compliant SLO
@@ -131,7 +131,6 @@ class TestReliabilityEvaluator:
             "slos": {
                 "availability": {
                     "target": 0.99,
-                    "error_budget": 0.01,
                     "safety_critical": True,
                 }
             }

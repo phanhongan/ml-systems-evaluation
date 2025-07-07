@@ -356,7 +356,54 @@ reports:
 
 ## Service Level Objectives (SLOs)
 
-For comprehensive SLO configuration guidance, including detailed examples and industry-specific configurations, see the [SLO Configuration Guide](./slo-configuration.md).
+SLOs define the performance targets for your ML system. Each SLO specifies a target value that the system should achieve.
+
+### SLO Configuration
+
+```yaml
+slos:
+  model_accuracy:
+    target: 0.95          # Required: Target performance value (0.0 to 1.0)
+    window: "24h"         # Required: Time window for evaluation
+    description: "Model accuracy for classification tasks"  # Optional
+    safety_critical: false # Optional: Whether this is safety-critical (default: false)
+```
+
+### SLO Parameters
+
+- **target** (required): The target performance value between 0.0 and 1.0
+- **window** (required): Time window for evaluation (e.g., "24h", "7d", "30d")
+- **description** (optional): Human-readable description of the SLO
+- **safety_critical** (optional): Whether this SLO is safety-critical (default: false)
+- **error_budget**: Error budget is always inferred from the target value as `1.0 - target` and should not be specified in user configuration.
+
+### Error Budgets
+
+Error budgets are automatically calculated from the target value using the formula:
+```
+error_budget = 1.0 - target
+```
+
+For example:
+- If `target: 0.95`, then `error_budget: 0.05`
+- If `target: 0.99`, then `error_budget: 0.01`
+
+You do not need to specify an error budget; it is always inferred from the target.
+
+### Safety-Critical SLOs
+
+For safety-critical systems, mark SLOs as safety-critical:
+
+```yaml
+slos:
+  collision_avoidance:
+    target: 0.999
+    window: "24h"
+    description: "Collision avoidance accuracy"
+    safety_critical: true
+```
+
+Safety-critical SLOs receive additional monitoring and stricter alerting thresholds.
 
 ## Advanced Configuration
 

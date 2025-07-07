@@ -6,7 +6,7 @@ from typing import Any, Dict
 class TemplateFactory:
     """Factory for creating industry-specific configuration templates"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.templates = self._load_templates()
 
     def _load_templates(self) -> Dict[str, Dict[str, Any]]:
@@ -62,7 +62,6 @@ class TemplateFactory:
                 "accuracy": {
                     "target": 0.99,
                     "window": "24h",
-                    "error_budget": 0.001,
                     "description": "Model accuracy for flight safety",
                     "safety_critical": True,
                     "compliance_standard": "DO-178C",
@@ -70,7 +69,6 @@ class TemplateFactory:
                 "latency": {
                     "target": 100,
                     "window": "1h",
-                    "error_budget": 0.01,
                     "description": "Inference latency (ms)",
                     "safety_critical": True,
                 },
@@ -93,6 +91,18 @@ class TemplateFactory:
                 {
                     "type": "reliability",
                     "error_budget_window": "7d",
+                    "slos": {
+                        "decision_accuracy": {
+                            "target": 0.999,
+                            "window": "24h",
+                            "description": "Safety-critical decision accuracy",
+                        },
+                        "response_time": {
+                            "target": 0.99,
+                            "window": "1h",
+                            "description": "Response time compliance",
+                        },
+                    },
                 },
             ],
         }
@@ -121,7 +131,6 @@ class TemplateFactory:
                 "grid_stability": {
                     "target": 0.995,
                     "window": "1h",
-                    "error_budget": 0.005,
                     "description": "Grid stability prediction accuracy",
                     "safety_critical": True,
                     "compliance_standard": "IEC-61508",
@@ -129,7 +138,6 @@ class TemplateFactory:
                 "response_time": {
                     "target": 50,
                     "window": "5m",
-                    "error_budget": 0.001,
                     "description": "Emergency response time (ms)",
                     "safety_critical": True,
                 },
@@ -152,6 +160,18 @@ class TemplateFactory:
                 {
                     "type": "reliability",
                     "error_budget_window": "30d",
+                    "slos": {
+                        "grid_stability": {
+                            "target": 0.995,
+                            "window": "1h",
+                            "description": "Grid stability prediction accuracy",
+                        },
+                        "emergency_response": {
+                            "target": 50,
+                            "window": "5m",
+                            "description": "Emergency response time (ms)",
+                        },
+                    },
                 },
             ],
         }
@@ -180,7 +200,6 @@ class TemplateFactory:
                 "quality_control": {
                     "target": 0.95,
                     "window": "8h",
-                    "error_budget": 0.05,
                     "description": "Quality control accuracy",
                     "safety_critical": False,
                     "compliance_standard": "ISO-13485",
@@ -188,7 +207,6 @@ class TemplateFactory:
                 "throughput": {
                     "target": 1000,
                     "window": "1h",
-                    "error_budget": 0.1,
                     "description": "Production throughput (units/hour)",
                     "safety_critical": False,
                 },
@@ -213,7 +231,6 @@ class TemplateFactory:
                 },
                 {
                     "type": "reliability",
-                    "error_budget_window": "30d",
                 },
             ],
         }
@@ -242,7 +259,6 @@ class TemplateFactory:
                 "collision_avoidance": {
                     "target": 0.99,
                     "window": "1h",
-                    "error_budget": 0.001,
                     "description": "Collision avoidance accuracy",
                     "safety_critical": True,
                     "compliance_standard": "SOLAS",
@@ -250,7 +266,6 @@ class TemplateFactory:
                 "navigation_accuracy": {
                     "target": 0.98,
                     "window": "24h",
-                    "error_budget": 0.02,
                     "description": "Navigation system accuracy",
                     "safety_critical": True,
                 },
@@ -272,7 +287,19 @@ class TemplateFactory:
                 },
                 {
                     "type": "reliability",
-                    "error_budget_window": "7d",
+                    "error_budget_window": "30d",
+                    "slos": {
+                        "collision_avoidance": {
+                            "target": 0.99,
+                            "window": "1h",
+                            "description": "Collision avoidance accuracy",
+                        },
+                        "navigation_accuracy": {
+                            "target": 0.98,
+                            "window": "24h",
+                            "description": "Navigation system accuracy",
+                        },
+                    },
                 },
             ],
         }

@@ -5,25 +5,39 @@ system:
   criticality: "safety_critical"
 
 slos:
-  collision_avoidance_accuracy:
+  collision_detection_accuracy:
     target: 0.999
     window: "24h"
-    error_budget: 0.001
-    description: "Accuracy of collision risk detection and avoidance recommendations, considering COLREGs and advanced navigation parameters (TCPA, DCPA, BCR, STW, SOG)"
+    description: "Accuracy of collision detection in maritime environments"
+  
+  vessel_classification:
+    target: 0.95
+    window: "24h"
+    description: "Accuracy of vessel type classification"
+  
+  distance_estimation:
+    target: 0.995
+    window: "24h"
+    description: "Accuracy of distance estimation between vessels"
+  
+  safety_critical_alert:
+    target: 0.9999
+    window: "24h"
+    description: "Accuracy of safety-critical collision alerts"
+  
   alert_latency:
-    target: 1000
+    target: 0.95
     window: "1h"
-    error_budget: 0.05
-    description: "Maximum time to alert Officer of the Watch after risk detected (ms)"
+    description: "Proportion of alerts delivered within 1000ms target time"
+  
   false_alarm_rate:
     target: 0.01
     window: "7d"
-    error_budget: 0.005
     description: "Proportion of false positive collision alerts"
+  
   system_availability:
     target: 0.9999
     window: "30d"
-    error_budget: 0.0001
     description: "System uptime for collision avoidance functionality"
 
 safety_thresholds:
@@ -44,7 +58,7 @@ operating_conditions:
 
 collectors:
   - type: "online"
-    endpoint: "http://bridge-systems:9000/metrics"
+    endpoints: ["http://bridge-systems:9000/metrics"]
     metrics: ["proximity_alerts", "collision_predictions", "alert_latency"]
   - type: "offline"
     log_paths: ["/var/log/bridge-systems/", "/var/log/navigation/alerts/"]

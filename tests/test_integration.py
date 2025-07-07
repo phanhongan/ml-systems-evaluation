@@ -159,18 +159,15 @@ class TestIndustrySpecificScenarios:
                 "criticality": "business_critical",
             },
             "slos": {
-                "defect_detection_accuracy": {
+                "quality_control": {
                     "target": 0.98,
                     "window": "24h",
-                    "error_budget": 0.02,
-                    "description": "Quality control defect detection",
-                    "business_impact": "millions_per_hour",
+                    "description": "Quality control accuracy",
                 },
-                "prediction_latency": {
+                "production_efficiency": {
                     "target": 0.99,
-                    "window": "1h",
-                    "error_budget": 0.01,
-                    "description": "Real-time prediction latency",
+                    "window": "8h",
+                    "description": "Production efficiency",
                 },
             },
         }
@@ -205,7 +202,6 @@ class TestIndustrySpecificScenarios:
                 "safety_decision_accuracy": {
                     "target": 0.9999,
                     "window": "1h",
-                    "error_budget": 0.0001,
                     "description": "Safety-critical decision accuracy",
                     "safety_critical": True,
                     "compliance_standard": "DO-178C",
@@ -258,14 +254,12 @@ class TestIndustrySpecificScenarios:
                 "grid_stability": {
                     "target": 0.995,
                     "window": "1h",
-                    "error_budget": 0.005,
                     "description": "Grid stability maintenance",
                     "business_impact": "millions_per_hour",
                 },
                 "demand_prediction_accuracy": {
                     "target": 0.95,
                     "window": "24h",
-                    "error_budget": 0.05,
                     "description": "Energy demand prediction",
                 },
             },

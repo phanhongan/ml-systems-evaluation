@@ -1,59 +1,190 @@
 system:
-  name: "Echogram Fish Species Classification Pipeline"
+  name: "Commercial Fishing Sonar Classification System"
   type: "workflow"
-  stages: ["echogram_preprocessing", "feature_extraction", "species_classification", "catch_optimization"]
+  persona: "Commercial Fisherman"
   criticality: "business_critical"
+  stages: ["sonar_signal_processing", "fish_detection", "species_classification", "catch_optimization"]
 
 slos:
-  species_accuracy:
-    target: 0.95
+  fish_detection_accuracy:
+    target: 0.92
     window: "24h"
-    error_budget: 0.05
-    description: "Accuracy of fish species identification from echogram data"
+    description: "Accuracy of fish detection from sonar signals in varying water conditions"
   
-  real_time_latency:
-    target: 200
-    window: "1h"
-    error_budget: 0.1
-    description: "End-to-end processing time for echogram classification (ms)"
+  species_classification_accuracy:
+    target: 0.88
+    window: "24h"
+    description: "Accuracy of fish species identification for catch management and regulatory compliance"
   
-  echogram_quality:
-    target: 0.98
+  sonar_signal_quality:
+    target: 0.85
     window: "12h"
-    error_budget: 0.02
-    description: "Quality score of incoming echogram data from underwater devices"
+    description: "Quality score of incoming sonar signals under various sea conditions"
   
   bycatch_prevention:
-    target: 0.99
+    target: 0.95
     window: "24h"
-    error_budget: 0.01
-    description: "Accuracy in identifying protected species to prevent bycatch"
+    description: "Accuracy in identifying protected species to prevent bycatch and regulatory violations"
 
-fishing_conditions:
-  depth_range: [10, 200]  # meters
-  water_temperature: [2, 25]  # celsius
-  device_types: ["trawl_net", "gill_net", "longline"]
+operating_conditions:
+  fishing_environments:
+    - "coastal_waters"
+    - "offshore_deep_sea"
+    - "estuarine_waters"
+    - "continental_shelf"
+  
+  weather_conditions:
+    - "calm_seas"
+    - "moderate_swell"
+    - "rough_seas"
+    - "storm_conditions"
+  
+  water_conditions:
+    depth_range: [5, 500]  # meters
+    temperature_range: [2, 30]  # celsius
+    salinity_range: [28, 35]  # ppt
+    turbidity_levels: ["clear", "moderate", "high"]
+  
+  fishing_methods:
+    - "trawl_fishing"
+    - "gill_net"
+    - "longline"
+    - "purse_seine"
+    - "pole_and_line"
+
+sonar_parameters:
+  frequency_range: [38, 200]  # kHz
+  beam_width: [7, 15]  # degrees
+  ping_rate: [1, 10]  # Hz
+  power_output: [100, 1000]  # watts
+  signal_processing:
+    noise_reduction: true
+    bottom_lock: true
+    target_tracking: true
+    depth_compensation: true
 
 collectors:
   - type: "online"
-    endpoint: "http://fishing-vessel-metrics:9090"
-    metrics: ["echogram_quality", "species_detection_rate", "processing_latency"]
+    endpoints: ["http://fishing-vessel-systems:8080/metrics"]
+    metrics:
+      - "sonar_signal_strength"
+      - "fish_detection_rate"
+      - "species_confidence"
+      - "processing_latency"
+      - "fish_detection_accuracy"
+      - "species_classification_accuracy"
+      - "bycatch_prevention"
+      - "accuracy"
+      - "latency"
+      - "throughput"
+      - "catch_efficiency"
+    polling_interval: 5  # seconds
+    real_time: true
   
   - type: "offline"
-    log_paths: ["/var/log/echogram-pipeline/", "/var/log/fishing-operations/"]
+    log_paths: ["/var/log/sonar-system/", "/var/log/fishing-operations/", "/var/log/catch-data/"]
+    data_retention: "90d"
   
   - type: "environmental"
-    sources: ["water_temperature", "depth_sensor", "current_speed"]
+    sources: ["water_temperature", "depth_sensor", "current_speed", "salinity", "turbidity"]
+    sampling_interval: 30  # seconds
+  
+  - type: "regulatory"
+    compliance_standards: ["fishery_management", "protected_species", "catch_limits"]
+    reporting_frequency: "daily"
 
 evaluators:
   - type: "reliability"
     error_budget_window: "30d"
-    critical_metrics: ["species_accuracy", "bycatch_prevention"]
+    slos: {
+      "fish_detection_accuracy": {
+        "target": 0.92,
+        "window": "24h",
+        "description": "Accuracy of fish detection from sonar signals"
+      },
+      "species_classification_accuracy": {
+        "target": 0.88,
+        "window": "24h",
+        "description": "Accuracy of fish species identification"
+      },
+      "bycatch_prevention": {
+        "target": 0.95,
+        "window": "24h",
+        "description": "Accuracy in identifying protected species"
+      }
+    }
+    failure_modes: ["sonar_signal_loss", "processing_failure", "environmental_interference"]
   
   - type: "performance"
-    metrics: ["accuracy", "latency", "throughput"]
-    real_time_threshold: 500  # ms
+    metrics: ["accuracy", "latency", "throughput", "catch_efficiency"]
+    thresholds:
+      latency_ms: 500
+      catch_efficiency: 0.78
+    baseline_period: "last_30_days"
   
-  - type: "environmental"
-    drift_detection: ["water_conditions", "echogram_characteristics"]
-    adaptation_threshold: 0.1 
+  - type: "drift"
+    drift_detection: ["water_conditions", "sonar_characteristics", "fish_behavior_patterns"]
+    adaptation_threshold: 0.15
+    environmental_factors: ["temperature", "salinity", "turbidity", "depth"]
+  
+  - type: "compliance"
+    standards: ["fishery_management", "protected_species", "catch_limits"]
+    audit_requirements: ["catch_logs", "bycatch_reports", "gear_restrictions"]
+    reporting_frequency: "daily"
+
+# Business metrics (not SLOs - can have any positive values)
+business_metrics:
+  catch_value:
+    target: 15000  # USD per trip
+    description: "Average catch value per fishing trip"
+  
+  fuel_efficiency:
+    target: 0.85
+    description: "Fuel efficiency ratio (catch value / fuel cost)"
+  
+  regulatory_compliance:
+    target: 0.98
+    description: "Compliance rate with fishing regulations and quotas"
+  
+  bycatch_rate:
+    target: 0.05
+    description: "Percentage of non-target species in catch"
+
+alerts:
+  critical:
+    - "sonar_system_failure"
+    - "protected_species_detected"
+    - "catch_limit_approaching"
+    - "weather_conditions_deteriorating"
+  
+  warning:
+    - "signal_quality_degrading"
+    - "species_confidence_low"
+    - "processing_latency_high"
+    - "environmental_conditions_changing"
+  
+  info:
+    - "catch_efficiency_optimization"
+    - "fuel_consumption_alert"
+    - "maintenance_reminder"
+
+reports:
+  - type: "business"
+    format: "html"
+    schedule: "0 6 * * *"  # Daily at 6 AM
+    recipients: ["captain@fishing-vessel.com", "operations@fishing-company.com"]
+    include_charts: true
+    include_recommendations: true
+  
+  - type: "compliance"
+    format: "pdf"
+    schedule: "0 0 1 * *"  # Monthly on 1st
+    standards: ["fishery_management", "protected_species"]
+    include_evidence: true
+    audit_trail: true
+  
+  - type: "technical"
+    format: "json"
+    schedule: "0 */4 * * *"  # Every 4 hours
+    include_system_metrics: true
+    include_performance_data: true

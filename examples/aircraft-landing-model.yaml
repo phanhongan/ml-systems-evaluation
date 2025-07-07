@@ -4,18 +4,20 @@ system:
   criticality: "safety_critical"
 
 slos:
-  decision_accuracy:
+  landing_accuracy:
     target: 0.9999
     window: "24h"
-    error_budget: 0.0001
-  response_time:
-    target: 50
-    window: "1h"
-    error_budget: 0.01
-  availability:
+    description: "Accuracy of aircraft landing predictions"
+  
+  runway_detection:
+    target: 0.99
+    window: "24h"
+    description: "Accuracy of runway detection and classification"
+  
+  safety_critical_decision:
     target: 0.99999
-    window: "30d"
-    error_budget: 0.00001
+    window: "24h"
+    description: "Accuracy of safety-critical landing decisions"
 
 safety_thresholds:
   false_positive_rate:
@@ -25,10 +27,23 @@ safety_thresholds:
 
 collectors:
   - type: "online"
-    endpoint: "http://aircraft-system:8080/metrics"
+    endpoints: ["http://aircraft-system:8080/metrics"]
 
 evaluators:
   - type: "reliability"
     error_budget_window: "7d"
+    slos:
+      landing_accuracy:
+        target: 0.9999
+        window: "24h"
+        description: "Accuracy of aircraft landing predictions"
+      runway_detection:
+        target: 0.99
+        window: "24h"
+        description: "Accuracy of runway detection and classification"
+      safety_critical_decision:
+        target: 0.99999
+        window: "24h"
+        description: "Accuracy of safety-critical landing decisions"
   - type: "safety"
     compliance_standards: ["DO-178C"] 

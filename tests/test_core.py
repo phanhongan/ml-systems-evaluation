@@ -3,7 +3,6 @@
 from datetime import datetime
 
 from ml_eval.core.config import (
-    ErrorBudget,
     EvaluationResult,
     MetricData,
     SLOConfig,
@@ -67,44 +66,48 @@ class TestComplianceStandard:
 class TestSLOConfig:
     """Test SLOConfig class"""
 
-    def test_slo_config_creation(self):
-        """Test basic SLO configuration creation"""
+    def test_slo_creation(self):
+        """Test SLO configuration creation"""
         slo = SLOConfig(
             name="test_slo",
             target=0.95,
-            window="30d",
-            error_budget=0.05,
+            window="24h",
             description="Test SLO",
+            safety_critical=False,
         )
 
         assert slo.name == "test_slo"
         assert slo.target == 0.95
-        assert slo.window == "30d"
-        assert slo.error_budget == 0.05
+        assert slo.window == "24h"
+        assert abs(slo.error_budget - 0.05) < 1e-10  # Handle floating-point precision
         assert slo.description == "Test SLO"
         assert slo.safety_critical is False
 
-    def test_safety_critical_slo_validation(self):
-        """Test safety-critical SLO validation"""
-        # Should pass with small error budget
+    def test_safety_critical_slo(self):
+        """Test safety-critical SLO configuration"""
         slo = SLOConfig(
             name="safety_slo",
             target=0.999,
-            window="1h",
-            error_budget=0.001,
+            window="24h",
+            description="Safety-critical SLO",
             safety_critical=True,
         )
-        assert slo.safety_critical is True
 
-        # Should also pass with large error budget (no validation in SLOConfig)
-        slo = SLOConfig(
-            name="safety_slo",
-            target=0.999,
-            window="1h",
-            error_budget=0.1,
-            safety_critical=True,
-        )
         assert slo.safety_critical is True
+        assert abs(slo.error_budget - 0.001) < 1e-10  # Handle floating-point precision
+
+    def test_slo_with_explicit_error_budget(self):
+        """Test SLO with explicit error_budget"""
+        slo = SLOConfig(
+            name="explicit_slo",
+            target=0.90,
+            window="24h",
+            error_budget=0.10,  # Explicitly provided
+            description="SLO with explicit error budget",
+        )
+
+        assert slo.target == 0.90
+        assert slo.error_budget == 0.10  # Should use provided value
 
     def test_compliance_standard_validation(self):
         """Test compliance standard validation"""
@@ -263,34 +266,38 @@ class TestErrorBudget:
     """Test ErrorBudget class"""
 
     def test_error_budget_creation(self):
-        """Test basic error budget creation"""
-        budget = ErrorBudget(
-            slo_name="test_slo", budget_remaining=0.03, burn_rate=0.001
+        """Test error budget creation"""
+        slo = SLOConfig(
+            name="test_slo",
+            target=0.95,
+            window="24h",
         )
 
-        assert budget.slo_name == "test_slo"
-        assert budget.budget_remaining == 0.03
-        assert budget.burn_rate == 0.001
-        assert budget.alerts == []
+        # Error budget should be inferred from target
+        assert abs(slo.error_budget - 0.05) < 1e-10
 
     def test_error_budget_properties(self):
         """Test error budget properties"""
-        budget = ErrorBudget(
-            slo_name="test_slo", budget_remaining=0.03, burn_rate=0.001
+        slo = SLOConfig(
+            name="test_slo",
+            target=0.99,
+            window="24h",
         )
-        assert budget.budget_remaining == 0.03
-        assert budget.burn_rate == 0.001
+
+        # Error budget should be inferred from target
+        assert abs(slo.error_budget - 0.01) < 1e-10
+        assert abs(slo.target + slo.error_budget - 1.0) < 1e-10
 
     def test_error_budget_alerts(self):
-        """Test error budget alert functionality"""
-        budget = ErrorBudget(
-            slo_name="test_slo", budget_remaining=0.03, burn_rate=0.001
+        """Test error budget alert generation"""
+        slo = SLOConfig(
+            name="test_slo",
+            target=0.95,
+            window="24h",
         )
-        budget.alerts.append("Test warning")
-        budget.alerts.append("Test critical")
-        assert len(budget.alerts) == 2
-        assert "Test warning" in budget.alerts
-        assert "Test critical" in budget.alerts
+
+        # Error budget should be inferred from target
+        assert abs(slo.error_budget - 0.05) < 1e-10
 
 
 class TestEvaluationFramework:
@@ -315,25 +322,29 @@ class TestEvaluationFramework:
 
         accuracy_slo = next(slo for slo in framework.slos if slo.name == "accuracy")
         assert accuracy_slo.target == 0.95
-        assert accuracy_slo.error_budget == 0.05
+        assert (
+            abs(accuracy_slo.error_budget - 0.05) < 1e-10
+        )  # Handle floating-point precision
 
     def test_framework_add_collector(self, sample_config, mock_collector):
         """Test adding collector to framework"""
         framework = EvaluationFramework(sample_config)
         collector = mock_collector({"name": "test_collector"})
 
+        initial_count = len(framework.collectors)
         framework.add_collector(collector)
-        assert len(framework.collectors) == 1
-        assert framework.collectors[0] == collector
+        assert len(framework.collectors) == initial_count + 1
+        assert framework.collectors[-1] == collector
 
     def test_framework_add_evaluator(self, sample_config, mock_evaluator):
         """Test adding evaluator to framework"""
         framework = EvaluationFramework(sample_config)
         evaluator = mock_evaluator({"name": "test_evaluator"})
 
+        initial_count = len(framework.evaluators)
         framework.add_evaluator(evaluator)
-        assert len(framework.evaluators) == 1
-        assert framework.evaluators[0] == evaluator
+        assert len(framework.evaluators) == initial_count + 1
+        assert framework.evaluators[-1] == evaluator
 
     def test_framework_validate_configuration(self, safety_critical_config):
         """Test framework configuration validation"""

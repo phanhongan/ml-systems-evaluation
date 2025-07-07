@@ -57,11 +57,20 @@ class ReliabilityEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_slo(
-        self, slo_name: str, slo_config: Dict[str, Any], current_value: float
+        self, slo_name: str, slo_config: Dict[str, Any], current_value: Any
     ) -> Dict[str, Any]:
         """Evaluate a single SLO"""
-        target = slo_config.get("target", 0)
+        # Get target (required)
+        target = slo_config.get("target", 0.95)  # Default to 95% if not specified
         window = slo_config.get("window", "24h")
+
+        # Extract value from MetricData if it's a list
+        if isinstance(current_value, list) and len(current_value) > 0:
+            # Take the first MetricData object and get its value
+            current_value = current_value[0].value
+        elif hasattr(current_value, "value"):
+            # It's a single MetricData object
+            current_value = current_value.value
 
         # Determine if SLO is met based on type
         if "accuracy" in slo_name.lower() or "precision" in slo_name.lower():
@@ -84,9 +93,10 @@ class ReliabilityEvaluator(BaseEvaluator):
         self, slo_name: str, slo_config: Dict[str, Any], slo_result: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Calculate error budget for an SLO"""
-        error_budget = slo_config.get("error_budget", 0.01)
+        # Always infer error_budget from target
+        target = slo_config.get("target", 0.95)
+        error_budget = 1.0 - target
         current_value = slo_result["current_value"]
-        target = slo_result["target"]
 
         # Calculate budget burn rate
         if slo_result["compliant"]:

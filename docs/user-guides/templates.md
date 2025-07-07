@@ -174,6 +174,8 @@ slo:
 **🎯 Use Case**: Ship collision avoidance and navigational safety
 **📊 Key Metrics**: Collision avoidance accuracy, alert latency, false alarm rate, STW/SOG discrepancy, system availability
 
+> **Note:** error_budget is always inferred from target and should not be specified in your configuration.
+
 ```yaml
 system:
   name: "Maritime Collision Avoidance System"
@@ -185,22 +187,18 @@ slos:
   collision_avoidance_accuracy:
     target: 0.999
     window: "24h"
-    error_budget: 0.001
     description: "Accuracy of collision risk detection and avoidance recommendations, considering COLREGs and advanced navigation parameters (TCPA, DCPA, BCR, STW, SOG)"
   alert_latency:
-    target: 1000
+    target: 0.95
     window: "1h"
-    error_budget: 0.05
-    description: "Maximum time to alert Officer of the Watch after risk detected (ms)"
+    description: "Proportion of alerts delivered within 1000ms target time"
   false_alarm_rate:
     target: 0.01
     window: "7d"
-    error_budget: 0.005
     description: "Proportion of false positive collision alerts"
   system_availability:
     target: 0.9999
     window: "30d"
-    error_budget: 0.0001
     description: "System uptime for collision avoidance functionality"
 
 safety_thresholds:

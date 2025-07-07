@@ -95,7 +95,7 @@ class SLOConfig:
         name: str,
         target: float,
         window: str,
-        error_budget: float,
+        error_budget: Optional[float] = None,
         description: Optional[str] = None,
         safety_critical: bool = False,
         business_impact: Optional[str] = None,
@@ -103,7 +103,8 @@ class SLOConfig:
         self.name = name
         self.target = target
         self.window = window
-        self.error_budget = error_budget
+        # Infer error_budget from target if not provided
+        self.error_budget = error_budget if error_budget is not None else (1.0 - target)
         self.description = description
         self.safety_critical = safety_critical
         self.business_impact = business_impact
@@ -127,7 +128,7 @@ class SLOConfig:
             name=data["name"],
             target=data["target"],
             window=data["window"],
-            error_budget=data["error_budget"],
+            error_budget=data.get("error_budget"),  # Optional now
             description=data.get("description"),
             safety_critical=data.get("safety_critical", False),
             business_impact=data.get("business_impact"),
@@ -200,7 +201,8 @@ class EvaluationResult:
         self.recommendations = recommendations
         self.alerts = alerts
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert EvaluationResult to dictionary representation"""
         return {
             "system_name": self.system_name,
             "timestamp": self.timestamp.isoformat(),
@@ -223,14 +225,18 @@ class EvaluationResult:
 
 class ErrorBudget:
     def __init__(
-        self, slo_name: str, budget_remaining: float, burn_rate: float, alerts=None
-    ):
+        self,
+        slo_name: str,
+        budget_remaining: float,
+        burn_rate: float,
+        alerts: Optional[list] = None,
+    ) -> None:
         self.slo_name = slo_name
         self.budget_remaining = budget_remaining
         self.burn_rate = burn_rate
         self.alerts = alerts or []
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "slo_name": self.slo_name,
             "budget_remaining": self.budget_remaining,

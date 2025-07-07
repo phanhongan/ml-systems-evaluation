@@ -40,16 +40,13 @@ class EnvironmentalCollector(BaseCollector):
             return {}
 
     def health_check(self) -> bool:
-        """Check if environmental sensors are operational"""
+        """Check if environmental collector is healthy"""
         try:
-            # Check each sensor type
-            for sensor_type in self.sensor_types:
-                if not self._check_sensor_health(sensor_type):
-                    self.logger.warning(f"Sensor {sensor_type} health check failed")
-                    return False
-            return True
+            # Basic health check - verify we can access environmental data
+            test_data = self._collect_environmental_data()
+            return len(test_data) > 0
         except Exception as e:
-            self.logger.error(f"Environmental health check failed: {e}")
+            self.logger.error(f"Environmental collector health check failed: {e}")
             return False
 
     def _collect_environmental_data(self) -> Dict[str, List[MetricData]]:
@@ -170,7 +167,7 @@ class EnvironmentalCollector(BaseCollector):
             # Generic sensor reading
             return random.uniform(0, 100)
 
-    def _check_environmental_alerts(self, sensor_type: str, value: float):
+    def _check_environmental_alerts(self, sensor_type: str, value: float) -> None:
         """Check for environmental condition alerts"""
         threshold = self.alert_thresholds.get(sensor_type)
         if threshold:

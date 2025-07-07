@@ -10,6 +10,7 @@ class SystemType(Enum):
     WORKFLOW = "workflow"
     PIPELINE = "pipeline"
     DISTRIBUTED = "distributed"
+    SAFETY_CRITICAL = "safety_critical"
 
 
 class CriticalityLevel(Enum):

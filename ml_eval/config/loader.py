@@ -1,6 +1,7 @@
 """Configuration loader for ML Systems Evaluation Framework"""
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -10,7 +11,9 @@ import yaml
 class ConfigLoader:
     """Load configuration from various file formats"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize configuration loader"""
+        self.logger = logging.getLogger(__name__)
         self.supported_formats = [".yaml", ".yml", ".json"]
         self.template_dir = Path(__file__).parent.parent / "templates"
 

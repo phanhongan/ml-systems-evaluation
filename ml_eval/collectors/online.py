@@ -28,13 +28,15 @@ class OnlineCollector(BaseCollector):
     def collect(self) -> Dict[str, List[MetricData]]:
         """Collect real-time metrics from online sources"""
         try:
-            if not self.health_check():
+            health = self.health_check()
+            if not health:
                 self.logger.warning(
                     f"Online collector health check failed for {self.name}"
                 )
                 return {}
 
-            return self._collect_online_data()
+            metrics = self._collect_online_data()
+            return metrics
         except Exception as e:
             self.logger.error(f"Failed to collect online data from {self.name}: {e}")
             return {}
@@ -89,7 +91,16 @@ class OnlineCollector(BaseCollector):
             mock_data = self._generate_mock_endpoint_data(endpoint)
 
             for metric_name, value in mock_data.items():
-                metrics[f"online_{metric_name}"] = [
+                # Check if this metric is from the configured metrics list
+                configured_metrics = getattr(self, "config", {}).get("metrics", [])
+                if metric_name in configured_metrics:
+                    # Use the metric name as-is for configured metrics
+                    final_metric_name = metric_name
+                else:
+                    # Prefix with "online_" for other metrics
+                    final_metric_name = f"online_{metric_name}"
+
+                metrics[final_metric_name] = [
                     MetricData(
                         timestamp=timestamp,
                         value=value,
@@ -109,6 +120,34 @@ class OnlineCollector(BaseCollector):
     def _generate_mock_endpoint_data(self, endpoint: str) -> Dict[str, float]:
         """Generate mock data for simulation"""
         import random
+
+        # Check if we have specific metrics configured
+        configured_metrics = getattr(self, "config", {}).get("metrics", [])
+
+        if configured_metrics:
+            # Generate data for configured metrics
+            mock_data = {}
+            for metric in configured_metrics:
+                if "accuracy" in metric.lower():
+                    mock_data[metric] = random.uniform(0.85, 0.98)
+                elif "latency" in metric.lower() or "response_time" in metric.lower():
+                    mock_data[metric] = random.uniform(10, 500)
+                elif "throughput" in metric.lower():
+                    mock_data[metric] = random.uniform(100, 10000)
+                elif "rate" in metric.lower():
+                    mock_data[metric] = random.uniform(0.8, 0.99)
+                elif "strength" in metric.lower():
+                    mock_data[metric] = random.uniform(0.7, 0.95)
+                elif "confidence" in metric.lower():
+                    mock_data[metric] = random.uniform(0.75, 0.95)
+                elif "quality" in metric.lower():
+                    mock_data[metric] = random.uniform(0.8, 0.95)
+                elif "efficiency" in metric.lower():
+                    mock_data[metric] = random.uniform(0.7, 0.9)
+                else:
+                    # Generic metric
+                    mock_data[metric] = random.uniform(0, 100)
+            return mock_data
 
         # Generate realistic mock data based on endpoint type
         if "metrics" in endpoint.lower():

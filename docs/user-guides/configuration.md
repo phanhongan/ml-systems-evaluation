@@ -48,9 +48,12 @@ system:
   environment: "production"  # production, staging, development
 ```
 
-### 🏭 System Configuration
+### 🏭 Supported Industries
 
-The framework supports workflow-based ML systems, which represent multi-stage processing pipelines typical in industrial AI applications. All systems are workflow-based by default.
+- **🏭 manufacturing**: Manufacturing and quality control systems
+- **✈️ aviation**: Aviation and aerospace systems
+- **⚡ energy**: Energy and utility systems
+- **🚢 maritime**: Maritime and navigation systems
 
 ### 🚨 Criticality Levels
 
@@ -441,4 +444,92 @@ environments:
 
 ### Validation Rules
 
+```yaml
+# Configuration validation
+validation:
+  required_fields: ["system.name", "system.type", "system.criticality"]
+  data_source_validation: true
+  evaluator_validation: true
+  report_validation: true
+  
+  # Custom validation rules
+  custom_rules:
+    - name: "safety_critical_requires_safety_evaluator"
+      condition: "system.criticality == 'safety-critical'"
+      requirement: "evaluators contains safety_evaluator"
+      
+    - name: "aviation_requires_compliance"
+      condition: "system.type == 'aviation'"
+      requirement: "evaluators contains compliance_evaluator"
 ```
+
+## Configuration Best Practices
+
+### 1. Security
+- Use environment variables for sensitive data
+- Encrypt database connections
+- Use least-privilege access
+- Regularly rotate credentials
+
+### 2. Performance
+- Set appropriate timeouts
+- Use connection pooling
+- Configure batch sizes appropriately
+- Monitor resource usage
+
+### 3. Reliability
+- Use multiple data sources for redundancy
+- Configure retry mechanisms
+- Set up alerting for failures
+- Monitor system health
+
+### 4. Maintainability
+- Use descriptive names
+- Document custom configurations
+- Version control your configs
+- Test configurations before deployment
+
+### 5. Compliance
+- Include all required fields
+- Validate against standards
+- Maintain audit trails
+- Regular compliance checks
+
+## Configuration Validation
+
+```bash
+# Validate configuration file
+ml-eval config validate config.yaml
+
+# Test configuration with sample data
+ml-eval config test config.yaml --sample-data
+
+# Generate configuration template
+ml-eval config template manufacturing --output my_config.yaml
+```
+
+## Troubleshooting Configuration Issues
+
+### Common Issues
+
+1. **Invalid YAML Syntax**
+   - Use a YAML validator
+   - Check indentation
+   - Verify quotes and special characters
+
+2. **Missing Required Fields**
+   - Check validation errors
+   - Review configuration schema
+   - Use configuration templates
+
+3. **Connection Issues**
+   - Verify connection strings
+   - Check network connectivity
+   - Validate credentials
+
+4. **Performance Problems**
+   - Adjust batch sizes
+   - Increase timeouts
+   - Optimize queries
+
+For more detailed troubleshooting, see the [Troubleshooting Guide](troubleshooting.md). 

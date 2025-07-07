@@ -3,7 +3,7 @@
 import logging
 from typing import Any
 
-from ..core.types import CriticalityLevel
+from ..core.types import ComplianceStandard, CriticalityLevel
 
 
 class ConfigValidator:
@@ -120,17 +120,13 @@ class ConfigValidator:
 
         # Validate compliance standard
         if "compliance_standard" in config:
-            # ComplianceStandard import was removed, so this validation is removed
-            # if "compliance_standard" in config:
-            #     try:
-            #         ComplianceStandard(config["compliance_standard"])
-            #     except ValueError:
-            #         self.errors.append(
-            #             f"Invalid compliance standard for SLO '{name}': "
-            #             f"{config['compliance_standard']}"
-            #         )
-            #         return False
-            pass  # Placeholder for future compliance standard validation
+            try:
+                ComplianceStandard(config["compliance_standard"])
+            except ValueError:
+                self.errors.append(
+                    f"SLO '{name}' has invalid compliance standard: {config['compliance_standard']}"
+                )
+                return False
 
         return True
 

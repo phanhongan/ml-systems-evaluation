@@ -34,16 +34,19 @@ class TestComplianceStandard:
     def test_compliance_standard_values(self):
         """Test that all compliance standards have correct values"""
         assert ComplianceStandard.DO_178C.value == "DO-178C"
-        assert ComplianceStandard.ISO_26262.value == "ISO-26262"
-        assert ComplianceStandard.IEC_61508.value == "IEC-61508"
-        assert ComplianceStandard.FDA_510K.value == "FDA-510K"
-        assert ComplianceStandard.SOX.value == "SOX"
+        assert ComplianceStandard.DO_254.value == "DO-254"
+        assert ComplianceStandard.ARP4754A.value == "ARP4754A"
+        assert ComplianceStandard.FAA.value == "FAA"
+        assert ComplianceStandard.EASA.value == "EASA"
+        assert ComplianceStandard.ICAO.value == "ICAO"
+        assert ComplianceStandard.COLREGs.value == "COLREGs"
+        assert ComplianceStandard.IMO.value == "IMO Guidelines"
         assert ComplianceStandard.GDPR.value == "GDPR"
 
     def test_compliance_standard_from_string(self):
         """Test creating ComplianceStandard from string"""
         assert ComplianceStandard("DO-178C") == ComplianceStandard.DO_178C
-        assert ComplianceStandard("ISO-26262") == ComplianceStandard.ISO_26262
+        assert ComplianceStandard("COLREGs") == ComplianceStandard.COLREGs
 
 
 class TestSLOConfig:

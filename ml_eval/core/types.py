@@ -12,24 +12,31 @@ class CriticalityLevel(Enum):
 
 
 class ComplianceStandard(Enum):
-    """Compliance standards for ML systems"""
+    """Industry compliance standards"""
 
-    # Aviation
-    DO_178C = "DO-178C"
-    DO_254 = "DO-254"
-    ARP4754A = "ARP4754A"
+    # Aviation safety standards
+    DO_178C = "DO-178C"  # Software Considerations in Airborne Systems
+    DO_254 = "DO-254"  # Hardware Considerations in Airborne Systems
+    ARP4754A = "ARP4754A"  # Guidelines for Development of Civil Aircraft and Systems
+    FAA = "FAA"  # Federal Aviation Administration
+    EASA = "EASA"  # European Aviation Safety Agency
+    ICAO = "ICAO"  # International Civil Aviation Organization
 
-    # Maritime
-    SOLAS = "SOLAS"
-    COLREGS = "COLREGS"
+    # Maritime safety standards
+    COLREGs = "COLREGs"  # International Regulations for Preventing Collisions at Sea
+    IMO = "IMO Guidelines"  # International Maritime Organization Guidelines
 
-    # Manufacturing
-    ISO_13485 = "ISO-13485"
-    FDA_510K = "FDA-510K"
+    # Energy standards
+    NERC = "NERC"  # North American Electric Reliability Corporation
+    FERC = "FERC"  # Federal Energy Regulatory Commission
 
-    # Energy
-    IEC_61508 = "IEC-61508"
-    ISO_13849 = "ISO-13849"
+    # Manufacturing standards
+    ISO_9001 = "ISO-9001"  # Quality Management Systems
+    ISO_14001 = "ISO-14001"  # Environmental Management Systems
+
+    # General standards
+    GDPR = "GDPR"  # Data privacy
+    NONE = "none"
 
 
 class EvaluationMode(Enum):
@@ -79,4 +86,4 @@ class TemplateType(Enum):
 
     # Maritime
     COLLISION_AVOIDANCE = "collision_avoidance"
-    NAVIGATION_SAFETY = "navigation_safety"
+    NAVIGATION_SYSTEM = "navigation_system"

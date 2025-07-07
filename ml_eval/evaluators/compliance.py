@@ -1,7 +1,7 @@
 """Compliance evaluator for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from .base import BaseEvaluator
 
@@ -9,20 +9,20 @@ from .base import BaseEvaluator
 class ComplianceEvaluator(BaseEvaluator):
     """Evaluate regulatory compliance for Industrial AI systems"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.compliance_standards = config.get("compliance_standards", [])
         self.audit_requirements = config.get("audit_requirements", {})
 
-    def get_required_metrics(self) -> List[str]:
+    def get_required_metrics(self) -> list[str]:
         """Get required metrics for compliance evaluation"""
         # Compliance evaluation may not require specific metrics
         # but rather checks against standards
         return []
 
-    def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def evaluate(self, metrics: dict[str, Any]) -> dict[str, Any]:
         """Evaluate compliance with regulatory standards"""
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "compliance_metrics": {},
             "audit_trail": [],
             "overall_compliance_score": 0.0,
@@ -71,8 +71,8 @@ class ComplianceEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_compliance_standard(
-        self, standard: str, metrics: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, standard: str, metrics: dict[str, Any]
+    ) -> dict[str, Any]:
         """Evaluate compliance with a specific standard"""
         compliance_checks = {
             "DO-178C": self._check_do178c_compliance(metrics),
@@ -94,7 +94,7 @@ class ComplianceEvaluator(BaseEvaluator):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _check_do178c_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_do178c_compliance(self, metrics: dict[str, Any]) -> dict[str, Any]:
         """Check DO-178C aviation safety compliance"""
         # Simplified DO-178C checks
         required_metrics = ["decision_accuracy", "response_time", "false_positive_rate"]
@@ -128,34 +128,34 @@ class ComplianceEvaluator(BaseEvaluator):
             ),
         }
 
-    def _check_iso26262_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_iso26262_compliance(self, _metrics: dict[str, Any]) -> dict[str, Any]:
         """Check ISO-26262 automotive safety compliance"""
         # Simplified ISO-26262 checks
         return {"compliant": True, "details": "ISO-26262 compliance check passed"}
 
-    def _check_iec61508_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_iec61508_compliance(self, _metrics: dict[str, Any]) -> dict[str, Any]:
         """Check IEC-61508 industrial safety compliance"""
         # Simplified IEC-61508 checks
         return {"compliant": True, "details": "IEC-61508 compliance check passed"}
 
-    def _check_fda510k_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_fda510k_compliance(self, _metrics: dict[str, Any]) -> dict[str, Any]:
         """Check FDA-510K medical device compliance"""
         # Simplified FDA-510K checks
         return {"compliant": True, "details": "FDA-510K compliance check passed"}
 
-    def _check_sox_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_sox_compliance(self, _metrics: dict[str, Any]) -> dict[str, Any]:
         """Check SOX financial compliance"""
         # Simplified SOX checks
         return {"compliant": True, "details": "SOX compliance check passed"}
 
-    def _check_gdpr_compliance(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_gdpr_compliance(self, _metrics: dict[str, Any]) -> dict[str, Any]:
         """Check GDPR data privacy compliance"""
         # Simplified GDPR checks
         return {"compliant": True, "details": "GDPR compliance check passed"}
 
     def _generate_audit_trail(
-        self, compliance_metrics: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+        self, compliance_metrics: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Generate audit trail for compliance evaluation"""
         audit_trail = []
 
@@ -170,7 +170,7 @@ class ComplianceEvaluator(BaseEvaluator):
 
         return audit_trail
 
-    def _identify_violations(self, compliance_metrics: Dict[str, Any]) -> List[str]:
+    def _identify_violations(self, compliance_metrics: dict[str, Any]) -> list[str]:
         """Identify compliance violations"""
         violations = []
 
@@ -180,7 +180,7 @@ class ComplianceEvaluator(BaseEvaluator):
 
         return violations
 
-    def _generate_compliance_alerts(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_compliance_alerts(self, results: dict[str, Any]) -> list[str]:
         """Generate compliance alerts"""
         alerts = []
 

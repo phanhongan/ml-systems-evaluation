@@ -1,7 +1,7 @@
 """Business impact reports for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from .base import BaseReport, ReportData
 
@@ -10,7 +10,7 @@ class BusinessImpactReport(BaseReport):
     """Generate business impact reports connecting technical metrics to
     business outcomes"""
 
-    def generate(self, data: Dict[str, Any]) -> ReportData:
+    def generate(self, data: dict[str, Any]) -> ReportData:
         """Generate business impact report from evaluation data"""
         business_metrics = data.get("business_metrics", {})
         technical_metrics = data.get("technical_metrics", {})

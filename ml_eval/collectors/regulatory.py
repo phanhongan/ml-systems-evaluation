@@ -2,7 +2,7 @@
 
 import random
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from ..core.config import MetricData
 from .base import BaseCollector
@@ -11,7 +11,7 @@ from .base import BaseCollector
 class RegulatoryCollector(BaseCollector):
     """Regulatory compliance monitoring and reporting"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.compliance_frameworks = config.get("compliance_frameworks", [])
         self.audit_requirements = config.get("audit_requirements", {})
@@ -19,10 +19,10 @@ class RegulatoryCollector(BaseCollector):
         self.regulatory_standards = config.get("regulatory_standards", {})
         self.compliance_thresholds = config.get("compliance_thresholds", {})
 
-    def get_required_config_fields(self) -> List[str]:
+    def get_required_config_fields(self) -> list[str]:
         return ["compliance_frameworks"]
 
-    def collect(self) -> Dict[str, List[MetricData]]:
+    def collect(self) -> dict[str, list[MetricData]]:
         """Collect regulatory compliance metrics"""
         try:
             if not self.health_check():
@@ -51,7 +51,7 @@ class RegulatoryCollector(BaseCollector):
             self.logger.error(f"Regulatory health check failed: {e}")
             return False
 
-    def _collect_compliance_data(self) -> Dict[str, List[MetricData]]:
+    def _collect_compliance_data(self) -> dict[str, list[MetricData]]:
         """Collect compliance metrics from all frameworks"""
         metrics = {}
         timestamp = datetime.now()
@@ -80,7 +80,7 @@ class RegulatoryCollector(BaseCollector):
 
     def _collect_framework_metrics(
         self, framework: str, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Collect metrics for a specific compliance framework"""
         metrics = {}
 
@@ -115,7 +115,7 @@ class RegulatoryCollector(BaseCollector):
 
         return metrics
 
-    def _generate_compliance_data(self, framework: str) -> Dict[str, float]:
+    def _generate_compliance_data(self, framework: str) -> dict[str, float]:
         """Generate compliance metrics for simulation"""
         # Generate realistic compliance metrics based on framework type
         if framework.lower() == "gdpr":
@@ -155,13 +155,13 @@ class RegulatoryCollector(BaseCollector):
                 "risk_mitigation": random.uniform(70, 95),
             }
 
-    def check_compliance_status(self, framework: str) -> Dict[str, Any]:
+    def check_compliance_status(self, framework: str) -> dict[str, Any]:
         """Check compliance status for a specific framework"""
         try:
             compliance_data = self._generate_compliance_data(framework)
             thresholds = self.compliance_thresholds.get(framework, {})
 
-            status: Dict[str, Any] = {
+            status: dict[str, Any] = {
                 "framework": framework,
                 "overall_score": sum(compliance_data.values()) / len(compliance_data),
                 "metrics": compliance_data,
@@ -192,10 +192,10 @@ class RegulatoryCollector(BaseCollector):
             self.logger.error(f"Failed to check compliance status for {framework}: {e}")
             return {"framework": framework, "error": str(e)}
 
-    def generate_compliance_report(self) -> Dict[str, Any]:
+    def generate_compliance_report(self) -> dict[str, Any]:
         """Generate comprehensive compliance report"""
         try:
-            report: Dict[str, Any] = {
+            report: dict[str, Any] = {
                 "timestamp": datetime.now().isoformat(),
                 "collector": self.name,
                 "frameworks": {},
@@ -238,7 +238,7 @@ class RegulatoryCollector(BaseCollector):
             self.logger.error(f"Failed to generate compliance report: {e}")
             return {"error": str(e)}
 
-    def get_collector_info(self) -> Dict[str, Any]:
+    def get_collector_info(self) -> dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
         info.update(

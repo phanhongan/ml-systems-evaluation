@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .loader import ConfigLoader
 from .validator import ConfigValidator
@@ -11,13 +11,13 @@ from .validator import ConfigValidator
 class ConfigFactory:
     """Factory for creating and managing configuration objects"""
 
-    def __init__(self, config_dir: Optional[str] = None):
+    def __init__(self, config_dir: str | None = None):
         self.config_dir = config_dir or os.getcwd()
         self.loader = ConfigLoader()
         self.validator = ConfigValidator()
-        self._config_cache: Dict[str, Dict[str, Any]] = {}
+        self._config_cache: dict[str, dict[str, Any]] = {}
 
-    def create_config(self, config_path: str) -> Dict[str, Any]:
+    def create_config(self, config_path: str) -> dict[str, Any]:
         """Create configuration from file or directory"""
         try:
             # Check if config is already cached
@@ -38,9 +38,11 @@ class ConfigFactory:
             return config
 
         except Exception as e:
-            raise ConfigFactoryError(f"Failed to create config from {config_path}: {e}")
+            raise ConfigFactoryError(
+                f"Failed to create config from {config_path}: {e}"
+            ) from e
 
-    def create_collector_config(self, collector_type: str, **kwargs) -> Dict[str, Any]:
+    def create_collector_config(self, collector_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific collector type"""
         base_config = self._get_base_collector_config(collector_type)
 
@@ -54,7 +56,7 @@ class ConfigFactory:
 
         return config
 
-    def create_evaluator_config(self, evaluator_type: str, **kwargs) -> Dict[str, Any]:
+    def create_evaluator_config(self, evaluator_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific evaluator type"""
         base_config = self._get_base_evaluator_config(evaluator_type)
 
@@ -68,7 +70,7 @@ class ConfigFactory:
 
         return config
 
-    def create_report_config(self, report_type: str, **kwargs) -> Dict[str, Any]:
+    def create_report_config(self, report_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific report type"""
         base_config = self._get_base_report_config(report_type)
 
@@ -82,7 +84,7 @@ class ConfigFactory:
 
         return config
 
-    def _get_base_collector_config(self, collector_type: str) -> Dict[str, Any]:
+    def _get_base_collector_config(self, collector_type: str) -> dict[str, Any]:
         """Get base configuration for a collector type"""
         base_configs = {
             "environmental": {
@@ -117,7 +119,7 @@ class ConfigFactory:
             result = {"type": collector_type}
         return result
 
-    def _get_base_evaluator_config(self, evaluator_type: str) -> Dict[str, Any]:
+    def _get_base_evaluator_config(self, evaluator_type: str) -> dict[str, Any]:
         """Get base configuration for an evaluator type"""
         base_configs = {
             "performance": {
@@ -164,7 +166,7 @@ class ConfigFactory:
             result = {"type": evaluator_type}
         return result
 
-    def _get_base_report_config(self, report_type: str) -> Dict[str, Any]:
+    def _get_base_report_config(self, report_type: str) -> dict[str, Any]:
         """Get base configuration for a report type"""
         base_configs = {
             "business": {
@@ -201,7 +203,7 @@ class ConfigFactory:
             result = {"type": report_type}
         return result
 
-    def list_available_configs(self) -> List[str]:
+    def list_available_configs(self) -> list[str]:
         """List all available configuration files"""
         config_files = []
         config_path = Path(self.config_dir)
@@ -220,24 +222,22 @@ class ConfigFactory:
         """Clear the configuration cache"""
         self._config_cache.clear()
 
-    def get_cached_config(self, config_path: str) -> Optional[Dict[str, Any]]:
+    def get_cached_config(self, config_path: str) -> dict[str, Any] | None:
         """Get cached configuration if available"""
         return self._config_cache.get(config_path)
 
-    def _validate_collector(self, collector: Dict[str, Any]) -> bool:
+    def _validate_collector(self, collector: dict[str, Any]) -> bool:
         """Validate a collector configuration"""
         return isinstance(collector, dict)
 
-    def _validate_evaluator(self, evaluator: Dict[str, Any]) -> bool:
+    def _validate_evaluator(self, evaluator: dict[str, Any]) -> bool:
         """Validate an evaluator configuration"""
         return isinstance(evaluator, dict)
 
-    def _validate_report(self, report: Dict[str, Any]) -> bool:
+    def _validate_report(self, report: dict[str, Any]) -> bool:
         """Validate a report configuration"""
         return isinstance(report, dict)
 
 
 class ConfigFactoryError(Exception):
     """Exception raised by ConfigFactory"""
-
-    pass

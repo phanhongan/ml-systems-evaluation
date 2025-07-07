@@ -1,7 +1,7 @@
 """Compliance reports for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from .base import BaseReport, ReportData
 
@@ -9,7 +9,7 @@ from .base import BaseReport, ReportData
 class ComplianceReport(BaseReport):
     """Generate compliance reports for regulatory standards"""
 
-    def generate(self, data: Dict[str, Any]) -> ReportData:
+    def generate(self, data: dict[str, Any]) -> ReportData:
         """Generate compliance report from evaluation data"""
         compliance_metrics = data.get("compliance_metrics", {})
         audit_trail = data.get("audit_trail", [])

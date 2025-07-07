@@ -1,7 +1,7 @@
 """Example registry for ML Systems Evaluation"""
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class ExampleRegistry:
@@ -11,7 +11,7 @@ class ExampleRegistry:
         self.logger = logging.getLogger(__name__)
         self.examples = self._load_examples()
 
-    def _load_examples(self) -> Dict[str, Dict[str, Any]]:
+    def _load_examples(self) -> dict[str, dict[str, Any]]:
         """Load all available examples"""
         return {
             "aviation": {
@@ -50,7 +50,7 @@ class ExampleRegistry:
             },
         }
 
-    def get_example(self, example_id: str) -> Optional[Dict[str, Any]]:
+    def get_example(self, example_id: str) -> dict[str, Any] | None:
         """Get a specific example"""
         try:
             return self.examples[example_id]
@@ -62,7 +62,7 @@ class ExampleRegistry:
         """List all available examples"""
         return list(self.examples.keys())
 
-    def get_example_config(self, example_id: str) -> Optional[Dict[str, Any]]:
+    def get_example_config(self, example_id: str) -> dict[str, Any] | None:
         """Get configuration for a specific example"""
         example = self.get_example(example_id)
         if example:

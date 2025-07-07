@@ -1,7 +1,7 @@
 """Performance evaluator for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from .base import BaseEvaluator
 
@@ -9,21 +9,21 @@ from .base import BaseEvaluator
 class PerformanceEvaluator(BaseEvaluator):
     """Evaluate system performance metrics"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.performance_metrics = config.get("metrics", [])
         self.thresholds = config.get("thresholds", {})
 
-    def get_required_metrics(self) -> List[str]:
+    def get_required_metrics(self) -> list[str]:
         """Get required metrics for performance evaluation"""
         return self.performance_metrics
 
-    def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def evaluate(self, metrics: dict[str, Any]) -> dict[str, Any]:
         """Evaluate performance metrics"""
         if not self.validate_metrics(metrics):
             return {"error": "Missing required performance metrics"}
 
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "performance_metrics": {},
             "overall_performance_score": 0.0,
             "bottlenecks": [],
@@ -67,7 +67,7 @@ class PerformanceEvaluator(BaseEvaluator):
 
     def _evaluate_performance_metric(
         self, metric_name: str, current_value: Any
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Evaluate a single performance metric"""
         # Get target from thresholds - thresholds can be direct values or dictionaries
         threshold_config = self.thresholds.get(metric_name, {})
@@ -116,7 +116,7 @@ class PerformanceEvaluator(BaseEvaluator):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _identify_bottlenecks(self, performance_metrics: Dict[str, Any]) -> List[str]:
+    def _identify_bottlenecks(self, performance_metrics: dict[str, Any]) -> list[str]:
         """Identify performance bottlenecks"""
         bottlenecks = []
 
@@ -130,7 +130,7 @@ class PerformanceEvaluator(BaseEvaluator):
 
         return bottlenecks
 
-    def _generate_performance_alerts(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_performance_alerts(self, results: dict[str, Any]) -> list[str]:
         """Generate performance alerts"""
         alerts = []
 

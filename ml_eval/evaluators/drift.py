@@ -1,7 +1,7 @@
 """Drift evaluator for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from .base import BaseEvaluator
 
@@ -9,21 +9,21 @@ from .base import BaseEvaluator
 class DriftEvaluator(BaseEvaluator):
     """Evaluate data and model drift with business impact assessment"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.drift_thresholds = config.get("drift_thresholds", {})
         self.business_impact_thresholds = config.get("business_impact_thresholds", {})
 
-    def get_required_metrics(self) -> List[str]:
+    def get_required_metrics(self) -> list[str]:
         """Get required metrics for drift evaluation"""
         return list(self.drift_thresholds.keys())
 
-    def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def evaluate(self, metrics: dict[str, Any]) -> dict[str, Any]:
         """Evaluate data and model drift"""
         if not self.validate_metrics(metrics):
             return {"error": "Missing required drift metrics"}
 
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "drift_metrics": {},
             "business_impact": {},
             "drift_alerts": [],
@@ -70,8 +70,8 @@ class DriftEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_drift_metric(
-        self, metric_name: str, threshold: Dict[str, Any], current_value: float
-    ) -> Dict[str, Any]:
+        self, _metric_name: str, threshold: dict[str, Any], current_value: float
+    ) -> dict[str, Any]:
         """Evaluate a single drift metric"""
         warning_threshold = threshold.get("warning", 0.1)
         critical_threshold = threshold.get("critical", 0.3)
@@ -99,7 +99,7 @@ class DriftEvaluator(BaseEvaluator):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _assess_business_impact(self, drift_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _assess_business_impact(self, drift_metrics: dict[str, Any]) -> dict[str, Any]:
         """Assess business impact of drift"""
         impact_score = 0.0
         impact_details = []
@@ -126,8 +126,8 @@ class DriftEvaluator(BaseEvaluator):
         }
 
     def _generate_business_recommendations(
-        self, drift_metrics: Dict[str, Any]
-    ) -> List[str]:
+        self, drift_metrics: dict[str, Any]
+    ) -> list[str]:
         """Generate business recommendations based on drift"""
         recommendations = []
 
@@ -160,7 +160,7 @@ class DriftEvaluator(BaseEvaluator):
 
         return recommendations
 
-    def _generate_drift_alerts(self, drift_metrics: Dict[str, Any]) -> List[str]:
+    def _generate_drift_alerts(self, drift_metrics: dict[str, Any]) -> list[str]:
         """Generate drift-specific alerts"""
         alerts = []
 
@@ -181,7 +181,7 @@ class DriftEvaluator(BaseEvaluator):
 
         return alerts
 
-    def _generate_overall_alerts(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_overall_alerts(self, results: dict[str, Any]) -> list[str]:
         """Generate overall alerts"""
         alerts = []
 

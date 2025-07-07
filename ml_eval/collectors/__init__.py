@@ -8,8 +8,8 @@ from .regulatory import RegulatoryCollector
 
 __all__ = [
     "BaseCollector",
-    "OnlineCollector",
-    "OfflineCollector",
     "EnvironmentalCollector",
+    "OfflineCollector",
+    "OnlineCollector",
     "RegulatoryCollector",
 ]

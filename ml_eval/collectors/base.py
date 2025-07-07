@@ -2,7 +2,7 @@
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any
 
 from ..core.config import MetricData
 
@@ -10,20 +10,18 @@ from ..core.config import MetricData
 class BaseCollector(ABC):
     """Abstract base for all metric collectors in Industrial AI systems"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.name = config.get("name", self.__class__.__name__)
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
-    def collect(self) -> Dict[str, List[MetricData]]:
+    def collect(self) -> dict[str, list[MetricData]]:
         """Collect and return metrics with industrial context"""
-        pass
 
     @abstractmethod
     def health_check(self) -> bool:
         """Check collector health and operational status"""
-        pass
 
     def validate_config(self) -> bool:
         """Validate collector configuration"""
@@ -40,11 +38,11 @@ class BaseCollector(ABC):
 
         return True
 
-    def get_required_config_fields(self) -> List[str]:
+    def get_required_config_fields(self) -> list[str]:
         """Get list of required configuration fields"""
         return []
 
-    def get_collector_info(self) -> Dict[str, Any]:
+    def get_collector_info(self) -> dict[str, Any]:
         """Get information about this collector"""
         return {
             "name": self.name,

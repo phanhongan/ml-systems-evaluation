@@ -1,6 +1,6 @@
 """Template factory for generating industry-specific configurations"""
 
-from typing import Any, Dict
+from typing import Any
 
 
 class TemplateFactory:
@@ -9,7 +9,7 @@ class TemplateFactory:
     def __init__(self) -> None:
         self.templates = self._load_templates()
 
-    def _load_templates(self) -> Dict[str, Dict[str, Any]]:
+    def _load_templates(self) -> dict[str, dict[str, Any]]:
         """Load industry-specific templates"""
         return {
             "aviation": {
@@ -30,7 +30,7 @@ class TemplateFactory:
             },
         }
 
-    def get_template(self, industry: str, template_type: str) -> Dict[str, Any]:
+    def get_template(self, industry: str, template_type: str) -> dict[str, Any]:
         """Get a specific template"""
         if industry not in self.templates:
             raise ValueError(f"Unknown industry: {industry}")
@@ -50,7 +50,7 @@ class TemplateFactory:
             return []
         return list(self.templates[industry].keys())
 
-    def _create_aviation_basic(self) -> Dict[str, Any]:
+    def _create_aviation_basic(self) -> dict[str, Any]:
         """Create basic aviation template"""
         return {
             "system": {
@@ -107,7 +107,7 @@ class TemplateFactory:
             ],
         }
 
-    def _create_aviation_advanced(self) -> Dict[str, Any]:
+    def _create_aviation_advanced(self) -> dict[str, Any]:
         """Create advanced aviation template"""
         basic = self._create_aviation_basic()
         basic["system"]["name"] = "Advanced Aviation ML System"
@@ -119,7 +119,7 @@ class TemplateFactory:
         )
         return basic
 
-    def _create_energy_basic(self) -> Dict[str, Any]:
+    def _create_energy_basic(self) -> dict[str, Any]:
         """Create basic energy template"""
         return {
             "system": {
@@ -176,7 +176,7 @@ class TemplateFactory:
             ],
         }
 
-    def _create_energy_advanced(self) -> Dict[str, Any]:
+    def _create_energy_advanced(self) -> dict[str, Any]:
         """Create advanced energy template"""
         basic = self._create_energy_basic()
         basic["system"]["name"] = "Advanced Energy Grid ML System"
@@ -188,7 +188,7 @@ class TemplateFactory:
         )
         return basic
 
-    def _create_manufacturing_basic(self) -> Dict[str, Any]:
+    def _create_manufacturing_basic(self) -> dict[str, Any]:
         """Create basic manufacturing template"""
         return {
             "system": {
@@ -235,7 +235,7 @@ class TemplateFactory:
             ],
         }
 
-    def _create_manufacturing_advanced(self) -> Dict[str, Any]:
+    def _create_manufacturing_advanced(self) -> dict[str, Any]:
         """Create advanced manufacturing template"""
         basic = self._create_manufacturing_basic()
         basic["system"]["name"] = "Advanced Manufacturing ML System"
@@ -247,7 +247,7 @@ class TemplateFactory:
         )
         return basic
 
-    def _create_maritime_basic(self) -> Dict[str, Any]:
+    def _create_maritime_basic(self) -> dict[str, Any]:
         """Create basic maritime template"""
         return {
             "system": {
@@ -304,7 +304,7 @@ class TemplateFactory:
             ],
         }
 
-    def _create_maritime_advanced(self) -> Dict[str, Any]:
+    def _create_maritime_advanced(self) -> dict[str, Any]:
         """Create advanced maritime template"""
         basic = self._create_maritime_basic()
         basic["system"]["name"] = "Advanced Maritime ML System"

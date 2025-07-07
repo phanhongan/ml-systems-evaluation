@@ -1,8 +1,7 @@
 """Online data collection for ML Systems Evaluation Framework"""
 
-import asyncio
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 import aiohttp
 
@@ -13,7 +12,7 @@ from .base import BaseCollector
 class OnlineCollector(BaseCollector):
     """Real-time data collection from APIs and streaming sources"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.endpoints = config.get("endpoints", [])
         self.polling_interval = config.get("polling_interval", 30)  # seconds
@@ -22,10 +21,10 @@ class OnlineCollector(BaseCollector):
         self.headers = config.get("headers", {})
         self.auth_config = config.get("auth_config", {})
 
-    def get_required_config_fields(self) -> List[str]:
+    def get_required_config_fields(self) -> list[str]:
         return ["endpoints"]
 
-    def collect(self) -> Dict[str, List[MetricData]]:
+    def collect(self) -> dict[str, list[MetricData]]:
         """Collect real-time metrics from online sources"""
         try:
             health = self.health_check()
@@ -54,7 +53,7 @@ class OnlineCollector(BaseCollector):
             self.logger.error(f"Online health check failed: {e}")
             return False
 
-    def _collect_online_data(self) -> Dict[str, List[MetricData]]:
+    def _collect_online_data(self) -> dict[str, list[MetricData]]:
         """Collect data from online endpoints"""
         metrics = {}
         timestamp = datetime.now()
@@ -81,7 +80,7 @@ class OnlineCollector(BaseCollector):
 
     def _collect_from_endpoint(
         self, endpoint: str, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Collect data from a specific endpoint"""
         metrics = {}
 
@@ -117,7 +116,7 @@ class OnlineCollector(BaseCollector):
 
         return metrics
 
-    def _generate_mock_endpoint_data(self, endpoint: str) -> Dict[str, float]:
+    def _generate_mock_endpoint_data(self, endpoint: str) -> dict[str, float]:
         """Generate mock data for simulation"""
         import random
 
@@ -181,7 +180,7 @@ class OnlineCollector(BaseCollector):
 
     async def _async_collect_from_endpoint(
         self, endpoint: str, session: aiohttp.ClientSession
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Asynchronously collect data from an endpoint"""
         try:
             headers = self.headers.copy()
@@ -200,18 +199,18 @@ class OnlineCollector(BaseCollector):
                     return self._parse_endpoint_response(data)
                 else:
                     self.logger.warning(
-                        f"Endpoint {endpoint} returned status " f"{response.status}"
+                        f"Endpoint {endpoint} returned status {response.status}"
                     )
                     return {}
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.logger.error(f"Timeout collecting from endpoint {endpoint}")
             return {}
         except Exception as e:
             self.logger.error(f"Failed to collect from endpoint {endpoint}: {e}")
             return {}
 
-    def _get_auth_headers(self) -> Dict[str, str]:
+    def _get_auth_headers(self) -> dict[str, str]:
         """Get authentication headers"""
         auth_type = self.auth_config.get("type", "bearer")
 
@@ -227,13 +226,13 @@ class OnlineCollector(BaseCollector):
 
         return {}
 
-    def _parse_endpoint_response(self, data: Dict[str, Any]) -> Dict[str, float]:
+    def _parse_endpoint_response(self, data: dict[str, Any]) -> dict[str, float]:
         """Parse response data and extract metrics"""
         metrics = {}
 
         if isinstance(data, dict):
             for key, value in data.items():
-                if isinstance(value, (int, float)):
+                if isinstance(value, int | float):
                     metrics[key] = float(value)
                 elif isinstance(value, dict):
                     # Handle nested metrics
@@ -243,7 +242,7 @@ class OnlineCollector(BaseCollector):
 
         return metrics
 
-    def get_collector_info(self) -> Dict[str, Any]:
+    def get_collector_info(self) -> dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
         info.update(

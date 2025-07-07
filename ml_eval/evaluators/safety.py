@@ -1,7 +1,7 @@
 """Safety evaluator for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from .base import BaseEvaluator
 
@@ -9,21 +9,21 @@ from .base import BaseEvaluator
 class SafetyEvaluator(BaseEvaluator):
     """Evaluate safety-critical systems with zero-tolerance checks"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.compliance_standards = config.get("compliance_standards", [])
         self.safety_thresholds = config.get("safety_thresholds", {})
 
-    def get_required_metrics(self) -> List[str]:
+    def get_required_metrics(self) -> list[str]:
         """Get required metrics for safety evaluation"""
         return list(self.safety_thresholds.keys())
 
-    def evaluate(self, metrics: Dict[str, float]) -> Dict[str, Any]:
+    def evaluate(self, metrics: dict[str, float]) -> dict[str, Any]:
         """Evaluate safety metrics with zero-tolerance checks"""
         if not self.validate_metrics(metrics):
             return {"error": "Missing required safety metrics"}
 
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "safety_metrics": {},
             "compliance_status": {},
             "safety_violations": [],
@@ -61,8 +61,8 @@ class SafetyEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_safety_metric(
-        self, metric_name: str, threshold: Dict[str, Any], current_value: float
-    ) -> Dict[str, Any]:
+        self, _metric_name: str, threshold: dict[str, Any], current_value: float
+    ) -> dict[str, Any]:
         """Evaluate a single safety metric"""
         min_value = threshold.get("min", 0)
         max_value = threshold.get("max", float("inf"))
@@ -92,8 +92,8 @@ class SafetyEvaluator(BaseEvaluator):
         }
 
     def _evaluate_compliance(
-        self, standard: str, metrics: Dict[str, float]
-    ) -> Dict[str, Any]:
+        self, standard: str, metrics: dict[str, float]
+    ) -> dict[str, Any]:
         """Evaluate compliance with a specific standard"""
         # This is a simplified compliance check
         # In practice, this would involve more complex validation logic
@@ -115,7 +115,7 @@ class SafetyEvaluator(BaseEvaluator):
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _check_do178c_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
+    def _check_do178c_compliance(self, metrics: dict[str, float]) -> dict[str, Any]:
         """Check DO-178C aviation safety compliance"""
         # Simplified DO-178C checks
         required_metrics = ["decision_accuracy", "response_time", "false_positive_rate"]
@@ -149,17 +149,17 @@ class SafetyEvaluator(BaseEvaluator):
             ),
         }
 
-    def _check_iso26262_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
+    def _check_iso26262_compliance(self, _metrics: dict[str, float]) -> dict[str, Any]:
         """Check ISO-26262 automotive safety compliance"""
         # Simplified ISO-26262 checks
         return {"compliant": True, "details": "ISO-26262 compliance check passed"}
 
-    def _check_iec61508_compliance(self, metrics: Dict[str, float]) -> Dict[str, Any]:
+    def _check_iec61508_compliance(self, _metrics: dict[str, float]) -> dict[str, Any]:
         """Check IEC-61508 industrial safety compliance"""
         # Simplified IEC-61508 checks
         return {"compliant": True, "details": "IEC-61508 compliance check passed"}
 
-    def _generate_safety_alerts(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_safety_alerts(self, results: dict[str, Any]) -> list[str]:
         """Generate safety alerts"""
         alerts = []
 

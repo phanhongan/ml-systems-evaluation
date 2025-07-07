@@ -185,7 +185,7 @@ class TestOfflineCollector:
 
     @patch("builtins.open", new_callable=Mock, read_data='{"availability": 0.99}')
     @patch("os.path.exists", return_value=True)
-    def test_offline_collector_collect_json(self, mock_exists, mock_file):
+    def test_offline_collector_collect_json(self, _mock_exists, _mock_file):
         """Test offline collector JSON data collection"""
         config = {
             "name": "offline_collector",
@@ -206,7 +206,7 @@ class TestOfflineCollector:
         read_data="timestamp,availability\n2023-01-01,0.99",
     )
     @patch("os.path.exists", return_value=True)
-    def test_offline_collector_collect_csv(self, mock_exists, mock_file):
+    def test_offline_collector_collect_csv(self, _mock_exists, _mock_file):
         """Test offline collector CSV data collection"""
         config = {
             "name": "offline_collector",
@@ -222,7 +222,7 @@ class TestOfflineCollector:
         assert len(result) >= 0
 
     @patch("os.path.exists", return_value=False)
-    def test_offline_collector_health_check_failure(self, mock_exists):
+    def test_offline_collector_health_check_failure(self, _mock_exists):
         """Test offline collector health check with missing files"""
         config = {
             "name": "offline_collector",
@@ -353,7 +353,7 @@ class TestRegulatoryCollector:
         assert len(result) >= 0
 
     @patch("os.path.exists", return_value=True)
-    def test_regulatory_collector_health_check(self, mock_exists):
+    def test_regulatory_collector_health_check(self, _mock_exists):
         """Test regulatory collector health check"""
         config = {
             "name": "regulatory_collector",
@@ -420,7 +420,7 @@ class TestCollectorIntegration:
 
             # If data is not empty, values should be lists of MetricData
             if data:
-                for metric_name, metric_list in data.items():
+                for _metric_name, metric_list in data.items():
                     assert isinstance(metric_list, list)
                     if metric_list:
                         assert isinstance(metric_list[0], MetricData)

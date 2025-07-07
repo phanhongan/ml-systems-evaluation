@@ -47,7 +47,6 @@ extend-exclude = '''
   \.eggs
   | \.git
   | \.hg
-  | \.mypy_cache
   | \.tox
   | \.venv
   | build
@@ -81,111 +80,66 @@ poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
 
-### 2. 🔍 Flake8 - Linting
+### 2. 🦊 Ruff - Linting, Type Checking, and Import Sorting
 
-[Flake8](https://flake8.pycqa.org/) is a Python linting tool that checks code style and potential errors.
-
-#### ⚙️ Configuration
-
-Flake8 is configured in `.flake8`:
-
-```ini
-[flake8]
-max-line-length = 88
-extend-ignore = E203, W503
-exclude = 
-    .git,
-    __pycache__,
-    .venv,
-    venv,
-    .pytest_cache,
-    htmlcov,
-    ml_eval.egg-info,
-    build,
-    dist
-```
-
-#### 💻 Usage
-
-```bash
-# Lint all Python files
-poetry run flake8 .
-
-# Lint specific directories
-poetry run flake8 ml_eval/ tests/
-
-# Show statistics
-poetry run flake8 --statistics .
-```
-
-### 3. 🔍 MyPy - Type Checking
-
-[MyPy](https://mypy.readthedocs.io/) is a static type checker for Python that helps catch type-related errors.
+[Ruff](https://docs.astral.sh/ruff/) is a fast Python linter, type checker, and import sorter that replaces flake8, mypy, and isort.
 
 #### ⚙️ Configuration
 
-MyPy configuration is in `pyproject.toml`:
+Ruff is configured in `pyproject.toml`:
 
 ```toml
-[tool.mypy]
-python_version = "3.9"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
+[tool.ruff]
+exclude = [ ... ]
+line-length = 88
+indent-width = 4
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM", "ARG", "PIE", "TCH", "Q", "RUF"]
+ignore = ["E203", "E501"]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["ml_eval"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 ```
 
 #### 💻 Usage
 
 ```bash
-# Type check all Python files
-poetry run mypy ml_eval
+# Lint, type check, and sort imports in all Python files
+poetry run ruff check .
 
-# Type check specific modules
-poetry run mypy ml_eval/core/ ml_eval/collectors/
+# Auto-fix issues
+poetry run ruff check --fix .
 
-# Generate type coverage report
-poetry run mypy --html-report mypy-report ml_eval
+# Format code (like black)
+poetry run ruff format .
+
+# Check only imports
+poetry run ruff check --select I .
 ```
 
-### 4. 📦 isort - Import Sorting
+#### 🔗 Pre-commit Hook
 
-[isort](https://pycqa.github.io/isort/) automatically sorts and organizes Python imports.
+To automatically run ruff before commits, add ruff to your pre-commit config:
 
-#### ⚙️ Configuration
-
-isort is configured in `pyproject.toml`:
-
-```toml
-[tool.isort]
-profile = "black"
-line_length = 88
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-```
-
-#### 💻 Usage
-
-```bash
-# Sort imports in all Python files
-poetry run isort .
-
-# Check import order without making changes
-poetry run isort --check-only .
-
-# Sort imports in specific files
-poetry run isort ml_eval/core/ tests/
+```yaml
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.0.292
+  hooks:
+    - id: ruff
+    - id: ruff-format
 ```
 
 ## 🔄 Development Workflow
@@ -198,14 +152,11 @@ Before committing code, run all quality checks:
 # Format code
 poetry run black .
 
-# Sort imports
-poetry run isort .
+# Lint, type check, and sort imports
+poetry run ruff check .
 
-# Lint code
-poetry run flake8 .
-
-# Type check
-poetry run mypy ml_eval
+# Format code with ruff
+poetry run ruff format .
 
 # Run tests
 poetry run pytest
@@ -217,13 +168,10 @@ The project includes a script to run all quality checks:
 
 ```bash
 # Run all quality checks
-./scripts/quality_check.sh
-
-# Or run individual checks
 poetry run black --check .
-poetry run isort --check-only .
-poetry run flake8 .
-poetry run mypy ml_eval
+poetry run ruff check .
+poetry run ruff format --check .
+poetry run pytest
 ```
 
 ### 3. Pre-commit Hooks
@@ -311,7 +259,7 @@ class TestEvaluationFramework:
 
 The project uses GitHub Actions for continuous integration. The workflow runs:
 
-1. **Code Quality Checks**: Black, Flake8, isort, MyPy
+1. **Code Quality Checks**: Black, Ruff
 2. **Tests**: Unit, integration, and end-to-end tests
 3. **Build**: Package building and validation
 4. **Coverage**: Test coverage reporting
@@ -326,9 +274,8 @@ poetry install
 
 # Run quality checks
 poetry run black --check .
-poetry run isort --check-only .
-poetry run flake8 .
-poetry run mypy ml_eval
+poetry run ruff check .
+poetry run ruff format --check .
 
 # Run tests
 poetry run pytest --cov=ml_eval --cov-report=xml
@@ -344,7 +291,7 @@ poetry build
 Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) with these modifications:
 
 - **Line Length**: 88 characters (Black default)
-- **Import Order**: Use isort for automatic sorting
+- **Import Order**: Use ruff for automatic sorting
 - **Type Hints**: Use type hints for all function parameters and return values
 - **Docstrings**: Use Google-style docstrings
 
@@ -417,9 +364,9 @@ class CustomCollector(BaseCollector):
 
 ### Common Debugging Scenarios
 
-1. **Type Errors**: Use MyPy to catch type-related issues
-2. **Import Errors**: Use isort to organize imports
-3. **Style Issues**: Use Black and Flake8 for consistent formatting
+1. **Type Errors**: Use ruff to catch type-related issues
+2. **Import Errors**: Use ruff to organize imports
+3. **Style Issues**: Use ruff for consistent formatting
 4. **Test Failures**: Use pytest with verbose output for detailed error information
 
 ## 📊 Performance Considerations
@@ -471,36 +418,3 @@ class CustomCollector(BaseCollector):
 Use conventional commit messages:
 
 ```
-feat: add new data collector for API metrics
-fix: resolve type error in evaluation framework
-docs: update API documentation
-test: add tests for custom evaluator
-refactor: simplify configuration loading
-```
-
-### Code Review Checklist
-
-- [ ] Code follows style guidelines
-- [ ] All tests pass
-- [ ] Type hints are included
-- [ ] Documentation is updated
-- [ ] No security vulnerabilities
-- [ ] Performance impact considered
-
-## 📝 Troubleshooting
-
-### Common Issues
-
-1. **Import Errors**: Run `poetry run isort .` to fix import order
-2. **Formatting Issues**: Run `poetry run black .` to format code
-3. **Type Errors**: Fix type hints and run `poetry run mypy ml_eval`
-4. **Test Failures**: Check test output and fix failing tests
-
-### Getting Help
-
-1. **Documentation**: Check the documentation first
-2. **Issues**: Search existing issues
-3. **Discussions**: Use GitHub discussions for questions
-4. **Code Review**: Ask for help in pull requests
-
-This development guide provides comprehensive information for maintaining code quality and contributing effectively to the ML Systems Evaluation Framework. 

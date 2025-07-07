@@ -9,9 +9,9 @@ from .safety import SafetyEvaluator
 
 __all__ = [
     "BaseEvaluator",
-    "ReliabilityEvaluator",
-    "SafetyEvaluator",
-    "PerformanceEvaluator",
     "ComplianceEvaluator",
     "DriftEvaluator",
+    "PerformanceEvaluator",
+    "ReliabilityEvaluator",
+    "SafetyEvaluator",
 ]

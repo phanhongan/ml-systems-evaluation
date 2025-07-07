@@ -478,7 +478,7 @@ pytest tests/industry/ -v  # Industry-specific tests
 
 We welcome contributions! Please see our [Development Guide](docs/developer/development.md) for comprehensive information about:
 
-- **🔧 Code Quality Tools**: Black, Flake8, MyPy, isort
+- **🔧 Code Quality Tools**: Black, Ruff
 - **🧪 Testing Practices**: Unit, integration, and end-to-end tests
 - **🔄 Development Workflow**: Setup, coding standards, and CI/CD
 - **📝 Code Style Guidelines**: Python style, naming conventions, documentation
@@ -491,9 +491,8 @@ poetry install
 
 # Run code quality checks
 poetry run black .          # Format code
-poetry run isort .          # Sort imports
-poetry run flake8 .         # Lint code
-poetry run mypy ml_eval     # Type check
+poetry run ruff check .     # Lint, type check, and sort imports
+poetry run ruff format .    # Format code
 
 # Run tests
 poetry run pytest
@@ -507,9 +506,7 @@ poetry build
 The project enforces strict code quality standards:
 
 - **⚫ Black**: 88-character line length, opinionated formatting
-- **🔍 Flake8**: PEP 8 compliance with project-specific rules
-- **🔍 MyPy**: Static type checking for all code
-- **📦 isort**: Consistent import organization
+- **🦊 Ruff**: Fast linting, type checking, and import sorting
 
 All code must pass these checks before merging.
 

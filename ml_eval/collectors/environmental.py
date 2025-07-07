@@ -2,7 +2,7 @@
 
 import random
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from ..core.config import MetricData
 from .base import BaseCollector
@@ -11,7 +11,7 @@ from .base import BaseCollector
 class EnvironmentalCollector(BaseCollector):
     """Environmental condition monitoring for harsh industrial environments"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.sensor_types = config.get(
             "sensor_types", ["temperature", "pressure", "humidity"]
@@ -20,15 +20,15 @@ class EnvironmentalCollector(BaseCollector):
         self.alert_thresholds = config.get("alert_thresholds", {})
         self.sensor_endpoints = config.get("sensor_endpoints", {})
 
-    def get_required_config_fields(self) -> List[str]:
+    def get_required_config_fields(self) -> list[str]:
         return ["sensor_types"]
 
-    def collect(self) -> Dict[str, List[MetricData]]:
+    def collect(self) -> dict[str, list[MetricData]]:
         """Collect environmental metrics from sensors and monitoring systems"""
         try:
             if not self.health_check():
                 self.logger.warning(
-                    f"Environmental sensors health check failed for " f"{self.name}"
+                    f"Environmental sensors health check failed for {self.name}"
                 )
                 return {}
 
@@ -49,7 +49,7 @@ class EnvironmentalCollector(BaseCollector):
             self.logger.error(f"Environmental collector health check failed: {e}")
             return False
 
-    def _collect_environmental_data(self) -> Dict[str, List[MetricData]]:
+    def _collect_environmental_data(self) -> dict[str, list[MetricData]]:
         """Collect environmental data (temperature, pressure, humidity, etc.)"""
         metrics = {}
         timestamp = datetime.now()
@@ -128,7 +128,7 @@ class EnvironmentalCollector(BaseCollector):
             self.logger.error(f"Failed to read sensor {sensor_type}: {e}")
             return None
 
-    def _read_from_endpoint(self, sensor_type: str, endpoint: str) -> float | None:
+    def _read_from_endpoint(self, _sensor_type: str, endpoint: str) -> float | None:
         """Read sensor data from configured endpoint"""
         try:
             import requests
@@ -186,7 +186,7 @@ class EnvironmentalCollector(BaseCollector):
                     f"above maximum {max_val}"
                 )
 
-    def get_collector_info(self) -> Dict[str, Any]:
+    def get_collector_info(self) -> dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
         info.update(

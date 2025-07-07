@@ -4,7 +4,7 @@ import csv
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from ..core.config import MetricData
 from .base import BaseCollector
@@ -13,7 +13,7 @@ from .base import BaseCollector
 class OfflineCollector(BaseCollector):
     """Collector for offline data sources (files, logs, databases)"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.data_sources = config.get("data_sources", [])
         self.file_patterns = config.get("file_patterns", ["*.json", "*.csv"])
@@ -21,10 +21,10 @@ class OfflineCollector(BaseCollector):
         self.database_config = config.get("database_config", {})
         self.parsing_rules = config.get("parsing_rules", {})
 
-    def get_required_config_fields(self) -> List[str]:
+    def get_required_config_fields(self) -> list[str]:
         return ["data_sources"]
 
-    def collect(self) -> Dict[str, List[MetricData]]:
+    def collect(self) -> dict[str, list[MetricData]]:
         """Collect metrics from offline data sources"""
         try:
             if not self.health_check():
@@ -51,9 +51,9 @@ class OfflineCollector(BaseCollector):
             self.logger.error(f"Offline health check failed: {e}")
             return False
 
-    def _collect_offline_data(self) -> Dict[str, List[MetricData]]:
+    def _collect_offline_data(self) -> dict[str, list[MetricData]]:
         """Collect data from offline sources"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
         timestamp = datetime.now()
 
         for source in self.data_sources:
@@ -81,7 +81,7 @@ class OfflineCollector(BaseCollector):
             self.logger.error(f"Health check failed for source {source}: {e}")
             return False
 
-    def _check_database_health(self, db_source: str) -> bool:
+    def _check_database_health(self, _db_source: str) -> bool:
         """Check database connectivity"""
         try:
             # This would check actual database connectivity
@@ -92,9 +92,9 @@ class OfflineCollector(BaseCollector):
 
     def _collect_from_source(
         self, source: str, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Collect data from a specific source"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
 
         if source.startswith("file://"):
             file_path = source[7:]
@@ -109,9 +109,9 @@ class OfflineCollector(BaseCollector):
 
     def _collect_from_file(
         self, file_path: str, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Collect data from a file"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
         path = Path(file_path)
 
         if not path.exists():
@@ -133,17 +133,17 @@ class OfflineCollector(BaseCollector):
 
     def _parse_json_file(
         self, file_path: Path, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Parse JSON file and extract metrics"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 data = json.load(f)
 
             # Extract metrics based on parsing rules
             for metric_name, value in data.items():
-                if isinstance(value, (int, float)):
+                if isinstance(value, int | float):
                     metrics[f"offline_{metric_name}"] = [
                         MetricData(
                             timestamp=timestamp,
@@ -163,12 +163,12 @@ class OfflineCollector(BaseCollector):
 
     def _parse_csv_file(
         self, file_path: Path, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+    ) -> dict[str, list[MetricData]]:
         """Parse CSV file and extract metrics"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     # Extract metrics from CSV rows
@@ -197,10 +197,10 @@ class OfflineCollector(BaseCollector):
         return metrics
 
     def _collect_from_database(
-        self, db_source: str, timestamp: datetime
-    ) -> Dict[str, List[MetricData]]:
+        self, db_source: str, _timestamp: datetime
+    ) -> dict[str, list[MetricData]]:
         """Collect data from database"""
-        metrics: Dict[str, List[MetricData]] = {}
+        metrics: dict[str, list[MetricData]] = {}
 
         try:
             # This would connect to database and execute queries
@@ -212,7 +212,7 @@ class OfflineCollector(BaseCollector):
 
         return metrics
 
-    def get_collector_info(self) -> Dict[str, Any]:
+    def get_collector_info(self) -> dict[str, Any]:
         """Get detailed information about this collector"""
         info = super().get_collector_info()
         info.update(

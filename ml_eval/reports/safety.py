@@ -1,7 +1,7 @@
 """Safety reports for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from .base import BaseReport, ReportData
 
@@ -9,7 +9,7 @@ from .base import BaseReport, ReportData
 class SafetyReport(BaseReport):
     """Generate safety reports for safety-critical systems"""
 
-    def generate(self, data: Dict[str, Any]) -> ReportData:
+    def generate(self, data: dict[str, Any]) -> ReportData:
         """Generate safety report from evaluation data"""
         safety_metrics = data.get("safety_metrics", {})
         compliance_status = data.get("compliance_status", {})

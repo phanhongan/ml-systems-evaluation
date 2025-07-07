@@ -2,6 +2,8 @@
 
 This guide provides comprehensive information about Service Level Objectives (SLOs) in the ML Systems Evaluation Framework, including definitions, configuration, and best practices.
 
+**Note**: For detailed error budget management, monitoring, and best practices, see the [Error Budget Management Guide](./error-budgets.md).
+
 ## What are SLOs?
 
 Service Level Objectives (SLOs) are measurable targets for system reliability, performance, and safety. They define the acceptable level of service that a system should provide and are used to determine when alerts should be triggered and when corrective actions are needed.
@@ -221,47 +223,7 @@ slo:
 
 ## Error Budgets
 
-### Error Budget Concept
-
-Error budgets define the acceptable amount of time a system can be unavailable or not meeting SLOs. They help teams make informed decisions about deployments and changes.
-
-### Error Budget Configuration
-
-```yaml
-slo:
-  # Error Budget Settings
-  error_budget: 0.001  # 0.1% error budget
-  error_budget_window: "30d"  # 30-day window
-  error_budget_alert_threshold: 0.8  # Alert when 80% of budget is consumed
-  
-  # Error Budget Tracking
-  error_budget_consumed: 0.0  # Current consumption
-  error_budget_remaining: 0.001  # Remaining budget
-  error_budget_burn_rate: 0.0001  # Current burn rate
-```
-
-### Error Budget Calculation
-
-```python
-# Error budget calculation example
-def calculate_error_budget(slo_target, actual_performance, time_window):
-    """
-    Calculate error budget consumption.
-    
-    Args:
-        slo_target: Target SLO value (e.g., 0.9999 for 99.99% availability)
-        actual_performance: Actual performance value
-        time_window: Time window for calculation
-    
-    Returns:
-        error_budget_consumed: Amount of error budget consumed
-    """
-    error_budget = 1 - slo_target
-    actual_error = 1 - actual_performance
-    error_budget_consumed = actual_error / error_budget
-    
-    return error_budget_consumed
-```
+For comprehensive error budget management, including configuration, monitoring, and best practices, see the [Error Budget Management Guide](./error-budgets.md).
 
 ## SLO Monitoring and Alerting
 

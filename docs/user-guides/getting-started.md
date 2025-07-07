@@ -156,7 +156,7 @@ The framework automatically alerts you when:
 
 - Check the [Configuration Guide](configuration.md) for detailed options
 - Review [CLI Reference](cli-reference.md) for command details
-- Consult [Industry Templates](templates/README.md) for your specific domain
+- Consult [Templates Guide](templates.md) for your specific domain
 
 ## Example: Manufacturing Quality Control
 

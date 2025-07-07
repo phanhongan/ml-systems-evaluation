@@ -27,7 +27,7 @@ Maritime systems require high levels of safety, reliability, and compliance with
 
 ### Maritime Collision Avoidance System Example
 
-See the full template in [`docs/templates/maritime-collision-avoidance.yaml`](../templates/maritime-collision-avoidance.yaml) for a complete, ready-to-use configuration example.
+See the full template in [`docs/user-guides/templates.md`](../user-guides/templates.md) for a complete, ready-to-use configuration example.
 
 Key configuration highlights:
 - **Persona**: Officer of the Watch (OOW)

@@ -432,7 +432,7 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **🏭 Industry-Specific Templates**
-- Ready-to-use configurations for 6 industrial sectors
+- Ready-to-use configurations for 4 industrial sectors
 - Multiple template types per industry
 - Industry-specific SLOs with appropriate safety and compliance standards
 

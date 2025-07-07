@@ -155,7 +155,6 @@ class TestIndustrySpecificScenarios:
         config = {
             "system": {
                 "name": "quality_control_system",
-                "type": "workflow",
                 "criticality": "business_critical",
             },
             "slos": {
@@ -195,7 +194,6 @@ class TestIndustrySpecificScenarios:
         config = {
             "system": {
                 "name": "safety_decision_system",
-                "type": "single_model",
                 "criticality": "safety_critical",
             },
             "slos": {
@@ -247,7 +245,6 @@ class TestIndustrySpecificScenarios:
         config = {
             "system": {
                 "name": "grid_optimization_system",
-                "type": "pipeline",
                 "criticality": "business_critical",
             },
             "slos": {
@@ -421,7 +418,7 @@ class TestConfigurationManagement:
         config = {
             "system": {
                 "name": "file_test_system",
-                "type": "single_model",
+                # type field removed since we only support workflow
                 "criticality": "operational",
             },
             "slos": {

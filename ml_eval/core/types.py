@@ -3,35 +3,33 @@
 from enum import Enum
 
 
-class SystemType(Enum):
-    """Types of ML systems supported by the framework"""
-
-    SINGLE_MODEL = "single_model"
-    WORKFLOW = "workflow"
-    PIPELINE = "pipeline"
-    DISTRIBUTED = "distributed"
-    SAFETY_CRITICAL = "safety_critical"
-
-
 class CriticalityLevel(Enum):
     """Criticality levels for ML systems"""
 
-    SAFETY_CRITICAL = "safety_critical"
-    BUSINESS_CRITICAL = "business_critical"
     OPERATIONAL = "operational"
-    EXPERIMENTAL = "experimental"
+    BUSINESS_CRITICAL = "business_critical"
+    SAFETY_CRITICAL = "safety_critical"
 
 
 class ComplianceStandard(Enum):
-    """Industry compliance standards"""
+    """Compliance standards for ML systems"""
 
-    DO_178C = "DO-178C"  # Aviation safety
-    ISO_26262 = "ISO-26262"  # Automotive safety
-    IEC_61508 = "IEC-61508"  # Industrial safety
-    FDA_510K = "FDA-510K"  # Medical devices
-    SOX = "SOX"  # Financial compliance
-    GDPR = "GDPR"  # Data privacy
-    NONE = "none"
+    # Aviation
+    DO_178C = "DO-178C"
+    DO_254 = "DO-254"
+    ARP4754A = "ARP4754A"
+
+    # Maritime
+    SOLAS = "SOLAS"
+    COLREGS = "COLREGS"
+
+    # Manufacturing
+    ISO_13485 = "ISO-13485"
+    FDA_510K = "FDA-510K"
+
+    # Energy
+    IEC_61508 = "IEC-61508"
+    ISO_13849 = "ISO-13849"
 
 
 class EvaluationMode(Enum):
@@ -60,9 +58,7 @@ class IndustryType(Enum):
     MANUFACTURING = "manufacturing"
     AVIATION = "aviation"
     ENERGY = "energy"
-    HEALTHCARE = "healthcare"
-    FINANCIAL = "financial"
-    AUTOMOTIVE = "automotive"
+    MARITIME = "maritime"
     CUSTOM = "custom"
 
 
@@ -81,14 +77,6 @@ class TemplateType(Enum):
     GRID_OPTIMIZATION = "grid_optimization"
     DEMAND_PREDICTION = "demand_prediction"
 
-    # Healthcare
-    MEDICAL_DIAGNOSIS = "medical_diagnosis"
-    PATIENT_MONITORING = "patient_monitoring"
-
-    # Financial
-    FRAUD_DETECTION = "fraud_detection"
-    RISK_ASSESSMENT = "risk_assessment"
-
-    # Automotive
-    AUTONOMOUS_DRIVING = "autonomous_driving"
-    VEHICLE_SAFETY = "vehicle_safety"
+    # Maritime
+    COLLISION_AVOIDANCE = "collision_avoidance"
+    NAVIGATION_SAFETY = "navigation_safety"

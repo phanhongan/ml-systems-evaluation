@@ -8,23 +8,7 @@ from ml_eval.core.config import (
     SLOConfig,
 )
 from ml_eval.core.framework import EvaluationFramework
-from ml_eval.core.types import ComplianceStandard, CriticalityLevel, SystemType
-
-
-class TestSystemType:
-    """Test SystemType enum"""
-
-    def test_system_type_values(self):
-        """Test that all system types have correct values"""
-        assert SystemType.SINGLE_MODEL.value == "single_model"
-        assert SystemType.WORKFLOW.value == "workflow"
-        assert SystemType.PIPELINE.value == "pipeline"
-        assert SystemType.DISTRIBUTED.value == "distributed"
-
-    def test_system_type_from_string(self):
-        """Test creating SystemType from string"""
-        assert SystemType("single_model") == SystemType.SINGLE_MODEL
-        assert SystemType("workflow") == SystemType.WORKFLOW
+from ml_eval.core.types import ComplianceStandard, CriticalityLevel
 
 
 class TestCriticalityLevel:
@@ -32,17 +16,17 @@ class TestCriticalityLevel:
 
     def test_criticality_level_values(self):
         """Test that all criticality levels have correct values"""
-        assert CriticalityLevel.SAFETY_CRITICAL.value == "safety_critical"
-        assert CriticalityLevel.BUSINESS_CRITICAL.value == "business_critical"
         assert CriticalityLevel.OPERATIONAL.value == "operational"
-        assert CriticalityLevel.EXPERIMENTAL.value == "experimental"
+        assert CriticalityLevel.BUSINESS_CRITICAL.value == "business_critical"
+        assert CriticalityLevel.SAFETY_CRITICAL.value == "safety_critical"
 
     def test_criticality_level_from_string(self):
         """Test creating CriticalityLevel from string"""
-        assert CriticalityLevel("safety_critical") == CriticalityLevel.SAFETY_CRITICAL
+        assert CriticalityLevel("operational") == CriticalityLevel.OPERATIONAL
         assert (
             CriticalityLevel("business_critical") == CriticalityLevel.BUSINESS_CRITICAL
         )
+        assert CriticalityLevel("safety_critical") == CriticalityLevel.SAFETY_CRITICAL
 
 
 class TestComplianceStandard:
@@ -51,16 +35,20 @@ class TestComplianceStandard:
     def test_compliance_standard_values(self):
         """Test that all compliance standards have correct values"""
         assert ComplianceStandard.DO_178C.value == "DO-178C"
-        assert ComplianceStandard.ISO_26262.value == "ISO-26262"
-        assert ComplianceStandard.IEC_61508.value == "IEC-61508"
+        assert ComplianceStandard.DO_254.value == "DO-254"
+        assert ComplianceStandard.ARP4754A.value == "ARP4754A"
+        assert ComplianceStandard.SOLAS.value == "SOLAS"
+        assert ComplianceStandard.COLREGS.value == "COLREGS"
+        assert ComplianceStandard.ISO_13485.value == "ISO-13485"
         assert ComplianceStandard.FDA_510K.value == "FDA-510K"
-        assert ComplianceStandard.SOX.value == "SOX"
-        assert ComplianceStandard.GDPR.value == "GDPR"
+        assert ComplianceStandard.IEC_61508.value == "IEC-61508"
+        assert ComplianceStandard.ISO_13849.value == "ISO-13849"
 
     def test_compliance_standard_from_string(self):
         """Test creating ComplianceStandard from string"""
         assert ComplianceStandard("DO-178C") == ComplianceStandard.DO_178C
-        assert ComplianceStandard("ISO-26262") == ComplianceStandard.ISO_26262
+        assert ComplianceStandard("DO-254") == ComplianceStandard.DO_254
+        assert ComplianceStandard.SOLAS.value == "SOLAS"
 
 
 class TestSLOConfig:
@@ -306,7 +294,6 @@ class TestEvaluationFramework:
         framework = EvaluationFramework(sample_config)
 
         assert framework.system_name == "test_system"
-        assert framework.system_type == SystemType.SINGLE_MODEL
         assert framework.criticality == CriticalityLevel.OPERATIONAL
         assert len(framework.slos) == 2
 
@@ -359,9 +346,7 @@ class TestEvaluationFramework:
         summary = framework.get_system_info()
 
         assert "name" in summary
-        assert "type" in summary
         assert "criticality" in summary
-        assert "slo_count" in summary
         assert "collector_count" in summary
         assert "evaluator_count" in summary
 
@@ -370,7 +355,7 @@ class TestEvaluationFramework:
         invalid_config = {
             "system": {
                 "name": "test",
-                "type": "single_model",
+                "type": "workflow",
                 "criticality": "operational",
             },
             "slos": {

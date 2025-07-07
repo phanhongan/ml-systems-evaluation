@@ -1,6 +1,5 @@
 system:
   name: "Maritime Collision Avoidance System"
-  type: "workflow"
   persona: "Officer of the Watch"
   criticality: "safety_critical"
 

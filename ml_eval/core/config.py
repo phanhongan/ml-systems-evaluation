@@ -50,14 +50,12 @@ class SystemConfig:
     def __init__(
         self,
         name: str,
-        system_type: str = "single_model",
         criticality: str = "operational",
         description: str | None = None,
         industry: str | None = None,
         compliance_standards: list[str] | None = None,
     ):
         self.name = name
-        self.system_type = system_type
         self.criticality = criticality
         self.description = description
         self.industry = industry
@@ -67,7 +65,6 @@ class SystemConfig:
         """Convert to dictionary representation"""
         return {
             "name": self.name,
-            "system_type": self.system_type,
             "criticality": self.criticality,
             "description": self.description,
             "industry": self.industry,
@@ -79,7 +76,6 @@ class SystemConfig:
         """Create SystemConfig from dictionary"""
         return cls(
             name=data["name"],
-            system_type=data.get("system_type", "single_model"),
             criticality=data.get("criticality", "operational"),
             description=data.get("description"),
             industry=data.get("industry"),

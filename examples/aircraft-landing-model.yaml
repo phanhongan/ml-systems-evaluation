@@ -1,6 +1,5 @@
 system:
   name: "Autonomous Flight Guidance System"
-  type: "workflow"
   persona: "Flight Crew"
   criticality: "safety_critical"
   description: "Advanced autonomous system for flight path optimization and landing assistance"

@@ -327,7 +327,6 @@ def create_config_command(args: argparse.Namespace) -> int:
         config: dict[str, Any] = {
             "system": {
                 "name": args.system_name,
-                "type": args.system_type,
                 "criticality": args.criticality,
             },
             "collectors": [],

@@ -96,7 +96,6 @@ poetry run pytest tests/test_core.py::TestEvaluationFramework::test_framework_cr
 ## Test Categories
 
 ### Core Framework Tests (`test_core.py`)
-- **SystemType**: Enum validation and string conversion
 - **CriticalityLevel**: Criticality level validation
 - **ComplianceStandard**: Compliance standard validation
 - **SLOConfig**: Service Level Objective configuration

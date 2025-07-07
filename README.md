@@ -246,16 +246,24 @@ ml-eval --help
 ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
 ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
 
-# Advanced development and production
-ml-eval dev --config production-system.yaml --mode validation --strict
-ml-eval evaluate --config production-system.yaml --mode single
-ml-eval monitor --config production-system.yaml --interval 60
+# Using example configurations
+ml-eval dev --config examples/aircraft-landing-model.yaml --mode validation --strict
+ml-eval evaluate --config examples/fish-classification-workflow.yaml --mode single
+ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
 
 # Additional reporting
 ml-eval report --type safety --period 30d
 ```
 
 ### Configuration Examples
+
+#### **Available Example Configurations**
+
+The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
+
+- **[aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml)**: Safety-critical aviation decision system with DO-178C compliance
+- **[fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
 
 #### **Using Industry Templates (Recommended)**
 
@@ -269,81 +277,11 @@ ml-eval template --industry manufacturing --type quality_control > quality-contr
 
 #### **Manufacturing Quality Control Example**
 
-```yaml
-# quality-control.yaml (generated from template)
-system:
-  name: "Manufacturing Quality Control System"
-  type: "workflow"
-  stages: ["data_collection", "quality_prediction", "defect_detection", "alert_generation"]
-  criticality: "business_critical"
-  
-slos:
-  defect_detection_accuracy:
-    target: 0.98
-    window: "24h"
-    error_budget: 0.02
-    description: "Accuracy in detecting manufacturing defects"
-  
-  prediction_latency:
-    target: 100
-    window: "1h"
-    error_budget: 0.05
-    description: "Time to predict quality issues (ms)"
-  
-  false_positive_rate:
-    target: 0.01
-    window: "24h"
-    error_budget: 0.01
-    description: "Rate of false defect alerts"
-
-collectors:
-  - type: "online"
-    endpoint: "http://manufacturing-metrics:9090"
-  - type: "offline"
-    log_paths: ["/var/log/quality-control/"]
-
-evaluators:
-  - type: "reliability"
-    error_budget_window: "30d"
-  - type: "performance"
-    metrics: ["accuracy", "latency"]
-```
+See [examples/fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml) for a complete workflow example with similar structure.
 
 #### **Aviation Safety System Example**
 
-```yaml
-# safety-system.yaml (generated from template)
-system:
-  name: "Aviation Safety Decision System"
-  type: "single_model"
-  criticality: "safety_critical"
-  
-slos:
-  decision_accuracy:
-    target: 0.9999
-    window: "24h"
-    error_budget: 0.0001
-    description: "Accuracy of safety-critical decisions"
-    compliance_standard: "DO-178C"
-    safety_critical: True
-  
-  response_time:
-    target: 50
-    window: "1h"
-    error_budget: 0.01
-    description: "Decision response time (ms)"
-    safety_critical: True
-
-collectors:
-  - type: "online"
-    endpoint: "http://aviation-system:8080/metrics"
-
-evaluators:
-  - type: "reliability"
-    error_budget_window: "7d"
-  - type: "safety"
-    compliance_standards: ["DO-178C"]
-```
+See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml) for a complete safety-critical system configuration.
 
 ## Core Components
 
@@ -370,29 +308,13 @@ evaluators:
 ## SRE Integration
 
 ### Service Level Objectives (SLOs)
-```yaml
-slos:
-  # Safety-Critical SLOs
-  false_positive_rate:
-    target: 0.0001  # 0.01% for safety-critical systems
-    window: "24h"
-    error_budget: 0.0001
-    compliance: "DO-178C"
-  
-  # Business-Critical SLOs
-  fraud_detection_accuracy:
-    target: 0.999
-    window: "1h"
-    error_budget: 0.001
-    business_impact: "millions_per_hour"
-  
-  # Environmental SLOs
-  underwater_device_uptime:
-    target: 0.9999
-    window: "30d"
-    error_budget: 0.0001
-    environmental_conditions: "high_pressure, salt_water"
-```
+
+For comprehensive SLO configuration guidance, see the [SLO Configuration Guide](./docs/slo-configuration.md). The framework supports:
+
+- **Safety-Critical SLOs**: Zero-tolerance thresholds for catastrophic failures
+- **Business-Critical SLOs**: Performance targets with immediate financial impact
+- **Environmental SLOs**: Adaptation to harsh operating conditions
+- **Regulatory SLOs**: Compliance with industry standards (DO-178C, COLREGs, etc.)
 
 ### Error Budget Policies
 - **Safety-First Alerts**: Immediate notification for safety-critical budget violations
@@ -407,6 +329,7 @@ This framework enables a new approach to Industrial AI development where safety 
 
 ```python
 # Define safety-critical SLOs before model development
+# See docs/slo-configuration.md for comprehensive SLO configuration examples
 slos = {
     "false_positive_rate": SLOConfig(target=0.0001, error_budget=0.0001, compliance="DO-178C"),
     "response_time": SLOConfig(target=50, error_budget=0.001, safety_critical=True),
@@ -435,6 +358,7 @@ while training:
 from ml_eval import EvaluationFramework
 
 # Create framework for workflow evaluation
+# See docs/slo-configuration.md for SLO configuration examples
 config = {
     "system": {
         "name": "Workflow System",

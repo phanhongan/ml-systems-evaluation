@@ -356,40 +356,7 @@ reports:
 
 ## Service Level Objectives (SLOs)
 
-```yaml
-slo:
-  # Availability SLOs
-  availability: 0.9999
-  uptime_target: 0.9995
-  downtime_budget: 0.0005
-  
-  # Performance SLOs
-  latency_p50: 50  # milliseconds
-  latency_p95: 100
-  latency_p99: 200
-  throughput: 1000  # requests per second
-  
-  # Quality SLOs
-  accuracy: 0.95
-  precision: 0.90
-  recall: 0.85
-  f1_score: 0.88
-  
-  # Safety SLOs (for safety-critical systems)
-  safety_margin: 0.99
-  failure_probability: 0.001
-  response_time_p99: 50
-  
-  # Compliance SLOs
-  data_retention_compliance: 1.0
-  audit_logging_compliance: 1.0
-  encryption_compliance: 1.0
-  
-  # Error Budgets
-  error_budget: 0.001
-  error_budget_window: "30d"
-  error_budget_alert_threshold: 0.8
-```
+For comprehensive SLO configuration guidance, including detailed examples and industry-specific configurations, see the [SLO Configuration Guide](./slo-configuration.md).
 
 ## Advanced Configuration
 

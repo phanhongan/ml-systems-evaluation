@@ -15,7 +15,7 @@ class ExampleRegistry:
         """Load all available examples"""
         return {
             "aviation": {
-                "name": "Autonomous Flight Guidance System",
+                "name": "Aircraft Landing System",
                 "type": "safety_critical",
                 "criticality": "safety_critical",
                 "slos": {

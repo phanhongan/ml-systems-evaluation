@@ -211,7 +211,7 @@ tests/
 - **Manufacturing**: Quality control, predictive maintenance
 - **Aviation**: Safety-critical decisions, flight control
 - **Energy**: Grid optimization, demand prediction
-- **Maritime**: Collision avoidance, navigation safety
+- **Maritime**: Collision avoidance, navigation systems
 
 ### Configuration Examples
 - Pre-configured SLOs for each industry

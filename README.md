@@ -131,8 +131,8 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **💰 Business metrics**: Connect technical performance to fishing efficiency and regulatory compliance
 - **🌊 Environmental adaptation**: Monitor water conditions and adjust model behavior for different fishing environments
 
-### ✈️ Autonomous Flight Guidance Systems (Comprehensive Example)
-**Problem**: Advanced autonomous flight guidance system with comprehensive safety and compliance requirements.
+### ✈️ Aircraft Landing Systems (Comprehensive Example)
+**Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
 
 **Challenges**:
 - **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
@@ -223,41 +223,38 @@ ml-eval report --type reliability --period 30d
 The framework provides ready-to-use templates for these industrial sectors:
 
 #### **🏭 Manufacturing Industry**
-- **🔍 basic**: Basic quality control system for defect detection and inspection
-- **🔧 advanced**: Advanced manufacturing with predictive maintenance and equipment monitoring
+- **🔍 quality_control**: Quality control system for defect detection and inspection
+- **🔧 predictive_maintenance**: Predictive maintenance system for equipment monitoring
 
 #### **✈️ Aviation Industry**  
-- **🛡️ basic**: Basic aviation safety system for flight control and safety monitoring
-- **✈️ advanced**: Advanced aviation system with comprehensive safety and regulatory compliance
+- **🛡️ safety_decision**: Safety-critical decision system for aviation safety
+- **✈️ flight_control**: Flight control assistance system for aircraft control
 
 #### **⚡ Energy Industry**
-- **⚡ basic**: Basic grid management system for power distribution and monitoring
-- **📊 advanced**: Advanced energy system with grid optimization and demand prediction
-
-#### **🚢 Maritime Industry**
-- **🚢 basic**: Basic maritime safety system for collision avoidance and navigation
-- **🚢 advanced**: Advanced maritime system with comprehensive safety and regulatory compliance
+- **⚡ grid_optimization**: Power grid optimization system for demand prediction and supply management
+- **📊 demand_prediction**: Energy demand forecasting system
 
 ### ⚡ Quick Commands
 
 ```bash
 # Get help and examples
-ml-eval --help
+ml-eval quickstart --industry aviation
+ml-eval example --type aircraft-model --detailed
 
 # Show all available commands
 ml-eval --help
 
-# Create configuration examples
-ml-eval create-config --system-name "My Manufacturing System" --industry manufacturing --output my-config.yaml
-ml-eval create-config --system-name "My Aviation System" --industry aviation --output aviation-config.yaml
+# Additional template examples
+ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
+ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
 
 # Using example configurations
-ml-eval run examples/aircraft-landing-model.yaml
-ml-eval validate examples/fish-classification-workflow.yaml
-ml-eval collect examples/maritime-collision-avoidance.yaml --output data.json
+ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
+ml-eval evaluate --config examples/fish-species-classification.yaml --mode single
+ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
 
 # Additional reporting
-ml-eval report examples/aircraft-landing-model.yaml --results results.json
+ml-eval report --type safety --period 30d
 ```
 
 ### 📋 Configuration Examples
@@ -266,28 +263,27 @@ ml-eval report examples/aircraft-landing-model.yaml --results results.json
 
 The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
 
-- **[✈️ aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml)**: Comprehensive autonomous flight guidance system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
-- **[🐟 fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
+- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
 - **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
 
 #### **📋 Using Industry Templates (Recommended)**
 
 ```bash
-# Create configuration for specific industry
-ml-eval create-config --system-name "My Manufacturing System" --industry manufacturing --output manufacturing-config.yaml
-ml-eval create-config --system-name "My Aviation System" --industry aviation --output aviation-config.yaml
+# List available templates
+ml-eval template --industry manufacturing --type list
 
-# Validate your configuration
-ml-eval validate manufacturing-config.yaml
+# Get a specific template
+ml-eval template --industry manufacturing --type quality_control > quality-control.yaml
 ```
 
 #### **🏭 Manufacturing Quality Control Example**
 
-See [examples/fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml) for a complete workflow example with similar structure.
+See [examples/fish-species-classification.yaml](./examples/fish-species-classification.yaml) for a complete workflow example with similar structure.
 
 #### **✈️ Aviation Safety System Example**
 
-See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml) for a comprehensive autonomous flight guidance system with multiple evaluators, collectors, and safety thresholds.
+See [examples/aircraft-landing.yaml](./examples/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
 
 ## 🔧 Core Components
 
@@ -436,8 +432,8 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **🏭 Industry-Specific Templates**
-- Ready-to-use configurations for 4 industrial sectors (Manufacturing, Aviation, Energy, Maritime)
-- Multiple template types per industry (basic and advanced)
+- Ready-to-use configurations for 6 industrial sectors
+- Multiple template types per industry
 - Industry-specific SLOs with appropriate safety and compliance standards
 
 #### **🖥️ Industrial-Focused CLI**

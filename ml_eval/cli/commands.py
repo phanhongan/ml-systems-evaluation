@@ -23,17 +23,39 @@ def run_evaluation_command(args: argparse.Namespace) -> int:
         # Run evaluation
         results = framework.evaluate()
 
+        # Convert EvaluationResult to dictionary for JSON serialization
+        def convert_to_dict(obj):
+            """Recursively convert objects to dictionaries for JSON serialization"""
+            if hasattr(obj, '__dict__'):
+                # Convert object to dictionary
+                result = {}
+                for key, value in obj.__dict__.items():
+                    if key.startswith('_'):  # Skip private attributes
+                        continue
+                    result[key] = convert_to_dict(value)
+                return result
+            elif isinstance(obj, (list, tuple)):
+                return [convert_to_dict(item) for item in obj]
+            elif isinstance(obj, dict):
+                return {key: convert_to_dict(value) for key, value in obj.items()}
+            elif hasattr(obj, 'isoformat'):  # Handle datetime objects
+                return obj.isoformat()
+            else:
+                return obj
+
+        results_dict = convert_to_dict(results)
+
         # Output results
         if args.output:
             output_path = Path(args.output)
             output_path.parent.mkdir(parents=True, exist_ok=True)
 
             with open(output_path, "w") as f:
-                json.dump(results, f, indent=2, default=str)
+                json.dump(results_dict, f, indent=2, default=str)
 
             print(f"Results saved to {output_path}")
         else:
-            print(json.dumps(results, indent=2, default=str))
+            print(json.dumps(results_dict, indent=2, default=str))
 
         return 0
 
@@ -57,6 +79,26 @@ def validate_config_command(args: argparse.Namespace) -> int:
         return 0
 
     except Exception as e:
+        # Try to extract and print validator errors if available
+        from ..config.validator import ConfigValidator
+        import yaml
+        try:
+            with open(args.config, "r") as f:
+                config_data = yaml.safe_load(f)
+            validator = ConfigValidator()
+            validator.validate_config(config_data)
+            errors = validator.get_errors()
+            warnings = validator.get_warnings()
+            if errors:
+                print("Validation errors:")
+                for err in errors:
+                    print(f"  - {err}")
+            if warnings:
+                print("Validation warnings:")
+                for warn in warnings:
+                    print(f"  - {warn}")
+        except Exception as inner:
+            print(f"(Additionally failed to extract validation errors: {inner})")
         print(f"Configuration validation failed: {e}", file=sys.stderr)
         return 1
 

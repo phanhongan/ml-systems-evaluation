@@ -95,7 +95,7 @@ class SLOConfig:
         name: str,
         target: float,
         window: str,
-        error_budget: float,
+        error_budget: Optional[float] = None,
         description: Optional[str] = None,
         safety_critical: bool = False,
         business_impact: Optional[str] = None,
@@ -103,7 +103,8 @@ class SLOConfig:
         self.name = name
         self.target = target
         self.window = window
-        self.error_budget = error_budget
+        # Infer error_budget from target if not provided
+        self.error_budget = error_budget if error_budget is not None else (1.0 - target)
         self.description = description
         self.safety_critical = safety_critical
         self.business_impact = business_impact
@@ -127,7 +128,7 @@ class SLOConfig:
             name=data["name"],
             target=data["target"],
             window=data["window"],
-            error_budget=data["error_budget"],
+            error_budget=data.get("error_budget"),  # Optional now
             description=data.get("description"),
             safety_critical=data.get("safety_critical", False),
             business_impact=data.get("business_impact"),

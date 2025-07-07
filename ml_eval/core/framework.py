@@ -22,6 +22,9 @@ class EvaluationFramework:
         self.slos = self._parse_slos(config.get("slos", {}))
         self.collectors: List[Any] = []
         self.evaluators: List[Any] = []
+        
+        # Automatically create collectors and evaluators from config
+        self._create_components_from_config()
 
     def _parse_slos(self, slos_config: Dict[str, Any]) -> List[SLOConfig]:
         """Parse SLO configuration into objects for Industrial AI systems"""
@@ -40,7 +43,6 @@ class EvaluationFramework:
                     name=name,
                     target=target,
                     window=config.get("window", "30d"),
-                    error_budget=config.get("error_budget", 0.05),
                     description=config.get("description", ""),
                     safety_critical=config.get("safety_critical", False),
                 )
@@ -50,6 +52,79 @@ class EvaluationFramework:
                 pass
 
         return slos
+
+    def _create_components_from_config(self):
+        """Create collectors and evaluators from configuration"""
+        # Create collectors
+        collectors_config = self.config.get("collectors", [])
+        print(f"Creating {len(collectors_config)} collectors from config")
+        for i, collector_config in enumerate(collectors_config):
+            try:
+                collector = self._create_collector(collector_config)
+                if collector:
+                    self.collectors.append(collector)
+                    print(f"Created collector {i+1}: {collector.__class__.__name__}")
+                else:
+                    print(f"Failed to create collector {i+1}: {collector_config.get('type', 'unknown')}")
+            except Exception as e:
+                print(f"Failed to create collector {i+1}: {e}")
+
+        # Create evaluators
+        evaluators_config = self.config.get("evaluators", [])
+        print(f"Creating {len(evaluators_config)} evaluators from config")
+        for i, evaluator_config in enumerate(evaluators_config):
+            try:
+                evaluator = self._create_evaluator(evaluator_config)
+                if evaluator:
+                    self.evaluators.append(evaluator)
+                    print(f"Created evaluator {i+1}: {evaluator.__class__.__name__}")
+                else:
+                    print(f"Failed to create evaluator {i+1}: {evaluator_config.get('type', 'unknown')}")
+            except Exception as e:
+                print(f"Failed to create evaluator {i+1}: {e}")
+
+    def _create_collector(self, config: Dict[str, Any]):
+        """Create a collector instance from configuration"""
+        collector_type = config.get("type", "")
+        
+        if collector_type == "online":
+            from ..collectors.online import OnlineCollector
+            return OnlineCollector(config)
+        elif collector_type == "offline":
+            from ..collectors.offline import OfflineCollector
+            return OfflineCollector(config)
+        elif collector_type == "environmental":
+            from ..collectors.environmental import EnvironmentalCollector
+            return EnvironmentalCollector(config)
+        elif collector_type == "regulatory":
+            from ..collectors.regulatory import RegulatoryCollector
+            return RegulatoryCollector(config)
+        else:
+            print(f"Unknown collector type: {collector_type}")
+            return None
+
+    def _create_evaluator(self, config: Dict[str, Any]):
+        """Create an evaluator instance from configuration"""
+        evaluator_type = config.get("type", "")
+        
+        if evaluator_type == "reliability":
+            from ..evaluators.reliability import ReliabilityEvaluator
+            return ReliabilityEvaluator(config)
+        elif evaluator_type == "performance":
+            from ..evaluators.performance import PerformanceEvaluator
+            return PerformanceEvaluator(config)
+        elif evaluator_type == "safety":
+            from ..evaluators.safety import SafetyEvaluator
+            return SafetyEvaluator(config)
+        elif evaluator_type == "compliance":
+            from ..evaluators.compliance import ComplianceEvaluator
+            return ComplianceEvaluator(config)
+        elif evaluator_type == "drift":
+            from ..evaluators.drift import DriftEvaluator
+            return DriftEvaluator(config)
+        else:
+            print(f"Unknown evaluator type: {evaluator_type}")
+            return None
 
     def add_collector(self, collector):
         """Add a metric collector to the framework"""
@@ -80,7 +155,7 @@ class EvaluationFramework:
             try:
                 metrics = collector.collect()
                 all_metrics.update(metrics)
-            except Exception:
+            except Exception as e:
                 # Log error but continue with other collectors
                 pass
 
@@ -96,7 +171,7 @@ class EvaluationFramework:
             try:
                 result = evaluator.evaluate(metrics)
                 results[evaluator.__class__.__name__] = result
-            except Exception:
+            except Exception as e:
                 # Log error but continue with other evaluators
                 pass
 

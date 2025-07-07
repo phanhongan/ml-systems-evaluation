@@ -103,13 +103,13 @@ class ConfigValidator:
 
     def _validate_single_slo(self, name: str, config: Dict[str, Any]) -> bool:
         """Validate a single SLO configuration"""
-        required_fields = ["target", "window", "error_budget"]
-        missing_fields = [field for field in required_fields if field not in config]
-
-        if missing_fields:
-            self.errors.append(
-                f"SLO '{name}' missing required fields: {missing_fields}"
-            )
+        # Check for required fields
+        if "target" not in config:
+            self.errors.append(f"SLO '{name}' missing required field: target")
+            return False
+        
+        if "window" not in config:
+            self.errors.append(f"SLO '{name}' missing required field: window")
             return False
 
         # Validate target value
@@ -118,24 +118,11 @@ class ConfigValidator:
             self.errors.append(f"SLO '{name}' target must be a number between 0 and 1")
             return False
 
-        # Validate error budget
-        error_budget = config.get("error_budget")
-        if (
-            not isinstance(error_budget, (int, float))
-            or error_budget < 0
-            or error_budget > 1
-        ):
-            self.errors.append(
-                f"SLO '{name}' error_budget must be a number between 0 and 1"
-            )
-            return False
-
         # Validate safety-critical requirements
         if config.get("safety_critical", False):
-            if error_budget > 0.001:
-                self.errors.append(
-                    f"Safety-critical SLO '{name}' must have error_budget <= 0.001"
-                )
+            # For safety-critical SLOs, target should be >= 0.999 (error_budget <= 0.001)
+            if target < 0.999:
+                self.errors.append(f"Safety-critical SLO '{name}' must have target >= 0.999")
                 return False
 
         # Validate compliance standard

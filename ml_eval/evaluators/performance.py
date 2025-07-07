@@ -66,11 +66,24 @@ class PerformanceEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_performance_metric(
-        self, metric_name: str, current_value: float
+        self, metric_name: str, current_value: Any
     ) -> Dict[str, Any]:
         """Evaluate a single performance metric"""
-        threshold = self.thresholds.get(metric_name, {})
-        target = threshold.get("target", 0)
+        # Get target from thresholds - thresholds can be direct values or dictionaries
+        threshold_config = self.thresholds.get(metric_name, {})
+        if isinstance(threshold_config, dict):
+            target = threshold_config.get("target", 0)
+        else:
+            # Direct value
+            target = threshold_config
+
+        # Extract value from MetricData if it's a list
+        if isinstance(current_value, list) and len(current_value) > 0:
+            # Take the first MetricData object and get its value
+            current_value = current_value[0].value
+        elif hasattr(current_value, 'value'):
+            # It's a single MetricData object
+            current_value = current_value.value
 
         # Calculate performance score (0-1)
         if "accuracy" in metric_name.lower() or "precision" in metric_name.lower():

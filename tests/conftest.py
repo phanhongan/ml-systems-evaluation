@@ -26,39 +26,71 @@ def sample_config():
         "slos": {
             "accuracy": {
                 "target": 0.95,
-                "window": "30d",
-                "error_budget": 0.05,
-                "description": "Model accuracy SLO",
+                "window": "24h",
+                "description": "Model accuracy",
             },
             "latency": {
                 "target": 0.99,
                 "window": "1h",
-                "error_budget": 0.01,
-                "description": "Response time SLO",
+                "description": "Response latency",
             },
         },
+        "collectors": [
+            {
+                "type": "online",
+                "endpoints": ["http://localhost:8080/metrics"],
+                "metrics": ["accuracy", "latency"],
+            }
+        ],
+        "evaluators": [
+            {
+                "type": "reliability",
+                "slos": {
+                    "accuracy": {"target": 0.95, "window": "24h"},
+                    "latency": {"target": 0.99, "window": "1h"},
+                },
+            }
+        ],
     }
 
 
 @pytest.fixture
 def safety_critical_config():
-    """Configuration for safety-critical system testing"""
+    """Safety-critical configuration for testing"""
     return {
         "system": {
             "name": "safety_system",
-            "type": "single_model",
+            "type": "safety_critical",
             "criticality": "safety_critical",
         },
         "slos": {
-            "safety_decision": {
+            "safety_margin": {
                 "target": 0.999,
-                "window": "1h",
-                "error_budget": 0.001,
-                "description": "Safety-critical decision accuracy",
+                "window": "24h",
+                "description": "Safety margin",
                 "safety_critical": True,
-                "compliance_standard": "DO-178C",
-            }
+            },
+            "failure_probability": {
+                "target": 0.001,
+                "window": "24h",
+                "description": "Failure probability",
+                "safety_critical": True,
+            },
         },
+        "collectors": [
+            {
+                "type": "online",
+                "endpoints": ["http://localhost:8080/metrics"],
+                "metrics": ["safety_margin", "failure_probability"],
+            }
+        ],
+        "evaluators": [
+            {
+                "type": "safety",
+                "compliance_standards": ["DO-178C"],
+                "safety_thresholds": {"safety_margin": 0.999},
+            }
+        ],
     }
 
 
@@ -75,14 +107,12 @@ def manufacturing_config():
             "defect_detection": {
                 "target": 0.98,
                 "window": "24h",
-                "error_budget": 0.02,
                 "description": "Quality control defect detection",
                 "business_impact": "millions_per_hour",
             },
             "prediction_latency": {
                 "target": 0.99,
                 "window": "1h",
-                "error_budget": 0.01,
                 "description": "Real-time prediction latency",
             },
         },

@@ -1,0 +1,188 @@
+system:
+  name: "Industrial Equipment Predictive Maintenance"
+  persona: "Maintenance Engineer"
+  criticality: "business_critical"
+  description: "ML system for predicting equipment failures and optimizing maintenance schedules"
+
+slos:
+  failure_prediction_accuracy:
+    target: 0.92
+    window: "30d"
+    description: "Accuracy of equipment failure prediction within 24-48 hours"
+  false_positive_rate:
+    target: 0.08
+    window: "30d"
+    description: "Rate of false positive failure predictions"
+  maintenance_cost_reduction:
+    target: 0.20
+    window: "90d"
+    description: "Reduction in maintenance costs through predictive maintenance"
+  system_availability:
+    target: 0.999
+    window: "30d"
+    description: "System uptime for predictive maintenance functionality"
+  prediction_response_time:
+    target: 0.99
+    window: "1h"
+    description: "Proportion of failure predictions completed within 5 minutes"
+
+safety_thresholds:
+  critical_equipment_alert:
+    max: 0.05
+    description: "Maximum acceptable false negative rate for critical equipment failure predictions"
+  maintenance_window:
+    min: 4
+    description: "Minimum hours advance warning required for critical equipment maintenance"
+
+operating_conditions:
+  equipment_types: ["pump", "motor", "compressor", "conveyor", "valve"]
+  operating_modes: ["normal", "high_load", "maintenance", "shutdown"]
+  environmental_conditions: ["normal", "high_temp", "high_humidity", "dusty"]
+
+collectors:
+  - type: "online"
+    endpoints: ["http://equipment-monitor:8080/metrics"]
+    metrics: ["vibration", "temperature", "pressure", "current", "voltage"]
+  - type: "offline"
+    log_paths: ["/var/log/equipment-sensors/", "/var/log/maintenance-records/"]
+  - type: "environmental"
+    sources: ["temperature_sensors", "humidity_sensors", "vibration_sensors"]
+  - type: "regulatory"
+    standards: ["ISO-10816", "ISO-7919", "API-670"]
+    compliance_metrics: ["vibration_limits", "temperature_limits"]
+
+evaluators:
+  - type: "performance"
+    metrics: ["failure_prediction_accuracy", "false_positive_rate"]
+    real_time_threshold: 300  # seconds
+  - type: "drift"
+    detection_methods: ["statistical", "ml_model"]
+    drift_metrics: ["vibration_patterns", "temperature_trends", "pressure_variations"]
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["system_availability", "prediction_response_time"]
+  - type: "business"
+    metrics: ["maintenance_cost_reduction", "downtime_reduction", "equipment_lifetime"]
+  - type: "compliance"
+    standards: ["ISO-10816", "ISO-7919"]
+    compliance_metrics: ["vibration_compliance", "temperature_compliance"]
+
+reports:
+  - type: "business"
+    frequency: "weekly"
+    stakeholders: ["maintenance_manager", "operations_manager", "plant_engineer"]
+  - type: "reliability"
+    frequency: "daily"
+    stakeholders: ["maintenance_crew", "equipment_technician"]
+  - type: "compliance"
+    frequency: "monthly"
+    stakeholders: ["safety_officer", "regulatory_authority"]
+
+data_sources:
+  - name: "equipment_sensors"
+    type: "database"
+    connection: "postgresql://user:pass@localhost/equipment_db"
+    tables: ["sensor_readings", "equipment_status", "maintenance_history"]
+  - name: "maintenance_records"
+    type: "database"
+    connection: "postgresql://user:pass@localhost/maintenance_db"
+    tables: ["maintenance_schedule", "failure_events", "cost_records"]
+  - name: "environmental_data"
+    type: "api"
+    endpoint: "http://environmental-monitor:8080/api/v1/readings"
+    authentication: "api_key"
+  - name: "equipment_specs"
+    type: "file"
+    path: "/data/equipment_specifications.json"
+    format: "json"
+
+features:
+  - name: "vibration_rms"
+    description: "Root mean square vibration amplitude"
+    unit: "mm/s"
+    range: [0, 50]
+  - name: "temperature"
+    description: "Equipment operating temperature"
+    unit: "°C"
+    range: [0, 150]
+  - name: "pressure"
+    description: "Operating pressure"
+    unit: "bar"
+    range: [0, 100]
+  - name: "current"
+    description: "Motor current consumption"
+    unit: "A"
+    range: [0, 500]
+  - name: "voltage"
+    description: "Operating voltage"
+    unit: "V"
+    range: [0, 1000]
+  - name: "runtime_hours"
+    description: "Equipment runtime since last maintenance"
+    unit: "hours"
+    range: [0, 8760]
+  - name: "load_factor"
+    description: "Equipment load factor percentage"
+    unit: "%"
+    range: [0, 100]
+
+models:
+  - name: "failure_prediction"
+    type: "classification"
+    algorithm: "random_forest"
+    target: "failure_within_48h"
+    features: ["vibration_rms", "temperature", "pressure", "current", "runtime_hours", "load_factor"]
+    hyperparameters:
+      n_estimators: 100
+      max_depth: 10
+      min_samples_split: 5
+  - name: "remaining_life"
+    type: "regression"
+    algorithm: "gradient_boosting"
+    target: "days_to_failure"
+    features: ["vibration_rms", "temperature", "pressure", "current", "runtime_hours", "load_factor"]
+    hyperparameters:
+      n_estimators: 200
+      learning_rate: 0.1
+      max_depth: 6
+
+training:
+  data_freshness:
+    max_age: "7d"
+    description: "Maximum age of training data before retraining"
+  retraining_trigger:
+    performance_degradation: 0.05
+    data_drift_threshold: 0.1
+    time_interval: "30d"
+  validation:
+    test_size: 0.2
+    cross_validation_folds: 5
+    metrics: ["accuracy", "precision", "recall", "f1_score", "mae"]
+
+alerts:
+  - name: "critical_failure_predicted"
+    condition: "failure_probability > 0.8"
+    severity: "critical"
+    notification: ["maintenance_manager", "plant_engineer"]
+    action: "schedule_immediate_maintenance"
+  - name: "maintenance_due"
+    condition: "days_to_failure < 7"
+    severity: "warning"
+    notification: ["maintenance_crew"]
+    action: "schedule_maintenance_window"
+  - name: "performance_degradation"
+    condition: "prediction_accuracy < 0.85"
+    severity: "warning"
+    notification: ["ml_engineer"]
+    action: "retrain_model"
+
+monitoring:
+  dashboard:
+    url: "http://maintenance-dashboard:8080"
+    refresh_interval: 300
+  metrics_export:
+    format: "prometheus"
+    endpoint: "http://metrics-exporter:9090"
+  log_aggregation:
+    system: "elasticsearch"
+    index: "predictive-maintenance-logs" 

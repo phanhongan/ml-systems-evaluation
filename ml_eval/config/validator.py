@@ -3,7 +3,7 @@
 import logging
 from typing import Any
 
-from ..core.types import ComplianceStandard, CriticalityLevel, SystemType
+from ..core.types import ComplianceStandard, CriticalityLevel
 
 
 class ConfigValidator:
@@ -70,14 +70,6 @@ class ConfigValidator:
             self.errors.append("System name is required")
             return False
 
-        # Validate system type
-        if "type" in system:
-            try:
-                SystemType(system["type"])
-            except ValueError:
-                self.errors.append(f"Invalid system type: {system['type']}")
-                return False
-
         # Validate criticality level
         if "criticality" in system:
             try:
@@ -132,8 +124,7 @@ class ConfigValidator:
                 ComplianceStandard(config["compliance_standard"])
             except ValueError:
                 self.errors.append(
-                    f"Invalid compliance standard for SLO '{name}': "
-                    f"{config['compliance_standard']}"
+                    f"SLO '{name}' has invalid compliance standard: {config['compliance_standard']}"
                 )
                 return False
 

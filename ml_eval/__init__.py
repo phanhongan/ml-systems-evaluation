@@ -20,7 +20,7 @@ from .core.config import ErrorBudget, EvaluationResult, SLOConfig
 
 # Core framework components
 from .core.framework import EvaluationFramework
-from .core.types import ComplianceStandard, CriticalityLevel, SystemType
+from .core.types import ComplianceStandard, CriticalityLevel
 
 # Evaluation engines
 from .evaluators.base import BaseEvaluator
@@ -70,7 +70,6 @@ __all__ = [
     "SLOConfig",
     "SafetyEvaluator",
     "SafetyReport",
-    "SystemType",
     "TemplateFactory",
     "cli_main",
 ]

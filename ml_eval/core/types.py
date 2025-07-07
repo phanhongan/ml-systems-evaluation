@@ -3,33 +3,38 @@
 from enum import Enum
 
 
-class SystemType(Enum):
-    """Types of ML systems supported by the framework"""
-
-    SINGLE_MODEL = "single_model"
-    WORKFLOW = "workflow"
-    PIPELINE = "pipeline"
-    DISTRIBUTED = "distributed"
-    SAFETY_CRITICAL = "safety_critical"
-
-
 class CriticalityLevel(Enum):
     """Criticality levels for ML systems"""
 
-    SAFETY_CRITICAL = "safety_critical"
-    BUSINESS_CRITICAL = "business_critical"
     OPERATIONAL = "operational"
-    EXPERIMENTAL = "experimental"
+    BUSINESS_CRITICAL = "business_critical"
+    SAFETY_CRITICAL = "safety_critical"
 
 
 class ComplianceStandard(Enum):
     """Industry compliance standards"""
 
-    DO_178C = "DO-178C"  # Aviation safety
-    ISO_26262 = "ISO-26262"  # Automotive safety
-    IEC_61508 = "IEC-61508"  # Industrial safety
-    FDA_510K = "FDA-510K"  # Medical devices
-    SOX = "SOX"  # Financial compliance
+    # Aviation safety standards
+    DO_178C = "DO-178C"  # Software Considerations in Airborne Systems
+    DO_254 = "DO-254"  # Hardware Considerations in Airborne Systems
+    ARP4754A = "ARP4754A"  # Guidelines for Development of Civil Aircraft and Systems
+    FAA = "FAA"  # Federal Aviation Administration
+    EASA = "EASA"  # European Aviation Safety Agency
+    ICAO = "ICAO"  # International Civil Aviation Organization
+
+    # Maritime safety standards
+    COLREGs = "COLREGs"  # International Regulations for Preventing Collisions at Sea
+    IMO = "IMO Guidelines"  # International Maritime Organization Guidelines
+
+    # Energy standards
+    NERC = "NERC"  # North American Electric Reliability Corporation
+    FERC = "FERC"  # Federal Energy Regulatory Commission
+
+    # Manufacturing standards
+    ISO_9001 = "ISO-9001"  # Quality Management Systems
+    ISO_14001 = "ISO-14001"  # Environmental Management Systems
+
+    # General standards
     GDPR = "GDPR"  # Data privacy
     NONE = "none"
 
@@ -60,9 +65,7 @@ class IndustryType(Enum):
     MANUFACTURING = "manufacturing"
     AVIATION = "aviation"
     ENERGY = "energy"
-    HEALTHCARE = "healthcare"
-    FINANCIAL = "financial"
-    AUTOMOTIVE = "automotive"
+    MARITIME = "maritime"
     CUSTOM = "custom"
 
 
@@ -81,14 +84,6 @@ class TemplateType(Enum):
     GRID_OPTIMIZATION = "grid_optimization"
     DEMAND_PREDICTION = "demand_prediction"
 
-    # Healthcare
-    MEDICAL_DIAGNOSIS = "medical_diagnosis"
-    PATIENT_MONITORING = "patient_monitoring"
-
-    # Financial
-    FRAUD_DETECTION = "fraud_detection"
-    RISK_ASSESSMENT = "risk_assessment"
-
-    # Automotive
-    AUTONOMOUS_DRIVING = "autonomous_driving"
-    VEHICLE_SAFETY = "vehicle_safety"
+    # Maritime
+    COLLISION_AVOIDANCE = "collision_avoidance"
+    NAVIGATION_SYSTEM = "navigation_system"

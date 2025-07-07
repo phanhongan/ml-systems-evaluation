@@ -1,6 +1,5 @@
 system:
   name: "Commercial Fishing Sonar Classification System"
-  type: "workflow"
   persona: "Commercial Fisherman"
   criticality: "business_critical"
   stages: ["sonar_signal_processing", "fish_detection", "species_classification", "catch_optimization"]

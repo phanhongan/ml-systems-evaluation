@@ -8,23 +8,7 @@ from ml_eval.core.config import (
     SLOConfig,
 )
 from ml_eval.core.framework import EvaluationFramework
-from ml_eval.core.types import ComplianceStandard, CriticalityLevel, SystemType
-
-
-class TestSystemType:
-    """Test SystemType enum"""
-
-    def test_system_type_values(self):
-        """Test that all system types have correct values"""
-        assert SystemType.SINGLE_MODEL.value == "single_model"
-        assert SystemType.WORKFLOW.value == "workflow"
-        assert SystemType.PIPELINE.value == "pipeline"
-        assert SystemType.DISTRIBUTED.value == "distributed"
-
-    def test_system_type_from_string(self):
-        """Test creating SystemType from string"""
-        assert SystemType("single_model") == SystemType.SINGLE_MODEL
-        assert SystemType("workflow") == SystemType.WORKFLOW
+from ml_eval.core.types import ComplianceStandard, CriticalityLevel
 
 
 class TestCriticalityLevel:
@@ -35,7 +19,6 @@ class TestCriticalityLevel:
         assert CriticalityLevel.SAFETY_CRITICAL.value == "safety_critical"
         assert CriticalityLevel.BUSINESS_CRITICAL.value == "business_critical"
         assert CriticalityLevel.OPERATIONAL.value == "operational"
-        assert CriticalityLevel.EXPERIMENTAL.value == "experimental"
 
     def test_criticality_level_from_string(self):
         """Test creating CriticalityLevel from string"""
@@ -51,16 +34,19 @@ class TestComplianceStandard:
     def test_compliance_standard_values(self):
         """Test that all compliance standards have correct values"""
         assert ComplianceStandard.DO_178C.value == "DO-178C"
-        assert ComplianceStandard.ISO_26262.value == "ISO-26262"
-        assert ComplianceStandard.IEC_61508.value == "IEC-61508"
-        assert ComplianceStandard.FDA_510K.value == "FDA-510K"
-        assert ComplianceStandard.SOX.value == "SOX"
+        assert ComplianceStandard.DO_254.value == "DO-254"
+        assert ComplianceStandard.ARP4754A.value == "ARP4754A"
+        assert ComplianceStandard.FAA.value == "FAA"
+        assert ComplianceStandard.EASA.value == "EASA"
+        assert ComplianceStandard.ICAO.value == "ICAO"
+        assert ComplianceStandard.COLREGs.value == "COLREGs"
+        assert ComplianceStandard.IMO.value == "IMO Guidelines"
         assert ComplianceStandard.GDPR.value == "GDPR"
 
     def test_compliance_standard_from_string(self):
         """Test creating ComplianceStandard from string"""
         assert ComplianceStandard("DO-178C") == ComplianceStandard.DO_178C
-        assert ComplianceStandard("ISO-26262") == ComplianceStandard.ISO_26262
+        assert ComplianceStandard("COLREGs") == ComplianceStandard.COLREGs
 
 
 class TestSLOConfig:
@@ -306,7 +292,7 @@ class TestEvaluationFramework:
         framework = EvaluationFramework(sample_config)
 
         assert framework.system_name == "test_system"
-        assert framework.system_type == SystemType.SINGLE_MODEL
+        # System type is no longer tracked since we only support workflow
         assert framework.criticality == CriticalityLevel.OPERATIONAL
         assert len(framework.slos) == 2
 
@@ -359,7 +345,6 @@ class TestEvaluationFramework:
         summary = framework.get_system_info()
 
         assert "name" in summary
-        assert "type" in summary
         assert "criticality" in summary
         assert "slo_count" in summary
         assert "collector_count" in summary

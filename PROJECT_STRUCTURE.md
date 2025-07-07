@@ -43,7 +43,7 @@ core/
 **Purpose**: Central framework components that define the evaluation system architecture.
 
 **Key Components**:
-- `SystemType`, `CriticalityLevel`, `ComplianceStandard` enums
+- `CriticalityLevel`, `ComplianceStandard` enums
 - `SLOConfig`, `ErrorBudget`, `EvaluationResult` data classes
 - `EvaluationFramework` main orchestrator class
 
@@ -156,9 +156,7 @@ docs/
     ├── manufacturing.md
     ├── aviation.md
     ├── energy.md
-    ├── healthcare.md
-    ├── financial.md
-    └── automotive.md
+    └── maritime.md
 ```
 
 **Purpose**: Comprehensive documentation tailored for system engineers.
@@ -189,9 +187,7 @@ tests/
 │   ├── manufacturing/
 │   ├── aviation/
 │   ├── energy/
-│   ├── healthcare/
-│   ├── financial/
-│   └── automotive/
+│   └── maritime/
 ├── safety/                   # Safety-critical tests
 ├── compliance/               # Compliance tests
 └── data/                     # Test data
@@ -215,9 +211,7 @@ tests/
 - **Manufacturing**: Quality control, predictive maintenance
 - **Aviation**: Safety-critical decisions, flight control
 - **Energy**: Grid optimization, demand prediction
-- **Healthcare**: Medical diagnostics, patient monitoring
-- **Financial**: Fraud detection, risk assessment
-- **Automotive**: Autonomous driving, vehicle safety
+- **Maritime**: Collision avoidance, navigation systems
 
 ### Configuration Examples
 - Pre-configured SLOs for each industry

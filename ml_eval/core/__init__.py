@@ -2,7 +2,7 @@
 
 from .config import ErrorBudget, SLOConfig
 from .framework import EvaluationFramework
-from .types import ComplianceStandard, CriticalityLevel, SystemType
+from .types import ComplianceStandard, CriticalityLevel
 
 __all__ = [
     "ComplianceStandard",
@@ -10,5 +10,4 @@ __all__ = [
     "ErrorBudget",
     "EvaluationFramework",
     "SLOConfig",
-    "SystemType",
 ]

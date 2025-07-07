@@ -54,11 +54,10 @@ class TemplateFactory:
         """Create basic aviation template"""
         return {
             "system": {
-                "name": "Autonomous Flight Guidance System",
-                "type": "workflow",
+                "name": "Aircraft Landing System",
                 "persona": "Flight Crew",
                 "criticality": "safety_critical",
-                "description": "Advanced autonomous system for flight path optimization and landing assistance",
+                "description": "Advanced system for aircraft landing assistance and safety-critical landing decisions",
             },
             "slos": {
                 "flight_path_accuracy": {
@@ -127,7 +126,7 @@ class TemplateFactory:
     def _create_aviation_advanced(self) -> dict[str, Any]:
         """Create advanced aviation template"""
         basic = self._create_aviation_basic()
-        basic["system"]["name"] = "Advanced Autonomous Flight Guidance System"
+        basic["system"]["name"] = "Advanced Aircraft Landing System"
 
         # Add more comprehensive SLOs
         basic["slos"].update(
@@ -150,7 +149,7 @@ class TemplateFactory:
                 "system_availability": {
                     "target": 0.9999,
                     "window": "30d",
-                    "description": "System uptime for autonomous flight guidance functionality",
+                    "description": "System uptime for aircraft landing functionality",
                 },
             }
         )

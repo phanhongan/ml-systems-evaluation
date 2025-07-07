@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 
 from .config import EvaluationResult, MetricData, SLOConfig
-from .types import CriticalityLevel, SystemType
+from .types import CriticalityLevel
 
 
 class EvaluationFramework:
@@ -13,9 +13,6 @@ class EvaluationFramework:
     def __init__(self, config: dict[str, Any]):
         self.config = config
         self.system_name = config.get("system", {}).get("name", "Unknown")
-        self.system_type = SystemType(
-            config.get("system", {}).get("type", "single_model")
-        )
         self.criticality = CriticalityLevel(
             config.get("system", {}).get("criticality", "operational")
         )
@@ -248,7 +245,6 @@ class EvaluationFramework:
         """Get information about the configured system"""
         return {
             "name": self.system_name,
-            "type": self.system_type.value,
             "criticality": self.criticality.value,
             "slo_count": len(self.slos),
             "collector_count": len(self.collectors),

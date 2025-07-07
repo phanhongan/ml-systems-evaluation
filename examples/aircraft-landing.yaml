@@ -1,9 +1,8 @@
 system:
-  name: "Autonomous Flight Guidance System"
-  type: "workflow"
+  name: "Aircraft Landing System"
   persona: "Flight Crew"
   criticality: "safety_critical"
-  description: "Advanced autonomous system for flight path optimization and landing assistance"
+  description: "Advanced system for aircraft landing assistance and safety-critical landing decisions"
 
 slos:
   flight_path_accuracy:
@@ -44,7 +43,7 @@ slos:
   system_availability:
     target: 0.9999
     window: "30d"
-    description: "System uptime for autonomous flight guidance functionality"
+    description: "System uptime for aircraft landing functionality"
 
 safety_thresholds:
   decision_confidence_threshold:

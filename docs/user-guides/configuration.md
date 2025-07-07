@@ -9,7 +9,6 @@ The framework uses YAML configuration files with the following structure:
 ```yaml
 system:
   name: "Your System Name"
-  type: "industry_type"
   criticality: "criticality_level"
 
 data_sources:
@@ -43,21 +42,18 @@ slo:
 ```yaml
 system:
   name: "Production Quality Control System"
-  type: "manufacturing"  # manufacturing, aviation, energy, etc.
   criticality: "business-critical"  # business-critical, safety-critical
   description: "Optional system description"
   version: "1.0.0"
   environment: "production"  # production, staging, development
 ```
 
-### 🏭 System Types
+### 🏭 Supported Industries
 
 - **🏭 manufacturing**: Manufacturing and quality control systems
 - **✈️ aviation**: Aviation and aerospace systems
 - **⚡ energy**: Energy and utility systems
-- **🏥 healthcare**: Healthcare and medical systems
-- **🚗 automotive**: Automotive and transportation systems
-- **🔧 custom**: Custom system type
+- **🚢 maritime**: Maritime and navigation systems
 
 ### 🚨 Criticality Levels
 

@@ -139,7 +139,6 @@ Here's a complete example for a manufacturing quality control system:
 # manufacturing-quality.yaml
 system:
   name: "PCB Quality Control"
-  type: "manufacturing"
   criticality: "business-critical"
 
 data_sources:

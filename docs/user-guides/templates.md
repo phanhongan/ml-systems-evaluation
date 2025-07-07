@@ -14,7 +14,6 @@ This directory contains pre-configured templates for different industries, desig
 ```yaml
 system:
   name: "Manufacturing Quality Control"
-  type: "manufacturing"
   criticality: "business-critical"
 
 data_sources:
@@ -69,7 +68,6 @@ slo:
 ```yaml
 system:
   name: "Flight Control System"
-  type: "aviation"
   criticality: "safety-critical"
 
 data_sources:
@@ -123,7 +121,6 @@ slo:
 ```yaml
 system:
   name: "Grid Optimization System"
-  type: "energy"
   criticality: "business-critical"
 
 data_sources:
@@ -179,7 +176,6 @@ slo:
 ```yaml
 system:
   name: "Maritime Collision Avoidance System"
-  type: "workflow"
   persona: "Officer of the Watch"
   criticality: "safety_critical"
 

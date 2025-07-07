@@ -131,8 +131,8 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **💰 Business metrics**: Connect technical performance to fishing efficiency and regulatory compliance
 - **🌊 Environmental adaptation**: Monitor water conditions and adjust model behavior for different fishing environments
 
-### ✈️ Autonomous Flight Guidance Systems (Comprehensive Example)
-**Problem**: Advanced autonomous flight guidance system with comprehensive safety and compliance requirements.
+### ✈️ Aircraft Landing Systems (Comprehensive Example)
+**Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
 
 **Challenges**:
 - **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
@@ -249,8 +249,8 @@ ml-eval template --industry aviation --type safety_decision --output safety-syst
 ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
 
 # Using example configurations
-ml-eval dev --config examples/aircraft-landing-model.yaml --mode validation --strict
-ml-eval evaluate --config examples/fish-classification-workflow.yaml --mode single
+ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
+ml-eval evaluate --config examples/fish-species-classification.yaml --mode single
 ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
 
 # Additional reporting
@@ -263,8 +263,8 @@ ml-eval report --type safety --period 30d
 
 The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
 
-- **[✈️ aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml)**: Comprehensive autonomous flight guidance system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
-- **[🐟 fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
+- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
 - **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
 
 #### **📋 Using Industry Templates (Recommended)**
@@ -279,11 +279,11 @@ ml-eval template --industry manufacturing --type quality_control > quality-contr
 
 #### **🏭 Manufacturing Quality Control Example**
 
-See [examples/fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml) for a complete workflow example with similar structure.
+See [examples/fish-species-classification.yaml](./examples/fish-species-classification.yaml) for a complete workflow example with similar structure.
 
 #### **✈️ Aviation Safety System Example**
 
-See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml) for a comprehensive autonomous flight guidance system with multiple evaluators, collectors, and safety thresholds.
+See [examples/aircraft-landing.yaml](./examples/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
 
 ## 🔧 Core Components
 

@@ -4,7 +4,6 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict
 
 from ..config.factory import ConfigFactory
 from ..core.framework import EvaluationFramework
@@ -80,8 +79,9 @@ def validate_config_command(args: argparse.Namespace) -> int:
 
     except Exception as e:
         # Try to extract and print validator errors if available
-        from ..config.validator import ConfigValidator
         import yaml
+
+        from ..config.validator import ConfigValidator
 
         try:
             with open(args.config, "r") as f:

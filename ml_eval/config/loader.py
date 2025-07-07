@@ -1,11 +1,11 @@
 """Configuration loader for ML Systems Evaluation Framework"""
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
 import yaml
-import logging
 
 
 class ConfigLoader:

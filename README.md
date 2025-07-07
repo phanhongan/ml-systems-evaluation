@@ -115,21 +115,24 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 
 ## 🎯 Supported Scenarios
 
-### 🐟 Fish Species Classification
-**Problem**: Multi-stage ML pipeline processing echogram images from underwater devices for real-time fish species identification in commercial fishing operations.
+The framework supports multiple industrial scenarios with ready-to-use configurations. Here are three representative scenarios covering different evaluation challenges:
+
+### ✈️ Aircraft Landing
+**Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
 
 **Challenges**:
-- **📊 Data Quality**: Echogram images from underwater devices vary in clarity, depth, and environmental conditions
-- **🔗 Pipeline Reliability**: Any stage failure breaks the entire classification process during active fishing operations
-- **💰 Business Impact**: Incorrect species identification affects catch management, regulatory compliance, and fishing efficiency
-- **⚡ Real-time Constraints**: Decisions must be made quickly during active fishing to optimize catch and avoid bycatch
+- **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
+- **📋 Regulatory Compliance**: Must meet multiple aviation safety standards (DO-178C, DO-254, ARP4754A)
+- **⚡ Real-time Constraints**: Complex flight path optimization and obstacle detection
+- **🚨 Failure Consequences**: Incorrect decisions can lead to catastrophic outcomes
+- **🌊 Environmental Adaptation**: System must adapt to various weather and runway conditions
 
 **Framework Solution**:
-- **🔍 End-to-end monitoring**: Track performance across echogram preprocessing → feature extraction → species classification → catch optimization
-- **📊 Data quality validation**: Detect drift in echogram characteristics and underwater conditions
-- **🛡️ Reliability assessment**: Ensure 99.9% pipeline availability with automatic failover during fishing operations
-- **💰 Business metrics**: Connect technical performance to fishing efficiency and regulatory compliance
-- **🌊 Environmental adaptation**: Monitor water conditions and adjust model behavior for different fishing environments
+- **🛡️ Multi-faceted safety validation**: Flight path accuracy, runway identification, weather assessment, obstacle detection
+- **📋 Comprehensive regulatory compliance**: Automated validation against multiple aviation standards
+- **🚨 Real-time alerting**: Immediate notification of any performance degradation across all critical metrics
+- **🚨 Incident response**: Structured approach to handling safety-critical failures with multiple stakeholders
+- **🌊 Environmental monitoring**: Continuous adaptation to changing flight conditions
 
 ### 🚢 Maritime Collision Avoidance
 **Problem**: AI-powered collision avoidance system for commercial vessels operating in busy maritime environments with strict safety and regulatory requirements.
@@ -148,22 +151,28 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **🌊 Environmental adaptation**: System performance monitoring under various weather and sea conditions
 - **📊 Navigation parameter validation**: Continuous monitoring of Speed Through Water (STW) vs Speed Over Ground (SOG) discrepancies
 
-### ✈️ Aircraft Landing
-**Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
+### 🔧 Predictive Maintenance
+**Problem**: Industrial equipment predictive maintenance system for manufacturing operations with business-critical reliability requirements.
 
 **Challenges**:
-- **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
-- **📋 Regulatory Compliance**: Must meet multiple aviation safety standards (DO-178C, DO-254, ARP4754A)
-- **⚡ Real-time Constraints**: Complex flight path optimization and obstacle detection
-- **🚨 Failure Consequences**: Incorrect decisions can lead to catastrophic outcomes
-- **🌊 Environmental Adaptation**: System must adapt to various weather and runway conditions
+- **💰 Business Impact**: Equipment failures cause immediate production losses and safety risks
+- **⚡ Real-time Monitoring**: Continuous assessment of equipment health across multiple production lines
+- **📊 Data Quality**: Sensor data from harsh industrial environments varies in reliability and accuracy
+- **🛡️ Safety Requirements**: Equipment failures can create hazardous conditions for workers
+- **📋 Regulatory Compliance**: Must meet manufacturing safety standards and environmental regulations
 
 **Framework Solution**:
-- **🛡️ Multi-faceted safety validation**: Flight path accuracy, runway identification, weather assessment, obstacle detection
-- **📋 Comprehensive regulatory compliance**: Automated validation against multiple aviation standards
-- **🚨 Real-time alerting**: Immediate notification of any performance degradation across all critical metrics
-- **🚨 Incident response**: Structured approach to handling safety-critical failures with multiple stakeholders
-- **🌊 Environmental monitoring**: Continuous adaptation to changing flight conditions
+- **🔍 Multi-equipment monitoring**: Track performance across different equipment types and production environments
+- **📊 Sensor data validation**: Detect drift in sensor characteristics and environmental conditions
+- **🛡️ Reliability assessment**: Ensure 99.5% prediction accuracy with automatic alerting for maintenance needs
+- **💰 Business metrics**: Connect technical performance to production efficiency and cost optimization
+- **🌊 Environmental adaptation**: Monitor operating conditions and adjust predictions for different equipment states
+
+### 📋 Additional Scenarios
+
+See the [`examples/`](./examples/) directory for complete configuration files covering additional scenarios:
+- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[📊 product-demand-forecasting.yaml](./examples/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
 
 ## 🏗️ Architecture
 
@@ -267,24 +276,14 @@ ml-eval template --industry energy --type grid_optimization --output grid-system
 
 # Using example configurations
 ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
-ml-eval evaluate --config examples/fish-species-classification.yaml --mode single
-ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
-ml-eval evaluate --config examples/predictive-maintenance.yaml --mode continuous
+ml-eval evaluate --config examples/maritime-collision-avoidance.yaml --mode single
+ml-eval monitor --config examples/predictive-maintenance.yaml --interval 60
 
 # Additional reporting
 ml-eval report --type safety --period 30d
 ```
 
 ### 📋 Configuration Examples
-
-#### **📁 Available Example Configurations**
-
-The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
-
-- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
-- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
-- **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
-- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance with failure prediction and cost optimization
 
 #### **📋 Using Industry Templates (Recommended)**
 
@@ -296,13 +295,17 @@ ml-eval template --industry manufacturing --type list
 ml-eval template --industry manufacturing --type predictive_maintenance > maintenance-system.yaml
 ```
 
-#### **🏭 Manufacturing Quality Control Example**
+#### **📁 Example Configurations**
 
-See [examples/fish-species-classification.yaml](./examples/fish-species-classification.yaml) for a complete workflow example with similar structure.
+The framework includes complete example configurations in the [`examples/`](./examples/) directory for the scenarios described above:
 
-#### **✈️ Aviation Safety System Example**
+- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Aircraft landing system with safety-critical compliance
+- **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance  
+- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance
 
-See [examples/aircraft-landing.yaml](./examples/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
+Additional examples include:
+- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater classification
+- **[📊 product-demand-forecasting.yaml](./examples/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
 
 ## 🔧 Core Components
 
@@ -350,7 +353,6 @@ This framework enables a new approach to Industrial AI development where safety 
 
 ```python
 # Define safety-critical SLOs before model development
-# See docs/reference/slo-configuration.md for comprehensive SLO configuration examples
 slos = {
     "false_positive_rate": SLOConfig(target=0.0001, error_budget=0.0001, compliance="DO-178C"),
     "response_time": SLOConfig(target=50, error_budget=0.001, safety_critical=True),
@@ -379,7 +381,6 @@ while training:
 from ml_eval import EvaluationFramework
 
 # Create framework for workflow evaluation
-# See docs/reference/slo-configuration.md for SLO configuration examples
 config = {
     "system": {
         "name": "Workflow System",

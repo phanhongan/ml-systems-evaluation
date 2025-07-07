@@ -1,14 +1,14 @@
-# CLI Reference
+# 🖥️ CLI Reference
 
 This document provides a complete reference for all command-line interface (CLI) commands available in the ML Systems Evaluation Framework.
 
-## Command Overview
+## 📋 Command Overview
 
 ```bash
 ml-eval [COMMAND] [OPTIONS]
 ```
 
-## Global Options
+## 🌍 Global Options
 
 ```bash
 --config, -c FILE          Configuration file path
@@ -19,9 +19,9 @@ ml-eval [COMMAND] [OPTIONS]
 --format FORMAT            Output format (json, yaml, html, pdf)
 ```
 
-## Main Commands
+## 🎯 Main Commands
 
-### Evaluate Command
+### 🔍 Evaluate Command
 
 Run a complete evaluation of your ML system.
 
@@ -56,7 +56,7 @@ ml-eval evaluate --config config.yaml --output-dir ./my_reports/
 ml-eval evaluate --config config.yaml --dry-run
 ```
 
-### Collect Command
+### 📊 Collect Command
 
 Collect data from configured sources.
 
@@ -91,7 +91,7 @@ ml-eval collect --config config.yaml --start-date 2024-01-01 --end-date 2024-01-
 ml-eval collect --config config.yaml --validate
 ```
 
-### Report Command
+### 📊 Report Command
 
 Generate reports from evaluation results.
 
@@ -126,9 +126,9 @@ ml-eval report --config config.yaml --format pdf
 ml-eval report --config config.yaml --template custom_template.html
 ```
 
-## Configuration Commands
+## 🔧 Configuration Commands
 
-### Config Validate
+### ✅ Config Validate
 
 Validate configuration files.
 
@@ -156,7 +156,7 @@ ml-eval config validate config.yaml --schema custom_schema.json
 ml-eval config validate config.yaml --fix
 ```
 
-### Config Test
+### 🧪 Config Test
 
 Test configuration with sample data.
 
@@ -184,7 +184,7 @@ ml-eval config test config.yaml --data-file test_data.csv
 ml-eval config test config.yaml --dry-run
 ```
 
-### Config Template
+### 📋 Config Template
 
 Generate configuration templates.
 

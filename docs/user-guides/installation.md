@@ -1,16 +1,16 @@
-# Installation Guide
+# 📦 Installation Guide
 
 This guide provides detailed installation instructions for the ML Systems Evaluation Framework.
 
-## Prerequisites
+## 🔧 Prerequisites
 
-- Python 3.9 or higher
-- Poetry package manager (https://python-poetry.org/)
-- Git (for cloning the repository)
+- 🐍 Python 3.9 or higher
+- 📦 Poetry package manager (https://python-poetry.org/)
+- 📥 Git (for cloning the repository)
 
-## Installation Methods
+## 🚀 Installation Methods
 
-### Method 1: Development Installation (Recommended)
+### 📋 Method 1: Development Installation (Recommended)
 
 ```bash
 # Clone the repository
@@ -24,7 +24,7 @@ poetry install
 poetry shell
 ```
 
-### Method 2: Production Installation
+### 🏭 Method 2: Production Installation
 
 ```bash
 # Clone the repository
@@ -35,7 +35,7 @@ cd ml-systems-evaluation
 poetry install --only main
 ```
 
-### Method 3: Docker Installation
+### 🐳 Method 3: Docker Installation
 
 ```bash
 # Build the Docker image
@@ -45,7 +45,7 @@ docker build -t ml-systems-evaluation .
 docker run -it ml-systems-evaluation ml-eval --help
 ```
 
-## Verification
+## ✅ Verification
 
 After installation, verify that everything is working:
 
@@ -60,9 +60,9 @@ ml-eval --help
 ml-eval templates list
 ```
 
-## Configuration
+## ⚙️ Configuration
 
-### Environment Variables
+### 🌍 Environment Variables
 
 Set these environment variables for your environment:
 
@@ -72,7 +72,7 @@ export ML_EVAL_LOG_LEVEL=INFO
 export ML_EVAL_DATA_DIR=/path/to/data
 ```
 
-### Poetry Configuration
+### 📦 Poetry Configuration
 
 If you're using Poetry, you can configure it for your project:
 
@@ -87,21 +87,21 @@ poetry add pandas numpy scikit-learn
 poetry show
 ```
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-### Common Issues
+### ❌ Common Issues
 
-**Issue**: "Command not found: ml-eval"
-- **Solution**: Ensure Poetry environment is activated: `poetry shell`
+**🚨 Issue**: "Command not found: ml-eval"
+- **✅ Solution**: Ensure Poetry environment is activated: `poetry shell`
 
-**Issue**: "Module not found"
-- **Solution**: Reinstall dependencies: `poetry install`
+**🚨 Issue**: "Module not found"
+- **✅ Solution**: Reinstall dependencies: `poetry install`
 
-**Issue**: "Permission denied"
-- **Solution**: Check file permissions or use `sudo` if necessary
+**🚨 Issue**: "Permission denied"
+- **✅ Solution**: Check file permissions or use `sudo` if necessary
 
-### Getting Help
+### 🆘 Getting Help
 
-- Check the [Quick Start Guide](getting-started.md) for basic setup
-- Review [Configuration Guide](configuration.md) for detailed options
-- Consult the [CLI Reference](cli-reference.md) for command details 
+- 📖 Check the [Quick Start Guide](getting-started.md) for basic setup
+- ⚙️ Review [Configuration Guide](configuration.md) for detailed options
+- 🖥️ Consult the [CLI Reference](cli-reference.md) for command details 

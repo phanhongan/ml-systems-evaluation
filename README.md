@@ -484,6 +484,9 @@ class SafetyCriticalImprovement:
 
 ## Development
 
+### Documentation
+For comprehensive documentation including user guides, developer guides, and industry-specific guides, see the [Documentation Index](./docs/README.md).
+
 ### Project Structure
 See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) for the most up-to-date and detailed project structure.
 

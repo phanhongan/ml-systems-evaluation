@@ -117,7 +117,11 @@ class TemplateFactory:
                 {
                     "type": "online",
                     "endpoints": ["http://flight-systems:8080/metrics"],
-                    "metrics": ["flight_path_accuracy", "response_time", "availability"],
+                    "metrics": [
+                        "flight_path_accuracy",
+                        "response_time",
+                        "availability",
+                    ],
                 },
             ],
             "evaluators": [
@@ -366,4 +370,3 @@ class TemplateFactory:
                 },
             ],
         }
-

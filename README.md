@@ -115,7 +115,7 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 
 ## 🎯 Supported Scenarios
 
-### 🐟 Fish Species Classification AI (Workflow Example)
+### 🐟 Fish Species Classification
 **Problem**: Multi-stage ML pipeline processing echogram images from underwater devices for real-time fish species identification in commercial fishing operations.
 
 **Challenges**:
@@ -131,7 +131,24 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **💰 Business metrics**: Connect technical performance to fishing efficiency and regulatory compliance
 - **🌊 Environmental adaptation**: Monitor water conditions and adjust model behavior for different fishing environments
 
-### ✈️ Aircraft Landing Systems (Comprehensive Example)
+### 🚢 Maritime Collision Avoidance
+**Problem**: AI-powered collision avoidance system for commercial vessels operating in busy maritime environments with strict safety and regulatory requirements.
+
+**Challenges**:
+- **🛡️ Safety-Critical Navigation**: 99.9% accuracy in collision detection with sub-2-second alert latency
+- **📋 International Maritime Law**: Must comply with COLREGs (International Regulations for Preventing Collisions at Sea) and IMO guidelines
+- **🌊 Harsh Marine Environment**: System must operate reliably in fog, storms, and extreme weather conditions
+- **🚢 Complex Vessel Dynamics**: Different vessel types (cargo, tanker, passenger, fishing) have varying collision characteristics
+- **⚡ Real-time Decision Making**: Rapid assessment of collision risk and recommended avoidance maneuvers
+
+**Framework Solution**:
+- **🛡️ Multi-vessel collision detection**: Accurate identification of collision scenarios across different vessel types and weather conditions
+- **📋 Regulatory compliance monitoring**: Continuous validation against COLREGs and IMO safety standards
+- **🚨 Real-time alerting system**: Immediate notification of collision risks with recommended avoidance actions
+- **🌊 Environmental adaptation**: System performance monitoring under various weather and sea conditions
+- **📊 Navigation parameter validation**: Continuous monitoring of Speed Through Water (STW) vs Speed Over Ground (SOG) discrepancies
+
+### ✈️ Aircraft Landing
 **Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
 
 **Challenges**:

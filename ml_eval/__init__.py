@@ -8,6 +8,10 @@ and business-critical ML systems in industrial environments.
 """
 
 # CLI interface
+# Autonomous agents (future implementation)
+from .agents.alerting import AlertingAgent
+from .agents.monitoring import MonitoringAgent
+from .agents.scheduling import SchedulingAgent
 from .cli.main import cli as cli_main
 
 # Data collection
@@ -31,6 +35,12 @@ from .evaluators.reliability import ReliabilityEvaluator
 from .evaluators.safety import SafetyEvaluator
 from .examples.registry import ExampleRegistry
 
+# LLM integration layer
+from .llm.analysis import LLMAnalysisEngine
+from .llm.assistant import LLMAssistantEngine
+from .llm.enhancement import LLMEnhancementEngine
+from .llm.providers import LLMProvider
+
 # Reporting
 from .reports.base import BaseReport
 from .reports.business import BusinessImpactReport
@@ -47,6 +57,7 @@ __description__ = "Industrial AI Reliability Assessment Framework"
 
 # Public API for system engineers
 __all__ = [
+    "AlertingAgent",
     "BaseCollector",
     "BaseEvaluator",
     "BaseReport",
@@ -61,6 +72,11 @@ __all__ = [
     "EvaluationFramework",
     "EvaluationResult",
     "ExampleRegistry",
+    "LLMAnalysisEngine",
+    "LLMAssistantEngine",
+    "LLMEnhancementEngine",
+    "LLMProvider",
+    "MonitoringAgent",
     "OfflineCollector",
     "OnlineCollector",
     "PerformanceEvaluator",
@@ -70,6 +86,7 @@ __all__ = [
     "SLOConfig",
     "SafetyEvaluator",
     "SafetyReport",
+    "SchedulingAgent",
     "TemplateFactory",
     "cli_main",
 ]

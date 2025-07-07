@@ -109,6 +109,8 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **📋 Regulatory Compliance**: Built-in validation against industry standards (DO-178C for aviation)
 - **🌊 Environmental Monitoring**: Specialized collectors for harsh operating conditions
 - **💰 Business-Critical Reliability**: SRE principles applied to systems with immediate financial impact
+- **🤖 LLM-Powered Intelligence**: Advanced pattern recognition, natural language configuration, and intelligent report enhancement
+- **🤖 Autonomous Agents**: Future-ready architecture for proactive monitoring, alerting, and scheduling
 - **🔌 Extensible Architecture**: Plugin-based collectors and evaluators for domain-specific requirements
 - **⚡ Real-time & Batch**: Online and offline evaluation for continuous monitoring
 - **📋 Standards Enforcement**: Configurable quality gates with regulatory compliance checks
@@ -176,6 +178,8 @@ See the [`examples/`](./examples/) directory for complete configuration files co
 
 ## 🏗️ Architecture
 
+The framework follows a hybrid architecture that combines deterministic components with LLM-powered intelligence:
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Data Sources  │    │   Collectors    │    │   Evaluators    │
@@ -192,6 +196,24 @@ See the [`examples/`](./examples/) directory for complete configuration files co
                                               │ • SLI/SLO       │
                                               │ • Incidents     │
                                               │ • Trends        │
+                                              └─────────────────┘
+                                                        │
+                                                        ▼
+                                              ┌─────────────────┐
+                                              │   LLM Layer     │
+                                              │                 │
+                                              │ • Analysis      │
+                                              │ • Assistant     │
+                                              │ • Enhancement   │
+                                              └─────────────────┘
+                                                        │
+                                                        ▼
+                                              ┌─────────────────┐
+                                              │  Agents (Future)│
+                                              │                 │
+                                              │ • Monitoring    │
+                                              │ • Alerting      │
+                                              │ • Scheduling    │
                                               └─────────────────┘
 ```
 
@@ -323,6 +345,16 @@ Additional examples include:
 - **🌊 EnvironmentalEvaluator**: Performance assessment under harsh conditions
 - **📈 DriftEvaluator**: Data and model drift detection with business impact assessment
 
+### 🤖 LLM Integration Layer
+- **🤖 LLMAnalysisEngine**: Advanced pattern recognition and intelligent drift detection
+- **🤖 LLMAssistantEngine**: Natural language configuration and troubleshooting assistance
+- **🤖 LLMEnhancementEngine**: Intelligent report enhancement and business impact translation
+
+### 🤖 Autonomous Agents (Future)
+- **🤖 MonitoringAgent**: Autonomous real-time monitoring and health checks
+- **🤖 AlertingAgent**: Intelligent alert prioritization and routing
+- **🤖 SchedulingAgent**: Autonomous task scheduling and resource allocation
+
 ### 📊 Reports
 - **🛡️ ReliabilityReport**: Error budgets, SLO compliance, incident analysis
 - **🚨 SafetyReport**: Safety-critical metrics and compliance status
@@ -376,6 +408,21 @@ while training:
         raise Exception("Model violates safety requirements")
 ```
 
+### 🤖 LLM-Powered Intelligence
+The framework integrates LLM capabilities for enhanced analysis and decision support:
+
+- **Advanced Pattern Recognition**: Intelligent drift detection and anomaly identification
+- **Natural Language Configuration**: Generate configurations from plain English requirements
+- **Intelligent Report Enhancement**: Add business context and insights to technical reports
+- **Smart Troubleshooting**: AI-powered problem diagnosis and solution recommendations
+
+### 🤖 Autonomous Agents (Future)
+The framework is designed for future autonomous capabilities:
+
+- **Proactive Monitoring**: Autonomous system health monitoring and issue detection
+- **Intelligent Alerting**: Smart alert prioritization and context-aware notifications
+- **Dynamic Scheduling**: Autonomous task scheduling and resource optimization
+
 ### 🔄 Workflow Evaluation
 ```python
 from ml_eval import EvaluationFramework
@@ -402,6 +449,8 @@ class DomainSpecificCollector(BaseCollector):
         # Custom metric collection logic
         return {"custom_metric": value}
 ```
+
+
 
 ### 🛡️ Safety-Critical Continuous Improvement
 ```python
@@ -444,6 +493,8 @@ The framework is designed with a modular architecture for easy maintenance and e
 - **`collectors/`**: Modular data collection with industrial focus
 - **`evaluators/`**: Specialized evaluation engines for different aspects
 - **`reports/`**: Comprehensive reporting for different stakeholders
+- **`llm/`**: LLM integration layer with analysis, assistant, and enhancement engines
+- **`agents/`**: Future autonomous agents for monitoring, alerting, and scheduling
 - **`cli/`**: User-friendly command-line interface for system engineers
 - **`config/`**: Robust configuration management for complex systems
 

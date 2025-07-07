@@ -7,7 +7,6 @@ This document provides a comprehensive overview of the ML Systems Evaluation Fra
 **What This Framework Does:**
 - Evaluates, monitors, and reports on deployed ML systems
 - Provides insights on performance, drift, compliance, safety, and reliability
-- Integrates with external systems for reporting and alerting
 - Leverages LLMs for intelligent analysis, reporting, and decision support
 - Maintains deterministic behavior for safety-critical operations
 - Supports future autonomous agents for proactive system management
@@ -639,11 +638,5 @@ See [`docs/developer/testing.md`](testing.md) for testing approach.
 - **Intelligent Alerting**: Context-aware alert generation and routing
 - **Dynamic Scheduling**: Real-time resource optimization and task scheduling
 - **System Optimization**: Autonomous performance tuning and optimization
-
-### 4. Monitoring and Observability
-- **LLM Performance Metrics**: Response times, accuracy, costs
-- **A/B Testing**: Compare different LLM approaches
-- **User Feedback**: Collect and incorporate user feedback
-- **Continuous Improvement**: Automated model selection and optimization
 
 This hybrid architecture provides a robust, scalable, and intelligent foundation for ML system evaluation, combining the reliability of deterministic systems with the intelligence of LLM-powered analysis while maintaining high standards for security, performance, and reliability in industrial AI systems.

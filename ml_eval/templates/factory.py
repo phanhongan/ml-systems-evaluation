@@ -96,7 +96,11 @@ class TemplateFactory:
                 {
                     "type": "online",
                     "endpoints": ["http://flight-systems:8080/metrics"],
-                    "metrics": ["flight_path_accuracy", "runway_detection", "weather_assessment"],
+                    "metrics": [
+                        "flight_path_accuracy",
+                        "runway_detection",
+                        "weather_assessment",
+                    ],
                 },
                 {
                     "type": "environmental",
@@ -107,7 +111,10 @@ class TemplateFactory:
                 {
                     "type": "safety",
                     "compliance_standards": ["DO-178C"],
-                    "critical_metrics": ["landing_decision_confidence", "false_positive_rate"],
+                    "critical_metrics": [
+                        "landing_decision_confidence",
+                        "false_positive_rate",
+                    ],
                 },
                 {
                     "type": "reliability",
@@ -123,69 +130,95 @@ class TemplateFactory:
         basic["system"]["name"] = "Advanced Autonomous Flight Guidance System"
 
         # Add more comprehensive SLOs
-        basic["slos"].update({
-            "weather_condition_assessment": {
-                "target": 0.995,
-                "window": "24h",
-                "description": "Accuracy of weather condition evaluation and impact assessment on landing",
-            },
-            "obstacle_detection": {
-                "target": 0.9999,
-                "window": "24h",
-                "description": "Accuracy of obstacle detection and avoidance recommendations",
-            },
-            "false_positive_rate": {
-                "target": 0.001,
-                "window": "7d",
-                "description": "Rate of false positive alerts for safety-critical scenarios",
-            },
-            "system_availability": {
-                "target": 0.9999,
-                "window": "30d",
-                "description": "System uptime for autonomous flight guidance functionality",
-            },
-        })
+        basic["slos"].update(
+            {
+                "weather_condition_assessment": {
+                    "target": 0.995,
+                    "window": "24h",
+                    "description": "Accuracy of weather condition evaluation and impact assessment on landing",
+                },
+                "obstacle_detection": {
+                    "target": 0.9999,
+                    "window": "24h",
+                    "description": "Accuracy of obstacle detection and avoidance recommendations",
+                },
+                "false_positive_rate": {
+                    "target": 0.001,
+                    "window": "7d",
+                    "description": "Rate of false positive alerts for safety-critical scenarios",
+                },
+                "system_availability": {
+                    "target": 0.9999,
+                    "window": "30d",
+                    "description": "System uptime for autonomous flight guidance functionality",
+                },
+            }
+        )
 
         # Add operating conditions
         basic["operating_conditions"] = {
             "flight_phases": ["approach", "final_approach", "landing", "rollout"],
-            "weather_conditions": ["clear", "fog", "rain", "crosswind", "low_visibility"],
-            "runway_types": ["asphalt", "concrete", "grass", "short_field", "contaminated"],
+            "weather_conditions": [
+                "clear",
+                "fog",
+                "rain",
+                "crosswind",
+                "low_visibility",
+            ],
+            "runway_types": [
+                "asphalt",
+                "concrete",
+                "grass",
+                "short_field",
+                "contaminated",
+            ],
         }
 
         # Add more collectors
-        basic["collectors"].extend([
-            {
-                "type": "offline",
-                "log_paths": ["/var/log/flight-systems/", "/var/log/navigation/"],
-            },
-            {
-                "type": "regulatory",
-                "standards": ["FAA", "EASA", "ICAO"],
-                "compliance_metrics": ["safety_margins", "operational_limits"],
-            },
-        ])
+        basic["collectors"].extend(
+            [
+                {
+                    "type": "offline",
+                    "log_paths": ["/var/log/flight-systems/", "/var/log/navigation/"],
+                },
+                {
+                    "type": "regulatory",
+                    "standards": ["FAA", "EASA", "ICAO"],
+                    "compliance_metrics": ["safety_margins", "operational_limits"],
+                },
+            ]
+        )
 
         # Add more evaluators
-        basic["evaluators"].extend([
-            {
-                "type": "performance",
-                "metrics": ["system_response_time", "decision_confidence"],
-                "real_time_threshold": 500,
-            },
-            {
-                "type": "drift",
-                "detection_methods": ["statistical", "ml_model"],
-                "drift_metrics": ["flight_path_accuracy", "weather_assessment", "runway_identification"],
-            },
-        ])
+        basic["evaluators"].extend(
+            [
+                {
+                    "type": "performance",
+                    "metrics": ["system_response_time", "decision_confidence"],
+                    "real_time_threshold": 500,
+                },
+                {
+                    "type": "drift",
+                    "detection_methods": ["statistical", "ml_model"],
+                    "drift_metrics": [
+                        "flight_path_accuracy",
+                        "weather_assessment",
+                        "runway_identification",
+                    ],
+                },
+            ]
+        )
 
         # Add reports
         basic["reports"] = [
             {
                 "type": "safety",
                 "frequency": "daily",
-                "stakeholders": ["flight_crew", "safety_officer", "regulatory_authority"],
+                "stakeholders": [
+                    "flight_crew",
+                    "safety_officer",
+                    "regulatory_authority",
+                ],
             },
             {
                 "type": "reliability",

@@ -6,7 +6,7 @@ This guide provides comprehensive information for developers contributing to the
 
 ### 🔧 Prerequisites
 
-- 🐍 Python 3.9 or higher
+- 🐍 Python 3.11 or higher
 - 📦 Poetry package manager
 - 📥 Git for version control
 
@@ -34,26 +34,7 @@ The project uses several tools to maintain code quality and consistency:
 
 #### ⚙️ Configuration
 
-Black is configured in `pyproject.toml`:
-
-```toml
-[tool.black]
-line-length = 88
-target-version = ['py39']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
-```
+Black is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.black]` section for the current configuration.
 
 #### 💻 Usage
 
@@ -86,33 +67,7 @@ poetry run pre-commit run --all-files
 
 #### ⚙️ Configuration
 
-Ruff is configured in `pyproject.toml`:
-
-```toml
-[tool.ruff]
-exclude = [ ... ]
-line-length = 88
-indent-width = 4
-target-version = "py311"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM", "ARG", "PIE", "TCH", "Q", "RUF"]
-ignore = ["E203", "E501"]
-fixable = ["ALL"]
-unfixable = []
-
-[tool.ruff.lint.isort]
-known-first-party = ["ml_eval"]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-```
+Ruff is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.ruff]` section for the current configuration.
 
 #### 💻 Usage
 
@@ -227,33 +182,7 @@ Follow these guidelines when writing tests:
 4. **Coverage**: Aim for high test coverage, especially for critical paths
 5. **Documentation**: Document complex test scenarios
 
-Example test structure:
-
-```python
-import pytest
-from ml_eval.core.framework import EvaluationFramework
-
-
-class TestEvaluationFramework:
-    """Test the main evaluation framework."""
-    
-    def test_framework_creation(self):
-        """Test that framework can be created with valid config."""
-        config = {"system": {"name": "test_system"}}
-        framework = EvaluationFramework(config)
-        assert framework.system_name == "test_system"
-    
-    def test_framework_with_invalid_config(self):
-        """Test that framework handles invalid config gracefully."""
-        with pytest.raises(ValueError):
-            EvaluationFramework({})
-    
-    @pytest.mark.integration
-    def test_complete_evaluation_workflow(self):
-        """Test complete evaluation workflow."""
-        # Test implementation
-        pass
-```
+See [`tests/test_core.py`](../../tests/test_core.py) for real test examples showing the actual testing patterns used in this project.
 
 ## 📋 Continuous Integration
 
@@ -266,7 +195,7 @@ The project uses GitHub Actions for continuous integration. The workflow runs:
 
 ### Local CI Simulation
 
-Run the same checks locally that CI runs:
+Run the same checks locally that CI runs. See [`.github/workflows/test.yml`](../../.github/workflows/test.yml) for the exact CI configuration:
 
 ```bash
 # Install all dependencies
@@ -286,72 +215,11 @@ poetry build
 
 ## 📝 Code Style Guidelines
 
-### Python Style
+Code style is automatically enforced by Black and Ruff. See [`pyproject.toml`](../../pyproject.toml) for configuration details.
 
-Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) with these modifications:
-
-- **Line Length**: 88 characters (Black default)
-- **Import Order**: Use ruff for automatic sorting
-- **Type Hints**: Use type hints for all function parameters and return values
-- **Docstrings**: Use Google-style docstrings
-
-### Naming Conventions
-
-- **Classes**: PascalCase (e.g., `EvaluationFramework`)
-- **Functions/Methods**: snake_case (e.g., `collect_metrics`)
-- **Variables**: snake_case (e.g., `metric_data`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `DEFAULT_TIMEOUT`)
-- **Modules**: snake_case (e.g., `data_collector`)
-
-### Documentation
-
-- **Docstrings**: Document all public functions and classes
-- **Type Hints**: Include type hints for all function signatures
-- **Comments**: Add comments for complex logic
-- **README**: Keep documentation up to date
-
-Example:
-
-```python
-from typing import Dict, List, Optional
-
-from .base import BaseCollector
-from ..core.config import MetricData
-
-
-class CustomCollector(BaseCollector):
-    """Custom data collector for specific metrics.
-    
-    This collector implements custom logic for collecting metrics
-    from specialized data sources.
-    """
-    
-    def __init__(self, config: Dict[str, any]) -> None:
-        """Initialize the custom collector.
-        
-        Args:
-            config: Configuration dictionary containing collector settings.
-            
-        Raises:
-            ValueError: If required configuration is missing.
-        """
-        super().__init__(config)
-        self.endpoint = config.get("endpoint")
-        if not self.endpoint:
-            raise ValueError("endpoint is required in config")
-    
-    def collect(self) -> Dict[str, List[MetricData]]:
-        """Collect metrics from the configured data source.
-        
-        Returns:
-            Dictionary mapping metric names to lists of MetricData objects.
-            
-        Raises:
-            ConnectionError: If unable to connect to data source.
-        """
-        # Implementation here
-        pass
-```
+For examples of the project's coding patterns, see:
+- [`ml_eval/collectors/`](../../ml_eval/collectors/) for collector implementations
+- [`tests/test_core.py`](../../tests/test_core.py) for testing patterns
 
 ## 🛡️ Debugging
 
@@ -369,37 +237,9 @@ class CustomCollector(BaseCollector):
 3. **Style Issues**: Use ruff for consistent formatting
 4. **Test Failures**: Use pytest with verbose output for detailed error information
 
-## 📊 Performance Considerations
-
-### Code Performance
-
-1. **Profiling**: Use cProfile for performance analysis
-2. **Memory Usage**: Monitor memory usage in large data processing
-3. **Async/Await**: Use async programming for I/O-bound operations
-4. **Caching**: Implement caching for expensive operations
-
-### Testing Performance
-
-1. **Benchmarks**: Write benchmarks for performance-critical code
-2. **Load Testing**: Test system performance under load
-3. **Memory Testing**: Monitor memory usage during tests
-4. **Profiling Tests**: Profile test execution for slow tests
-
 ## 🛡️ Security Considerations
 
-### Code Security
-
-1. **Input Validation**: Validate all inputs
-2. **Authentication**: Implement proper authentication
-3. **Authorization**: Check permissions appropriately
-4. **Data Protection**: Handle sensitive data securely
-
-### Security Testing
-
-1. **Vulnerability Scanning**: Regular security scans
-2. **Penetration Testing**: Test for security vulnerabilities
-3. **Code Review**: Security-focused code reviews
-4. **Dependency Updates**: Keep dependencies updated
+Follow standard Python security best practices. If handling sensitive data or authentication, consult a project maintainer for guidance.
 
 ## 📋 Contributing
 
@@ -415,6 +255,4 @@ class CustomCollector(BaseCollector):
 
 ### Commit Messages
 
-Use conventional commit messages:
-
-```
+Use [conventional commit messages](https://www.conventionalcommits.org/) for all commits. See the full specification for more details.

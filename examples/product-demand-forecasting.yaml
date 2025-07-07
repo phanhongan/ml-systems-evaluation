@@ -1,0 +1,204 @@
+system:
+  name: "Product Demand Forecasting System"
+  persona: "Supply Chain Manager"
+  criticality: "business_critical"
+  description: "Forecasting system for product demand to optimize equipment procurement"
+  training_mode: "online"
+  training_trigger: "real_time_data_availability"
+
+slos:
+  forecast_accuracy:
+    target: 0.85
+    window: "30d"
+    description: "Accuracy of demand forecasts"
+  
+  market_share_prediction:
+    target: 0.80
+    window: "30d"
+    description: "Accuracy of market share predictions"
+  
+  sales_volume_forecast:
+    target: 0.82
+    window: "30d"
+    description: "Accuracy of sales volume predictions"
+  
+  transaction_pattern_accuracy:
+    target: 0.88
+    window: "30d"
+    description: "Accuracy of transaction pattern recognition"
+  
+  competitor_analysis_accuracy:
+    target: 0.75
+    window: "30d"
+    description: "Accuracy of competitor behavior analysis"
+  
+  difficulty_assessment:
+    target: 0.78
+    window: "30d"
+    description: "Accuracy of supply chain difficulty assessment"
+  
+  model_training_latency:
+    target: 0.95
+    window: "24h"
+    description: "Proportion of model training completed within 2 hours of new data"
+  
+  training_data_freshness:
+    target: 0.99
+    window: "24h"
+    description: "Proportion of training using data from last 24 hours"
+
+collectors:
+  - type: "online"
+    endpoints: ["https://companyforecast.blob.core.windows.net/sales-analytics/metrics"]
+    metrics: ["forecast_accuracy", "market_share_prediction", "sales_volume_forecast", "model_training_latency", "training_data_freshness"]
+    polling_interval: 3600
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["https://companyforecast.blob.core.windows.net/logs/forecasting-system/"]
+    data_retention: "365d"
+    batch_size: 10000
+  
+  - type: "online"
+    endpoints: ["https://companyforecast.blob.core.windows.net/training-data/"]
+    metrics: ["training_data_volume", "data_quality_score", "feature_availability"]
+    polling_interval: 300
+    real_time: true
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["forecast_accuracy", "market_share_prediction", "sales_volume_forecast", "model_training_latency"]
+    reliability_targets:
+      mttf: "720h"
+      mttr: "24h"
+      availability: 0.99
+    failure_modes: ["data_pipeline_failure", "model_degradation", "training_failure"]
+  
+  - type: "performance"
+    metrics: ["forecast_latency", "model_inference_time", "training_duration"]
+    real_time_threshold: 14400
+    performance_baselines:
+      normal_operation: 7200
+      degraded_operation: 14400
+      emergency_mode: 3600
+  
+  - type: "drift"
+    detection_methods: ["statistical", "ml_model"]
+    drift_metrics: ["market_share_prediction", "sales_volume_forecast", "training_data_freshness"]
+    drift_thresholds:
+      statistical: 0.15
+      ml_model: 0.20
+    environmental_factors: ["economic_conditions", "market_volatility"]
+
+reports:
+  - type: "business"
+    format: "html"
+    schedule: "0 8 * * 1"
+    recipients: ["supply_chain_manager@company.com"]
+    include_charts: true
+    include_recommendations: true
+
+# Forecasting model configurations
+forecasting_models:
+  market_share_model:
+    type: "ensemble"
+    algorithms: ["random_forest", "gradient_boosting", "neural_network"]
+    features: ["historical_market_share", "competitor_pricing", "marketing_spend", "unit_price"]
+    update_frequency: "online"
+    confidence_threshold: 0.80
+    training_config:
+      trigger: "new_sales_data"
+      batch_size: 1000
+      learning_rate: 0.01
+      retrain_threshold: 0.15
+  
+  sales_volume_model:
+    type: "time_series"
+    algorithms: ["arima", "prophet", "lstm"]
+    features: ["historical_sales", "seasonal_patterns", "promotional_events", "unit_price"]
+    update_frequency: "online"
+    forecast_horizon: "12_months"
+    training_config:
+      trigger: "new_transaction_data"
+      window_size: 30
+      retrain_threshold: 0.10
+  
+  transaction_pattern_model:
+    type: "clustering"
+    algorithms: ["k_means", "dbscan", "hierarchical"]
+    features: ["transaction_frequency", "purchase_amount", "product_categories", "unit_price"]
+    update_frequency: "online"
+    pattern_detection_threshold: 0.75
+    training_config:
+      trigger: "new_pos_data"
+      batch_size: 500
+      retrain_threshold: 0.20
+  
+  competitor_analysis_model:
+    type: "classification"
+    algorithms: ["support_vector_machine", "logistic_regression", "random_forest"]
+    features: ["competitor_pricing", "market_position", "product_launches", "unit_price"]
+    update_frequency: "online"
+    classification_threshold: 0.70
+    training_config:
+      trigger: "new_market_data"
+      batch_size: 200
+      retrain_threshold: 0.25
+  
+  difficulty_assessment_model:
+    type: "regression"
+    algorithms: ["linear_regression", "ridge_regression", "elastic_net"]
+    features: ["supply_chain_complexity", "lead_times", "supplier_reliability", "unit_price"]
+    update_frequency: "online"
+    risk_threshold: 0.60
+    training_config:
+      trigger: "new_inventory_data"
+      batch_size: 300
+      retrain_threshold: 0.18
+
+# Data sources and integration
+data_integration:
+  internal_sources:
+    - name: "sales_database"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/sales-data/"
+      containers: ["sales_transactions", "product_catalog", "customer_data", "unit_prices"]
+      update_frequency: "hourly"
+    
+    - name: "pos_devices"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/pos-data/"
+      containers: ["pos_transactions", "store_locations", "payment_methods", "real_time_sales"]
+      update_frequency: "real_time"
+    
+    - name: "inventory_system"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/inventory-data/"
+      containers: ["inventory_levels", "supplier_data", "purchase_orders"]
+      update_frequency: "daily"
+    
+    - name: "market_research"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/market-research/"
+      containers: ["market_share", "competitor_analysis", "industry_trends"]
+      update_frequency: "weekly"
+    
+    - name: "training_data"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/training-data/"
+      containers: ["latest_sales", "latest_transactions", "model_features", "training_labels"]
+      update_frequency: "real_time"
+  
+  external_sources:
+    - name: "economic_indicators"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/external-data/economic/"
+      containers: ["gdp_growth", "inflation_rate", "unemployment_rate"]
+      update_frequency: "monthly"
+    
+    - name: "social_media_sentiment"
+      type: "blob_storage"
+      connection: "https://companyforecast.blob.core.windows.net/external-data/sentiment/"
+      containers: ["brand_sentiment", "product_sentiment", "competitor_sentiment"]
+      update_frequency: "real_time"

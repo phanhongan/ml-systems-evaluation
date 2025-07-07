@@ -6,63 +6,63 @@ This directory contains pre-configured templates for different industries, desig
 
 ### 🏭 Manufacturing Templates
 
-#### 🔍 Basic Manufacturing Quality Control
-**📄 File**: `manufacturing-basic.yaml`
-**🎯 Use Case**: General quality control systems
-**📊 Key Metrics**: Accuracy, precision, recall, defect rate
+#### 🔧 Manufacturing Predictive Maintenance
+**📄 File**: `manufacturing-predictive_maintenance.yaml`
+**🎯 Use Case**: Equipment monitoring and predictive maintenance systems
+**📊 Key Metrics**: Failure prediction accuracy, maintenance cost reduction, downtime reduction
 
 ```yaml
 system:
-  name: "Manufacturing Quality Control"
+  name: "Manufacturing Predictive Maintenance"
   criticality: "business-critical"
 
 data_sources:
-  - name: "quality_data"
+  - name: "equipment_data"
     type: "database"
-    connection: "postgresql://user:pass@localhost/quality_db"
-    tables: ["quality_measurements", "defect_reports"]
+    connection: "postgresql://user:pass@localhost/equipment_db"
+    tables: ["sensor_readings", "maintenance_history", "failure_events"]
 
 collectors:
-  - name: "quality_metrics"
+  - name: "equipment_metrics"
     type: "offline"
-    data_source: "quality_data"
-    metrics: ["accuracy", "precision", "recall", "f1_score"]
+    data_source: "equipment_data"
+    metrics: ["vibration", "temperature", "pressure", "current", "voltage"]
 
 evaluators:
-  - name: "quality_performance"
+  - name: "maintenance_performance"
     type: "performance"
     thresholds:
-      accuracy: 0.95
-      precision: 0.90
-      recall: 0.85
+      failure_prediction_accuracy: 0.92
+      maintenance_cost_reduction: 0.15
+      downtime_reduction: 0.20
 
-  - name: "quality_drift"
+  - name: "equipment_drift"
     type: "drift"
     detection_method: "statistical"
     sensitivity: 0.05
 
 reports:
-  - name: "quality_report"
+  - name: "maintenance_report"
     type: "business"
     format: "html"
     output_path: "./reports/"
 
 slo:
   availability: 0.999
-  accuracy: 0.95
-  latency_p95: 100
+  failure_prediction_accuracy: 0.92
+  maintenance_cost_reduction: 0.15
 ```
 
-#### 🔧 Advanced Manufacturing with Predictive Maintenance
-**📄 File**: `manufacturing-advanced.yaml`
-**🎯 Use Case**: Predictive maintenance and quality control
-**📊 Key Metrics**: Equipment health, failure prediction, maintenance costs
+#### 📊 Manufacturing Demand Forecasting
+**📄 File**: `manufacturing-demand_forecasting.yaml`
+**🎯 Use Case**: Demand forecasting and supply chain optimization
+**📊 Key Metrics**: Forecast accuracy, inventory optimization, supply chain efficiency
 
 ### ✈️ Aviation Templates
 
-#### 🛡️ Safety-Critical Flight Systems
-**📄 File**: `aviation-safety.yaml`
-**🎯 Use Case**: Flight control and safety systems
+#### 🛡️ Aviation Safety Decision System
+**📄 File**: `aviation-safety_decision.yaml`
+**🎯 Use Case**: Safety-critical decision systems for aviation operations
 **📊 Key Metrics**: Safety margins, failure probability, response time
 
 ```yaml
@@ -106,16 +106,16 @@ slo:
   response_time_p99: 50
 ```
 
-#### 🔧 Aircraft Maintenance Prediction
-**📄 File**: `aviation-maintenance.yaml`
-**🎯 Use Case**: Predictive maintenance for aircraft components
-**📊 Key Metrics**: Component health, maintenance scheduling, cost optimization
+#### ✈️ Aviation Flight Control System
+**📄 File**: `aviation-flight_control.yaml`
+**🎯 Use Case**: Advanced flight control and navigation systems
+**📊 Key Metrics**: Flight path accuracy, weather assessment, obstacle detection
 
 ### ⚡ Energy Templates
 
-#### ⚡ Grid Optimization Systems
-**📄 File**: `energy-grid.yaml`
-**🎯 Use Case**: Power grid optimization and demand prediction
+#### ⚡ Energy Grid Optimization
+**📄 File**: `energy-grid_optimization.yaml`
+**🎯 Use Case**: Power grid optimization and load balancing
 **📊 Key Metrics**: Grid stability, demand accuracy, efficiency
 
 ```yaml
@@ -159,15 +159,15 @@ slo:
   grid_stability: 0.99
 ```
 
-#### 🌞 Renewable Energy Forecasting
-**📄 File**: `energy-renewable.yaml`
-**🎯 Use Case**: Solar and wind power forecasting
+#### 📊 Energy Demand Prediction
+**📄 File**: `energy-demand_prediction.yaml`
+**🎯 Use Case**: Energy demand forecasting and capacity planning
 **📊 Key Metrics**: Forecast accuracy, energy production, cost optimization
 
 ### 🚢 Maritime Templates
 
 #### 🚢 Maritime Collision Avoidance
-**📄 File**: `maritime-collision-avoidance.yaml`
+**📄 File**: `maritime-collision_avoidance.yaml`
 **🎯 Use Case**: Ship collision avoidance and navigational safety
 **📊 Key Metrics**: Collision avoidance accuracy, alert latency, false alarm rate, STW/SOG discrepancy, system availability
 
@@ -234,6 +234,58 @@ evaluators:
     real_time_threshold: 2000  # ms
 ```
 
+## 📋 Configuration Examples
+
+#### **📁 Available Example Configurations**
+
+The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
+
+- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
+- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
+- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance with failure prediction and cost optimization
+
+#### **📋 Using Industry Templates (Recommended)**
+
+```bash
+# List available templates
+ml-eval templates list
+
+# Use a specific template
+ml-eval templates use manufacturing-predictive_maintenance
+
+# Customize the template
+ml-eval templates customize manufacturing-predictive_maintenance --output my-config.yaml
+```
+
+#### **🏭 Manufacturing Predictive Maintenance Example**
+
+See [examples/fish-species-classification.yaml](./examples/fish-species-classification.yaml) for a complete workflow example with similar structure.
+
+#### **✈️ Aviation Safety System Example**
+
+See [examples/aircraft-landing.yaml](./examples/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
+
+#### **🔧 Predictive Maintenance Example**
+
+See [examples/predictive-maintenance.yaml](./examples/predictive-maintenance.yaml) for a comprehensive predictive maintenance system with:
+
+- **Equipment Monitoring**: Vibration, temperature, pressure, current, voltage sensors
+- **Failure Prediction**: Random Forest classification for failure prediction within 48 hours
+- **Remaining Life Estimation**: Gradient Boosting regression for days-to-failure prediction
+- **Cost Optimization**: Maintenance cost reduction and downtime minimization
+- **Regulatory Compliance**: ISO-10816, ISO-7919, API-670 standards
+- **Business Metrics**: Maintenance cost reduction, equipment lifetime optimization
+- **Alert System**: Critical failure alerts, maintenance scheduling, performance degradation warnings
+
+**Key Features:**
+- Real-time equipment monitoring with multiple sensor types
+- Dual ML models for classification and regression tasks
+- Comprehensive SLOs for prediction accuracy and business impact
+- Regulatory compliance for industrial equipment standards
+- Automated alerting and maintenance scheduling
+- Cost optimization and downtime reduction tracking
+
 ## Using Templates
 
 ### 1. List Available Templates
@@ -246,17 +298,17 @@ ml-eval templates list
 
 ```bash
 # Use a specific template
-ml-eval templates use manufacturing-basic
+ml-eval templates use manufacturing-predictive_maintenance
 
 # Customize the template
-ml-eval templates customize manufacturing-basic --output my-config.yaml
+ml-eval templates customize manufacturing-predictive_maintenance --output my-config.yaml
 ```
 
 ### 3. Create Custom Template
 
 ```bash
 # Create a new template based on existing one
-ml-eval templates create my-industry --base manufacturing-basic
+ml-eval templates create my-industry --base manufacturing-predictive_maintenance
 
 # Edit the template
 ml-eval templates edit my-industry
@@ -337,9 +389,9 @@ collectors:
 ## Industry-Specific Considerations
 
 ### Manufacturing
-- Focus on quality control metrics
-- Include defect detection rates
-- Monitor production efficiency
+- Focus on predictive maintenance metrics
+- Include equipment failure prediction
+- Monitor maintenance efficiency
 - Track cost implications
 
 ### Aviation
@@ -366,10 +418,10 @@ collectors:
 
 ```bash
 # Validate a template
-ml-eval templates validate manufacturing-basic
+ml-eval templates validate manufacturing-predictive_maintenance
 
 # Test a template with sample data
-ml-eval templates test manufacturing-basic --sample-data
+ml-eval templates test manufacturing-predictive_maintenance --sample-data
 ```
 
 ## Contributing Templates

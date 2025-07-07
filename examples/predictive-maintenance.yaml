@@ -1,0 +1,229 @@
+system:
+  name: "Industrial Equipment Predictive Maintenance"
+  persona: "Maintenance Engineer"
+  criticality: "business_critical"
+  description: "ML system for predicting equipment failures and optimizing maintenance schedules"
+
+slos:
+  vae_anomaly_detection_accuracy:
+    target: 0.90
+    window: "30d"
+    description: "Accuracy of VAE-based anomaly detection for equipment failures"
+  rule_based_fault_detection_accuracy:
+    target: 0.85
+    window: "30d"
+    description: "Accuracy of rule-based fault prediction system"
+  ensemble_prediction_accuracy:
+    target: 0.92
+    window: "30d"
+    description: "Combined accuracy of VAE and rule-based predictions"
+  false_positive_rate:
+    target: 0.08
+    window: "30d"
+    description: "Rate of false positive failure predictions across both models"
+  maintenance_cost_reduction:
+    target: 0.20
+    window: "90d"
+    description: "Reduction in maintenance costs through predictive maintenance"
+  downtime_reduction:
+    target: 0.30
+    window: "90d"
+    description: "Reduction in equipment downtime through predictive maintenance"
+  system_availability:
+    target: 0.999
+    window: "30d"
+    description: "System uptime for predictive maintenance functionality"
+  prediction_response_time:
+    target: 0.99
+    window: "1h"
+    description: "Proportion of failure predictions completed within 5 minutes"
+
+safety_thresholds:
+  critical_equipment_alert:
+    max: 0.05
+    description: "Maximum acceptable false negative rate for critical equipment failure predictions"
+  maintenance_window:
+    min: 4
+    description: "Minimum hours advance warning required for critical equipment maintenance"
+
+operating_conditions:
+  equipment_types: ["pump", "motor", "compressor", "conveyor", "valve"]
+  operating_modes: ["normal", "high_load", "maintenance", "shutdown"]
+  environmental_conditions: ["normal", "high_temp", "high_humidity", "dusty"]
+
+collectors:
+  - type: "online"
+    source: "s3"
+    bucket: "equipment-maintenance-data"
+    prefix: "inference/"
+    metrics: ["vibration", "temperature", "pressure", "current", "voltage"]
+    polling_interval: 60  # seconds
+    format: "json"
+  - type: "offline"
+    source: "s3"
+    bucket: "equipment-maintenance-data"
+    prefix: "training/"
+    data_types: ["sensor_readings", "equipment_status", "maintenance_history", "failure_events"]
+    format: "parquet"
+    batch_size: 10000
+  - type: "environmental"
+    source: "s3"
+    bucket: "equipment-maintenance-data"
+    prefix: "environmental/"
+    sources: ["temperature_sensors", "humidity_sensors", "vibration_sensors"]
+    format: "json"
+  - type: "regulatory"
+    source: "s3"
+    bucket: "equipment-maintenance-data"
+    prefix: "compliance/"
+    standards: ["ISO-10816", "ISO-7919", "API-670"]
+    compliance_metrics: ["vibration_limits", "temperature_limits"]
+    format: "json"
+
+evaluators:
+  - type: "performance"
+    metrics: ["vae_anomaly_detection_accuracy", "rule_based_fault_detection_accuracy", "ensemble_prediction_accuracy", "false_positive_rate"]
+    real_time_threshold: 300  # seconds
+  - type: "drift"
+    detection_methods: ["statistical", "ml_model"]
+    drift_metrics: ["vibration_patterns", "temperature_trends", "pressure_variations"]
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["system_availability", "prediction_response_time"]
+  - type: "performance"
+    metrics: ["maintenance_cost_reduction", "downtime_reduction", "equipment_lifetime"]
+    thresholds:
+      maintenance_cost_reduction: 0.20
+      downtime_reduction: 0.30
+      equipment_lifetime: 8760  # hours (1 year)
+  - type: "compliance"
+    standards: ["ISO-10816", "ISO-7919"]
+    compliance_metrics: ["vibration_compliance", "temperature_compliance"]
+
+reports:
+  - type: "business"
+    frequency: "weekly"
+    stakeholders: ["maintenance_manager", "operations_manager", "plant_engineer"]
+  - type: "reliability"
+    frequency: "daily"
+    stakeholders: ["maintenance_crew", "equipment_technician"]
+  - type: "compliance"
+    frequency: "monthly"
+    stakeholders: ["safety_officer", "regulatory_authority"]
+
+data_sources:
+  - name: "equipment_data"
+    type: "s3"
+    bucket: "equipment-maintenance-data"
+    region: "us-east-1"
+    authentication: "aws_iam"
+    offline_training:
+      prefix: "training/"
+      data_types: ["sensor_readings", "equipment_status", "maintenance_history", "failure_events"]
+      format: "parquet"
+      compression: "snappy"
+    online_inference:
+      prefix: "inference/"
+      data_types: ["real_time_sensors", "equipment_status"]
+      format: "json"
+      streaming: true
+    backup:
+      prefix: "backup/"
+      retention_days: 365
+
+models:
+  - name: "vae_predictive_maintenance"
+    type: "anomaly_detection"
+    algorithm: "variational_autoencoder"
+    target: "equipment_anomaly_score"
+    features: ["vibration_rms", "temperature", "pressure", "current", "voltage", "runtime_hours", "load_factor"]
+    hyperparameters:
+      latent_dim: 32
+      hidden_dims: [128, 64, 32]
+      learning_rate: 0.001
+      batch_size: 64
+      epochs: 100
+    description: "Main VAE-based predictive maintenance model for anomaly detection"
+  - name: "rule_based_fault_prediction"
+    type: "rule_engine"
+    algorithm: "expert_rules"
+    target: "fault_probability"
+    features: ["vibration_rms", "temperature", "pressure", "current", "voltage"]
+    rules:
+      - condition: "vibration_rms > 25 AND temperature > 120"
+        fault_type: "bearing_wear"
+        probability: 0.85
+      - condition: "temperature > 140 OR current > 450"
+        fault_type: "overheating"
+        probability: 0.90
+      - condition: "pressure > 80 AND vibration_rms > 30"
+        fault_type: "pressure_system_fault"
+        probability: 0.75
+    description: "Rule-based fault prediction system for immediate fault detection"
+
+training:
+  workflow:
+    step1:
+      name: "vae_predictive_maintenance"
+      type: "unsupervised"
+      description: "VAE-based anomaly detection for predictive maintenance"
+      data_freshness:
+        max_age: "7d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.05
+        data_drift_threshold: 0.1
+        time_interval: "30d"
+      validation:
+        test_size: 0.2
+        metrics: ["reconstruction_error", "anomaly_detection_rate", "false_positive_rate"]
+    step2:
+      name: "rule_based_fault_prediction"
+      type: "rule_engine"
+      description: "Rule-based fault prediction for immediate fault detection"
+      rule_validation:
+        expert_review: "monthly"
+        rule_performance_tracking: true
+        metrics: ["rule_accuracy", "fault_detection_rate", "false_alarm_rate"]
+  model_ensemble:
+    combination_method: "weighted_average"
+    weights:
+      vae_predictive_maintenance: 0.7
+      rule_based_fault_prediction: 0.3
+
+alerts:
+  - name: "vae_anomaly_detected"
+    condition: "vae_anomaly_score > 0.8"
+    severity: "critical"
+    notification: ["maintenance_manager", "plant_engineer"]
+    action: "schedule_immediate_maintenance"
+    source: "vae_predictive_maintenance"
+  - name: "rule_based_fault_detected"
+    condition: "fault_probability > 0.75"
+    severity: "high"
+    notification: ["maintenance_crew", "equipment_technician"]
+    action: "investigate_equipment_condition"
+    source: "rule_based_fault_prediction"
+  - name: "ensemble_high_risk"
+    condition: "ensemble_score > 0.85"
+    severity: "critical"
+    notification: ["maintenance_manager", "plant_engineer", "maintenance_crew"]
+    action: "emergency_maintenance_protocol"
+    source: "model_ensemble"
+  - name: "vae_performance_degradation"
+    condition: "vae_reconstruction_error > 0.15"
+    severity: "warning"
+    notification: ["ml_engineer"]
+    action: "retrain_vae_model"
+    source: "vae_predictive_maintenance"
+
+monitoring:
+  dashboard:
+    url: "http://maintenance-dashboard:8080"
+    refresh_interval: 300
+  metrics_export:
+    format: "prometheus"
+    endpoint: "http://metrics-exporter:9090"
+  log_aggregation:
+    system: "elasticsearch"
+    index: "predictive-maintenance-logs"

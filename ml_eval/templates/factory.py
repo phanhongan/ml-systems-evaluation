@@ -13,20 +13,20 @@ class TemplateFactory:
         """Load industry-specific templates"""
         return {
             "aviation": {
-                "basic": self._create_aviation_basic(),
-                "advanced": self._create_aviation_advanced(),
+                "safety_decision": self._create_aviation_safety_decision(),
+                "flight_control": self._create_aviation_flight_control(),
             },
             "energy": {
-                "basic": self._create_energy_basic(),
-                "advanced": self._create_energy_advanced(),
+                "grid_optimization": self._create_energy_grid_optimization(),
+                "demand_prediction": self._create_energy_demand_prediction(),
             },
             "manufacturing": {
-                "basic": self._create_manufacturing_basic(),
-                "advanced": self._create_manufacturing_advanced(),
+                "predictive_maintenance": self._create_manufacturing_predictive_maintenance(),
+                "demand_forecasting": self._create_manufacturing_demand_forecasting(),
             },
             "maritime": {
-                "basic": self._create_maritime_basic(),
-                "advanced": self._create_maritime_advanced(),
+                "collision_avoidance": self._create_maritime_collision_avoidance(),
+                "navigation_system": self._create_maritime_navigation_system(),
             },
         }
 
@@ -50,45 +50,67 @@ class TemplateFactory:
             return []
         return list(self.templates[industry].keys())
 
-    def _create_aviation_basic(self) -> dict[str, Any]:
-        """Create basic aviation template"""
+    def _create_aviation_safety_decision(self) -> dict[str, Any]:
+        """Create aviation safety decision template"""
         return {
             "system": {
-                "name": "Aircraft Landing System",
+                "name": "Aircraft Safety Decision System",
                 "persona": "Flight Crew",
                 "criticality": "safety_critical",
-                "description": "Advanced system for aircraft landing assistance and safety-critical landing decisions",
+                "description": "Safety-critical decision system for aircraft operations",
             },
             "slos": {
                 "flight_path_accuracy": {
                     "target": 0.9999,
                     "window": "24h",
-                    "description": "Accuracy of autonomous flight path predictions and trajectory optimization",
-                },
-                "runway_identification": {
-                    "target": 0.9995,
-                    "window": "24h",
-                    "description": "Accuracy of runway detection, classification, and approach path identification",
-                },
-                "landing_decision_confidence": {
-                    "target": 0.99999,
-                    "window": "24h",
-                    "description": "Confidence level in autonomous landing decisions and safety assessments",
+                    "description": "Accuracy of autonomous flight path predictions",
                 },
                 "system_response_time": {
                     "target": 0.99,
                     "window": "1h",
-                    "description": "Proportion of system responses within 500ms for critical flight decisions",
+                    "description": "Proportion of system responses within 500ms",
                 },
             },
-            "safety_thresholds": {
-                "decision_confidence_threshold": {
-                    "min": 0.95,
-                    "description": "Minimum confidence threshold required for autonomous decisions",
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://flight-systems:8080/metrics"],
+                    "metrics": ["flight_path_accuracy", "response_time"],
                 },
-                "response_time_p99": {
-                    "max": 500,
-                    "description": "99th percentile response time for critical flight decisions",
+            ],
+            "evaluators": [
+                {
+                    "type": "safety",
+                    "compliance_standards": ["DO-178C"],
+                    "critical_metrics": ["flight_path_accuracy"],
+                },
+            ],
+        }
+
+    def _create_aviation_flight_control(self) -> dict[str, Any]:
+        """Create aviation flight control template"""
+        return {
+            "system": {
+                "name": "Advanced Aircraft Flight Control System",
+                "persona": "Flight Crew",
+                "criticality": "safety_critical",
+                "description": "Comprehensive flight control system with safety features",
+            },
+            "slos": {
+                "flight_path_accuracy": {
+                    "target": 0.9999,
+                    "window": "24h",
+                    "description": "Accuracy of autonomous flight path predictions",
+                },
+                "system_response_time": {
+                    "target": 0.99,
+                    "window": "1h",
+                    "description": "Proportion of system responses within 500ms",
+                },
+                "system_availability": {
+                    "target": 0.9999,
+                    "window": "30d",
+                    "description": "System uptime for flight control functionality",
                 },
             },
             "collectors": [
@@ -97,330 +119,254 @@ class TemplateFactory:
                     "endpoints": ["http://flight-systems:8080/metrics"],
                     "metrics": [
                         "flight_path_accuracy",
-                        "runway_detection",
-                        "weather_assessment",
+                        "response_time",
+                        "availability",
                     ],
-                },
-                {
-                    "type": "environmental",
-                    "sources": ["weather_station", "radar", "gps", "altimeter"],
                 },
             ],
             "evaluators": [
                 {
                     "type": "safety",
                     "compliance_standards": ["DO-178C"],
-                    "critical_metrics": [
-                        "landing_decision_confidence",
-                        "false_positive_rate",
-                    ],
+                    "critical_metrics": ["flight_path_accuracy"],
                 },
                 {
                     "type": "reliability",
                     "error_budget_window": "30d",
-                    "critical_metrics": ["system_availability", "flight_path_accuracy"],
+                    "critical_metrics": ["system_availability"],
                 },
             ],
         }
 
-    def _create_aviation_advanced(self) -> dict[str, Any]:
-        """Create advanced aviation template"""
-        basic = self._create_aviation_basic()
-        basic["system"]["name"] = "Advanced Aircraft Landing System"
+    def _create_energy_grid_optimization(self) -> dict[str, Any]:
+        """Create energy grid optimization template"""
+        return {
+            "system": {
+                "name": "Energy Grid Optimization System",
+                "persona": "Grid Operator",
+                "criticality": "business_critical",
+                "description": "ML system for energy grid optimization and load balancing",
+            },
+            "slos": {
+                "load_prediction_accuracy": {
+                    "target": 0.95,
+                    "window": "24h",
+                    "description": "Accuracy of energy demand prediction",
+                },
+                "response_time": {
+                    "target": 0.99,
+                    "window": "1h",
+                    "description": "Proportion of system responses within 2 seconds",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://grid-monitor:8080/metrics"],
+                    "metrics": ["load_prediction", "response_time"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["load_prediction_accuracy", "response_time"],
+                },
+            ],
+        }
 
-        # Add more comprehensive SLOs
-        basic["slos"].update(
-            {
-                "weather_condition_assessment": {
-                    "target": 0.995,
+    def _create_energy_demand_prediction(self) -> dict[str, Any]:
+        """Create energy demand prediction template"""
+        return {
+            "system": {
+                "name": "Energy Demand Prediction System",
+                "persona": "Grid Operator",
+                "criticality": "business_critical",
+                "description": "Energy demand prediction and grid optimization system",
+            },
+            "slos": {
+                "load_prediction_accuracy": {
+                    "target": 0.95,
                     "window": "24h",
-                    "description": "Accuracy of weather condition evaluation and impact assessment on landing",
+                    "description": "Accuracy of energy demand prediction",
                 },
-                "obstacle_detection": {
-                    "target": 0.9999,
+                "system_availability": {
+                    "target": 0.999,
+                    "window": "30d",
+                    "description": "System uptime for grid optimization",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://grid-monitor:8080/metrics"],
+                    "metrics": ["load_prediction", "availability"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["load_prediction_accuracy"],
+                },
+                {
+                    "type": "reliability",
+                    "error_budget_window": "30d",
+                    "critical_metrics": ["system_availability"],
+                },
+            ],
+        }
+
+    def _create_manufacturing_predictive_maintenance(self) -> dict[str, Any]:
+        """Create manufacturing predictive maintenance template"""
+        return {
+            "system": {
+                "name": "Manufacturing Predictive Maintenance System",
+                "persona": "Maintenance Engineer",
+                "criticality": "business_critical",
+                "description": "ML system for manufacturing equipment monitoring",
+            },
+            "slos": {
+                "equipment_failure_prediction": {
+                    "target": 0.92,
                     "window": "24h",
-                    "description": "Accuracy of obstacle detection and avoidance recommendations",
+                    "description": "Accuracy of equipment failure prediction",
                 },
-                "false_positive_rate": {
-                    "target": 0.001,
-                    "window": "7d",
-                    "description": "Rate of false positive alerts for safety-critical scenarios",
+                "system_availability": {
+                    "target": 0.999,
+                    "window": "30d",
+                    "description": "System uptime for maintenance functionality",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://equipment-monitor:8080/metrics"],
+                    "metrics": ["failure_prediction", "availability"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["equipment_failure_prediction"],
+                },
+                {
+                    "type": "reliability",
+                    "error_budget_window": "30d",
+                    "critical_metrics": ["system_availability"],
+                },
+            ],
+        }
+
+    def _create_manufacturing_demand_forecasting(self) -> dict[str, Any]:
+        """Create manufacturing demand forecasting template"""
+        return {
+            "system": {
+                "name": "Manufacturing Demand Forecasting System",
+                "persona": "Supply Chain Manager",
+                "criticality": "business_critical",
+                "description": "ML system for manufacturing demand forecasting",
+            },
+            "slos": {
+                "demand_forecast_accuracy": {
+                    "target": 0.90,
+                    "window": "30d",
+                    "description": "Accuracy of demand forecasting",
+                },
+                "forecast_response_time": {
+                    "target": 0.99,
+                    "window": "1h",
+                    "description": "Proportion of forecast requests completed within 5 minutes",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://forecast-engine:8080/metrics"],
+                    "metrics": ["demand_prediction", "response_time"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["demand_forecast_accuracy", "forecast_response_time"],
+                },
+            ],
+        }
+
+    def _create_maritime_collision_avoidance(self) -> dict[str, Any]:
+        """Create maritime collision avoidance template"""
+        return {
+            "system": {
+                "name": "Maritime Collision Avoidance System",
+                "persona": "Ship Captain",
+                "criticality": "safety_critical",
+                "description": "Safety-critical collision avoidance system for maritime vessels",
+            },
+            "slos": {
+                "collision_detection_accuracy": {
+                    "target": 0.999,
+                    "window": "24h",
+                    "description": "Accuracy of collision detection and avoidance",
+                },
+                "response_time": {
+                    "target": 0.99,
+                    "window": "1h",
+                    "description": "Proportion of collision alerts within 2 seconds",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "endpoints": ["http://maritime-monitor:8080/metrics"],
+                    "metrics": ["collision_detection", "response_time"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "safety",
+                    "compliance_standards": ["SOLAS", "COLREGS"],
+                    "critical_metrics": ["collision_detection_accuracy"],
+                },
+            ],
+        }
+
+    def _create_maritime_navigation_system(self) -> dict[str, Any]:
+        """Create maritime navigation system template"""
+        return {
+            "system": {
+                "name": "Maritime Navigation System",
+                "persona": "Ship Captain",
+                "criticality": "safety_critical",
+                "description": "Maritime navigation and safety system",
+            },
+            "slos": {
+                "collision_detection_accuracy": {
+                    "target": 0.999,
+                    "window": "24h",
+                    "description": "Accuracy of collision detection and avoidance",
                 },
                 "system_availability": {
                     "target": 0.9999,
                     "window": "30d",
-                    "description": "System uptime for aircraft landing functionality",
-                },
-            }
-        )
-
-        # Add operating conditions
-        basic["operating_conditions"] = {
-            "flight_phases": ["approach", "final_approach", "landing", "rollout"],
-            "weather_conditions": [
-                "clear",
-                "fog",
-                "rain",
-                "crosswind",
-                "low_visibility",
-            ],
-            "runway_types": [
-                "asphalt",
-                "concrete",
-                "grass",
-                "short_field",
-                "contaminated",
-            ],
-        }
-
-        # Add more collectors
-        basic["collectors"].extend(
-            [
-                {
-                    "type": "offline",
-                    "log_paths": ["/var/log/flight-systems/", "/var/log/navigation/"],
-                },
-                {
-                    "type": "regulatory",
-                    "standards": ["FAA", "EASA", "ICAO"],
-                    "compliance_metrics": ["safety_margins", "operational_limits"],
-                },
-            ]
-        )
-
-        # Add more evaluators
-        basic["evaluators"].extend(
-            [
-                {
-                    "type": "performance",
-                    "metrics": ["system_response_time", "decision_confidence"],
-                    "real_time_threshold": 500,
-                },
-                {
-                    "type": "drift",
-                    "detection_methods": ["statistical", "ml_model"],
-                    "drift_metrics": [
-                        "flight_path_accuracy",
-                        "weather_assessment",
-                        "runway_identification",
-                    ],
-                },
-            ]
-        )
-
-        # Add reports
-        basic["reports"] = [
-            {
-                "type": "safety",
-                "frequency": "daily",
-                "stakeholders": [
-                    "flight_crew",
-                    "safety_officer",
-                    "regulatory_authority",
-                ],
-            },
-            {
-                "type": "reliability",
-                "frequency": "weekly",
-                "stakeholders": ["maintenance_crew", "operations_manager"],
-            },
-        ]
-
-        return basic
-
-    def _create_energy_basic(self) -> dict[str, Any]:
-        """Create basic energy template"""
-        return {
-            "system": {
-                "name": "Energy Grid ML System",
-                "type": "workflow",
-                "criticality": "safety_critical",
-            },
-            "slos": {
-                "grid_stability": {
-                    "target": 0.995,
-                    "window": "1h",
-                    "description": "Grid stability prediction accuracy",
-                    "safety_critical": True,
-                    "compliance_standard": "IEC-61508",
-                },
-                "response_time": {
-                    "target": 50,
-                    "window": "5m",
-                    "description": "Emergency response time (ms)",
-                    "safety_critical": True,
+                    "description": "System uptime for navigation functionality",
                 },
             },
             "collectors": [
                 {
                     "type": "online",
-                    "endpoint": "http://energy-grid:9090",
-                },
-                {
-                    "type": "environmental",
-                    "sensor_types": ["temperature", "pressure"],
+                    "endpoints": ["http://maritime-monitor:8080/metrics"],
+                    "metrics": ["collision_detection", "availability"],
                 },
             ],
             "evaluators": [
                 {
                     "type": "safety",
-                    "compliance_standards": ["IEC-61508"],
+                    "compliance_standards": ["SOLAS", "COLREGS"],
+                    "critical_metrics": ["collision_detection_accuracy"],
                 },
                 {
                     "type": "reliability",
                     "error_budget_window": "30d",
-                    "slos": {
-                        "grid_stability": {
-                            "target": 0.995,
-                            "window": "1h",
-                            "description": "Grid stability prediction accuracy",
-                        },
-                        "emergency_response": {
-                            "target": 50,
-                            "window": "5m",
-                            "description": "Emergency response time (ms)",
-                        },
-                    },
+                    "critical_metrics": ["system_availability"],
                 },
             ],
         }
-
-    def _create_energy_advanced(self) -> dict[str, Any]:
-        """Create advanced energy template"""
-        basic = self._create_energy_basic()
-        basic["system"]["name"] = "Advanced Energy Grid ML System"
-        basic["collectors"].append(
-            {
-                "type": "regulatory",
-                "compliance_standards": ["IEC-61508", "ISO-13849"],
-            }
-        )
-        return basic
-
-    def _create_manufacturing_basic(self) -> dict[str, Any]:
-        """Create basic manufacturing template"""
-        return {
-            "system": {
-                "name": "Manufacturing ML System",
-                "type": "workflow",
-                "criticality": "business_critical",
-            },
-            "slos": {
-                "quality_control": {
-                    "target": 0.95,
-                    "window": "8h",
-                    "description": "Quality control accuracy",
-                    "safety_critical": False,
-                    "compliance_standard": "ISO-13485",
-                },
-                "throughput": {
-                    "target": 1000,
-                    "window": "1h",
-                    "description": "Production throughput (units/hour)",
-                    "safety_critical": False,
-                },
-            },
-            "collectors": [
-                {
-                    "type": "online",
-                    "endpoint": "http://manufacturing-metrics:9090",
-                },
-                {
-                    "type": "environmental",
-                    "sensor_types": ["temperature", "humidity", "vibration"],
-                },
-            ],
-            "evaluators": [
-                {
-                    "type": "performance",
-                    "thresholds": {
-                        "quality_control": {"target": 0.95, "warning": 0.90},
-                        "throughput": {"target": 1000, "warning": 900},
-                    },
-                },
-                {
-                    "type": "reliability",
-                },
-            ],
-        }
-
-    def _create_manufacturing_advanced(self) -> dict[str, Any]:
-        """Create advanced manufacturing template"""
-        basic = self._create_manufacturing_basic()
-        basic["system"]["name"] = "Advanced Manufacturing ML System"
-        basic["collectors"].append(
-            {
-                "type": "regulatory",
-                "compliance_standards": ["ISO-13485", "FDA-510K"],
-            }
-        )
-        return basic
-
-    def _create_maritime_basic(self) -> dict[str, Any]:
-        """Create basic maritime template"""
-        return {
-            "system": {
-                "name": "Maritime ML System",
-                "type": "workflow",
-                "criticality": "safety_critical",
-            },
-            "slos": {
-                "collision_avoidance": {
-                    "target": 0.99,
-                    "window": "1h",
-                    "description": "Collision avoidance accuracy",
-                    "safety_critical": True,
-                    "compliance_standard": "SOLAS",
-                },
-                "navigation_accuracy": {
-                    "target": 0.98,
-                    "window": "24h",
-                    "description": "Navigation system accuracy",
-                    "safety_critical": True,
-                },
-            },
-            "collectors": [
-                {
-                    "type": "online",
-                    "endpoint": "http://maritime-system:8080/metrics",
-                },
-                {
-                    "type": "environmental",
-                    "sensor_types": ["temperature", "humidity", "pressure"],
-                },
-            ],
-            "evaluators": [
-                {
-                    "type": "safety",
-                    "compliance_standards": ["SOLAS", "MARPOL"],
-                },
-                {
-                    "type": "reliability",
-                    "error_budget_window": "30d",
-                    "slos": {
-                        "collision_avoidance": {
-                            "target": 0.99,
-                            "window": "1h",
-                            "description": "Collision avoidance accuracy",
-                        },
-                        "navigation_accuracy": {
-                            "target": 0.98,
-                            "window": "24h",
-                            "description": "Navigation system accuracy",
-                        },
-                    },
-                },
-            ],
-        }
-
-    def _create_maritime_advanced(self) -> dict[str, Any]:
-        """Create advanced maritime template"""
-        basic = self._create_maritime_basic()
-        basic["system"]["name"] = "Advanced Maritime ML System"
-        basic["collectors"].append(
-            {
-                "type": "regulatory",
-                "compliance_standards": ["SOLAS", "MARPOL"],
-            }
-        )
-        return basic

@@ -17,7 +17,7 @@ Start with a template that matches your industry:
 ml-eval templates list
 
 # Use a template for your industry
-ml-eval templates use manufacturing-basic
+ml-eval templates use manufacturing-predictive_maintenance
 ```
 
 ## 📊 Step 2: Configure Your Data Sources

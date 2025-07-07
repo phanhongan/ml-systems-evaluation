@@ -101,7 +101,7 @@ class TestEndToEndEvaluation:
         result = framework.evaluate()
 
         # Verify manufacturing-specific aspects
-        assert result.system_name == "quality_control_system"
+        assert result.system_name == "predictive_maintenance_system"
         assert result.timestamp is not None
         assert isinstance(result.overall_compliance, float)
         assert isinstance(result.has_critical_violations, bool)
@@ -150,24 +150,24 @@ class TestEndToEndEvaluation:
 class TestIndustrySpecificScenarios:
     """Test industry-specific evaluation scenarios"""
 
-    def test_manufacturing_quality_control_scenario(self):
-        """Test manufacturing quality control scenario"""
+    def test_manufacturing_predictive_maintenance_scenario(self):
+        """Test manufacturing predictive maintenance scenario"""
         config = {
             "system": {
-                "name": "quality_control_system",
+                "name": "predictive_maintenance_system",
                 "type": "workflow",
                 "criticality": "business_critical",
             },
             "slos": {
-                "quality_control": {
-                    "target": 0.98,
+                "equipment_failure_prediction": {
+                    "target": 0.92,
                     "window": "24h",
-                    "description": "Quality control accuracy",
+                    "description": "Equipment failure prediction accuracy",
                 },
-                "production_efficiency": {
-                    "target": 0.99,
-                    "window": "8h",
-                    "description": "Production efficiency",
+                "maintenance_cost_reduction": {
+                    "target": 0.15,
+                    "window": "30d",
+                    "description": "Maintenance cost reduction",
                 },
             },
         }
@@ -185,7 +185,7 @@ class TestIndustrySpecificScenarios:
         result = framework.evaluate()
 
         # Verify manufacturing-specific results
-        assert result.system_name == "quality_control_system"
+        assert result.system_name == "predictive_maintenance_system"
         assert len(result.recommendations) >= 0
         assert result.timestamp is not None
         assert isinstance(result.overall_compliance, float)

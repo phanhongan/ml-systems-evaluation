@@ -1,6 +1,8 @@
 # API Reference
 
-This document provides a complete reference for all APIs and endpoints available in the ML Systems Evaluation Framework.
+> **Note**: This API is currently in the design phase and has not been implemented yet.
+
+This document provides the design specification for the REST API and Python SDK interfaces for the ML Systems Evaluation Framework.
 
 ## API Overview
 
@@ -8,7 +10,7 @@ The framework provides both REST API and Python SDK interfaces for programmatic 
 
 ### Base URL
 ```
-https://api.ml-eval.com/v1
+http://localhost:8000/api/v1
 ```
 
 ### Authentication

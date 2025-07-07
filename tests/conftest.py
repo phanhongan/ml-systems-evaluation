@@ -20,6 +20,7 @@ def sample_config():
     return {
         "system": {
             "name": "test_system",
+            "type": "single_model",
             "criticality": "operational",
         },
         "slos": {
@@ -59,6 +60,7 @@ def safety_critical_config():
     return {
         "system": {
             "name": "safety_system",
+            "type": "safety_critical",
             "criticality": "safety_critical",
         },
         "slos": {
@@ -98,6 +100,7 @@ def manufacturing_config():
     return {
         "system": {
             "name": "quality_control_system",
+            "type": "workflow",
             "criticality": "business_critical",
         },
         "slos": {
@@ -122,6 +125,7 @@ def aviation_config():
     return {
         "system": {
             "name": "flight_control_system",
+            "type": "single_model",
             "criticality": "safety_critical",
         },
         "slos": {

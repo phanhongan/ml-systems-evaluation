@@ -16,7 +16,6 @@ Examples:
   ml-eval collect config.yaml --output data.json
   ml-eval evaluate config.yaml --data data.json --output results.json
   ml-eval report config.yaml --results results.json --output reports.json
-  ml-eval create-config --system-name "My System" --output config.yaml
         """,
     )
 
@@ -91,10 +90,16 @@ Examples:
 
     # Create configuration command
     create_parser = subparsers.add_parser(
-        "create-config", help="Create a new workflow-based configuration file"
+        "create-config", help="Create a new configuration file"
     )
     create_parser.add_argument("--output", required=True, help="Output file path")
     create_parser.add_argument("--system-name", required=True, help="System name")
+    create_parser.add_argument(
+        "--system-type",
+        default="single_model",
+        choices=["single_model", "workflow", "ensemble"],
+        help="System type (default: single_model)",
+    )
     create_parser.add_argument(
         "--criticality",
         default="operational",

@@ -216,13 +216,25 @@ class ConfigFactory:
 
         return config_files
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear the configuration cache"""
         self._config_cache.clear()
 
     def get_cached_config(self, config_path: str) -> Optional[Dict[str, Any]]:
         """Get cached configuration if available"""
         return self._config_cache.get(config_path)
+
+    def _validate_collector(self, collector: Dict[str, Any]) -> bool:
+        """Validate a collector configuration"""
+        return isinstance(collector, dict)
+
+    def _validate_evaluator(self, evaluator: Dict[str, Any]) -> bool:
+        """Validate an evaluator configuration"""
+        return isinstance(evaluator, dict)
+
+    def _validate_report(self, report: Dict[str, Any]) -> bool:
+        """Validate a report configuration"""
+        return isinstance(report, dict)
 
 
 class ConfigFactoryError(Exception):

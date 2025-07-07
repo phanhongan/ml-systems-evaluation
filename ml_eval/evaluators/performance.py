@@ -81,7 +81,7 @@ class PerformanceEvaluator(BaseEvaluator):
         if isinstance(current_value, list) and len(current_value) > 0:
             # Take the first MetricData object and get its value
             current_value = current_value[0].value
-        elif hasattr(current_value, 'value'):
+        elif hasattr(current_value, "value"):
             # It's a single MetricData object
             current_value = current_value.value
 

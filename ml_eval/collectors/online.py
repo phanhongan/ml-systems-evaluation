@@ -92,14 +92,14 @@ class OnlineCollector(BaseCollector):
 
             for metric_name, value in mock_data.items():
                 # Check if this metric is from the configured metrics list
-                configured_metrics = getattr(self, 'config', {}).get('metrics', [])
+                configured_metrics = getattr(self, "config", {}).get("metrics", [])
                 if metric_name in configured_metrics:
                     # Use the metric name as-is for configured metrics
                     final_metric_name = metric_name
                 else:
                     # Prefix with "online_" for other metrics
                     final_metric_name = f"online_{metric_name}"
-                
+
                 metrics[final_metric_name] = [
                     MetricData(
                         timestamp=timestamp,
@@ -122,27 +122,27 @@ class OnlineCollector(BaseCollector):
         import random
 
         # Check if we have specific metrics configured
-        configured_metrics = getattr(self, 'config', {}).get('metrics', [])
-        
+        configured_metrics = getattr(self, "config", {}).get("metrics", [])
+
         if configured_metrics:
             # Generate data for configured metrics
             mock_data = {}
             for metric in configured_metrics:
-                if 'accuracy' in metric.lower():
+                if "accuracy" in metric.lower():
                     mock_data[metric] = random.uniform(0.85, 0.98)
-                elif 'latency' in metric.lower() or 'response_time' in metric.lower():
+                elif "latency" in metric.lower() or "response_time" in metric.lower():
                     mock_data[metric] = random.uniform(10, 500)
-                elif 'throughput' in metric.lower():
+                elif "throughput" in metric.lower():
                     mock_data[metric] = random.uniform(100, 10000)
-                elif 'rate' in metric.lower():
+                elif "rate" in metric.lower():
                     mock_data[metric] = random.uniform(0.8, 0.99)
-                elif 'strength' in metric.lower():
+                elif "strength" in metric.lower():
                     mock_data[metric] = random.uniform(0.7, 0.95)
-                elif 'confidence' in metric.lower():
+                elif "confidence" in metric.lower():
                     mock_data[metric] = random.uniform(0.75, 0.95)
-                elif 'quality' in metric.lower():
+                elif "quality" in metric.lower():
                     mock_data[metric] = random.uniform(0.8, 0.95)
-                elif 'efficiency' in metric.lower():
+                elif "efficiency" in metric.lower():
                     mock_data[metric] = random.uniform(0.7, 0.9)
                 else:
                     # Generic metric

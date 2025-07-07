@@ -201,7 +201,8 @@ class EvaluationResult:
         self.recommendations = recommendations
         self.alerts = alerts
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert EvaluationResult to dictionary representation"""
         return {
             "system_name": self.system_name,
             "timestamp": self.timestamp.isoformat(),
@@ -224,14 +225,18 @@ class EvaluationResult:
 
 class ErrorBudget:
     def __init__(
-        self, slo_name: str, budget_remaining: float, burn_rate: float, alerts=None
-    ):
+        self,
+        slo_name: str,
+        budget_remaining: float,
+        burn_rate: float,
+        alerts: Optional[list] = None,
+    ) -> None:
         self.slo_name = slo_name
         self.budget_remaining = budget_remaining
         self.burn_rate = burn_rate
         self.alerts = alerts or []
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "slo_name": self.slo_name,
             "budget_remaining": self.budget_remaining,

@@ -7,7 +7,7 @@ from typing import Any, Dict, Optional
 class ExampleRegistry:
     """Registry for example configurations and use cases"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
         self.examples = self._load_examples()
 
@@ -58,7 +58,7 @@ class ExampleRegistry:
             self.logger.error(f"Example not found: {example_id}")
             return None
 
-    def list_examples(self) -> list:
+    def list_examples(self) -> list[str]:
         """List all available examples"""
         return list(self.examples.keys())
 

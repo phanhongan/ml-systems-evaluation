@@ -6,7 +6,7 @@ from typing import Any, Dict
 class TemplateFactory:
     """Factory for creating industry-specific configuration templates"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.templates = self._load_templates()
 
     def _load_templates(self) -> Dict[str, Dict[str, Any]]:

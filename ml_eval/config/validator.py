@@ -9,10 +9,11 @@ from ..core.types import ComplianceStandard, CriticalityLevel, SystemType
 class ConfigValidator:
     """Configuration validator for Industrial AI systems"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize validator"""
+        self.errors: List[str] = []
+        self.warnings: List[str] = []
         self.logger = logging.getLogger(__name__)
-        self.errors = []
-        self.warnings = []
 
     def validate_config(self, config: Dict[str, Any]) -> bool:
         """Validate complete configuration"""
@@ -107,7 +108,7 @@ class ConfigValidator:
         if "target" not in config:
             self.errors.append(f"SLO '{name}' missing required field: target")
             return False
-        
+
         if "window" not in config:
             self.errors.append(f"SLO '{name}' missing required field: window")
             return False
@@ -120,9 +121,12 @@ class ConfigValidator:
 
         # Validate safety-critical requirements
         if config.get("safety_critical", False):
-            # For safety-critical SLOs, target should be >= 0.999 (error_budget <= 0.001)
+            # For safety-critical SLOs, target should be >= 0.999
+            # (error_budget <= 0.001)
             if target < 0.999:
-                self.errors.append(f"Safety-critical SLO '{name}' must have target >= 0.999")
+                self.errors.append(
+                    f"Safety-critical SLO '{name}' must have target >= 0.999"
+                )
                 return False
 
         # Validate compliance standard
@@ -216,7 +220,7 @@ class ConfigValidator:
         """Get validation warnings"""
         return self.warnings.copy()
 
-    def print_validation_report(self):
+    def print_validation_report(self) -> None:
         """Print validation report"""
         if self.errors:
             self.logger.error("Configuration validation failed:")

@@ -24,13 +24,13 @@ def run_evaluation_command(args: argparse.Namespace) -> int:
         results = framework.evaluate()
 
         # Convert EvaluationResult to dictionary for JSON serialization
-        def convert_to_dict(obj):
+        def convert_to_dict(obj: Any) -> Any:
             """Recursively convert objects to dictionaries for JSON serialization"""
-            if hasattr(obj, '__dict__'):
+            if hasattr(obj, "__dict__"):
                 # Convert object to dictionary
                 result = {}
                 for key, value in obj.__dict__.items():
-                    if key.startswith('_'):  # Skip private attributes
+                    if key.startswith("_"):  # Skip private attributes
                         continue
                     result[key] = convert_to_dict(value)
                 return result
@@ -38,7 +38,7 @@ def run_evaluation_command(args: argparse.Namespace) -> int:
                 return [convert_to_dict(item) for item in obj]
             elif isinstance(obj, dict):
                 return {key: convert_to_dict(value) for key, value in obj.items()}
-            elif hasattr(obj, 'isoformat'):  # Handle datetime objects
+            elif hasattr(obj, "isoformat"):  # Handle datetime objects
                 return obj.isoformat()
             else:
                 return obj
@@ -82,6 +82,7 @@ def validate_config_command(args: argparse.Namespace) -> int:
         # Try to extract and print validator errors if available
         from ..config.validator import ConfigValidator
         import yaml
+
         try:
             with open(args.config, "r") as f:
                 config_data = yaml.safe_load(f)

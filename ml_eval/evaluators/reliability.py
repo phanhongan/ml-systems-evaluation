@@ -60,16 +60,15 @@ class ReliabilityEvaluator(BaseEvaluator):
         self, slo_name: str, slo_config: Dict[str, Any], current_value: Any
     ) -> Dict[str, Any]:
         """Evaluate a single SLO"""
-        # Get target (required) and infer error_budget
+        # Get target (required)
         target = slo_config.get("target", 0.95)  # Default to 95% if not specified
-        error_budget = 1.0 - target
         window = slo_config.get("window", "24h")
 
         # Extract value from MetricData if it's a list
         if isinstance(current_value, list) and len(current_value) > 0:
             # Take the first MetricData object and get its value
             current_value = current_value[0].value
-        elif hasattr(current_value, 'value'):
+        elif hasattr(current_value, "value"):
             # It's a single MetricData object
             current_value = current_value.value
 

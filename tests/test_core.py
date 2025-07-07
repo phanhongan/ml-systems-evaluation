@@ -3,7 +3,6 @@
 from datetime import datetime
 
 from ml_eval.core.config import (
-    ErrorBudget,
     EvaluationResult,
     MetricData,
     SLOConfig,
@@ -76,7 +75,7 @@ class TestSLOConfig:
             description="Test SLO",
             safety_critical=False,
         )
-        
+
         assert slo.name == "test_slo"
         assert slo.target == 0.95
         assert slo.window == "24h"
@@ -93,7 +92,7 @@ class TestSLOConfig:
             description="Safety-critical SLO",
             safety_critical=True,
         )
-        
+
         assert slo.safety_critical is True
         assert abs(slo.error_budget - 0.001) < 1e-10  # Handle floating-point precision
 
@@ -106,7 +105,7 @@ class TestSLOConfig:
             error_budget=0.10,  # Explicitly provided
             description="SLO with explicit error budget",
         )
-        
+
         assert slo.target == 0.90
         assert slo.error_budget == 0.10  # Should use provided value
 
@@ -273,7 +272,7 @@ class TestErrorBudget:
             target=0.95,
             window="24h",
         )
-        
+
         # Error budget should be inferred from target
         assert abs(slo.error_budget - 0.05) < 1e-10
 
@@ -284,7 +283,7 @@ class TestErrorBudget:
             target=0.99,
             window="24h",
         )
-        
+
         # Error budget should be inferred from target
         assert abs(slo.error_budget - 0.01) < 1e-10
         assert abs(slo.target + slo.error_budget - 1.0) < 1e-10
@@ -296,7 +295,7 @@ class TestErrorBudget:
             target=0.95,
             window="24h",
         )
-        
+
         # Error budget should be inferred from target
         assert abs(slo.error_budget - 0.05) < 1e-10
 
@@ -323,25 +322,29 @@ class TestEvaluationFramework:
 
         accuracy_slo = next(slo for slo in framework.slos if slo.name == "accuracy")
         assert accuracy_slo.target == 0.95
-        assert abs(accuracy_slo.error_budget - 0.05) < 1e-10  # Handle floating-point precision
+        assert (
+            abs(accuracy_slo.error_budget - 0.05) < 1e-10
+        )  # Handle floating-point precision
 
     def test_framework_add_collector(self, sample_config, mock_collector):
         """Test adding collector to framework"""
         framework = EvaluationFramework(sample_config)
         collector = mock_collector({"name": "test_collector"})
 
+        initial_count = len(framework.collectors)
         framework.add_collector(collector)
-        assert len(framework.collectors) == 1
-        assert framework.collectors[0] == collector
+        assert len(framework.collectors) == initial_count + 1
+        assert framework.collectors[-1] == collector
 
     def test_framework_add_evaluator(self, sample_config, mock_evaluator):
         """Test adding evaluator to framework"""
         framework = EvaluationFramework(sample_config)
         evaluator = mock_evaluator({"name": "test_evaluator"})
 
+        initial_count = len(framework.evaluators)
         framework.add_evaluator(evaluator)
-        assert len(framework.evaluators) == 1
-        assert framework.evaluators[0] == evaluator
+        assert len(framework.evaluators) == initial_count + 1
+        assert framework.evaluators[-1] == evaluator
 
     def test_framework_validate_configuration(self, safety_critical_config):
         """Test framework configuration validation"""

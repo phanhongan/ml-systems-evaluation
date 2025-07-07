@@ -189,7 +189,7 @@ poetry shell
 
 **Note**: This project uses Poetry for dependency management and packaging. 
 See [pyproject.toml](./pyproject.toml) for the full, up-to-date list of dependencies.
-For detailed installation instructions, see [docs/getting-started.md](./docs/getting-started.md).
+For detailed installation instructions, see [docs/user-guides/installation.md](./docs/user-guides/installation.md).
 
 ### Getting Started (For Industrial ML Engineers)
 
@@ -309,7 +309,7 @@ See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yam
 
 ### Service Level Objectives (SLOs)
 
-For comprehensive SLO configuration guidance, see the [SLO Configuration Guide](./docs/slo-configuration.md). The framework supports:
+For comprehensive SLO configuration guidance, see the [SLO Configuration Guide](./docs/reference/slo-configuration.md). The framework supports:
 
 - **Safety-Critical SLOs**: Zero-tolerance thresholds for catastrophic failures
 - **Business-Critical SLOs**: Performance targets with immediate financial impact
@@ -329,7 +329,7 @@ This framework enables a new approach to Industrial AI development where safety 
 
 ```python
 # Define safety-critical SLOs before model development
-# See docs/slo-configuration.md for comprehensive SLO configuration examples
+# See docs/reference/slo-configuration.md for comprehensive SLO configuration examples
 slos = {
     "false_positive_rate": SLOConfig(target=0.0001, error_budget=0.0001, compliance="DO-178C"),
     "response_time": SLOConfig(target=50, error_budget=0.001, safety_critical=True),
@@ -358,7 +358,7 @@ while training:
 from ml_eval import EvaluationFramework
 
 # Create framework for workflow evaluation
-# See docs/slo-configuration.md for SLO configuration examples
+# See docs/reference/slo-configuration.md for SLO configuration examples
 config = {
     "system": {
         "name": "Workflow System",
@@ -472,11 +472,11 @@ pytest tests/industry/ -v  # Industry-specific tests
 
 ```
 
-**Note**: For detailed testing instructions, see [docs/testing.md](./docs/testing.md)
+**Note**: For detailed testing instructions, see [docs/developer/testing.md](./docs/developer/testing.md)
 
 ## Contributing
 
-We welcome contributions! Please see our [Development Guide](docs/development.md) for comprehensive information about:
+We welcome contributions! Please see our [Development Guide](docs/developer/development.md) for comprehensive information about:
 
 - **Code Quality Tools**: Black, Flake8, MyPy, isort
 - **Testing Practices**: Unit, integration, and end-to-end tests

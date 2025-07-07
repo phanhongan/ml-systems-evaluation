@@ -121,7 +121,7 @@ class TemplateFactory:
         """Create advanced aviation template"""
         basic = self._create_aviation_basic()
         basic["system"]["name"] = "Advanced Autonomous Flight Guidance System"
-        
+
         # Add more comprehensive SLOs
         basic["slos"].update({
             "weather_condition_assessment": {
@@ -145,14 +145,14 @@ class TemplateFactory:
                 "description": "System uptime for autonomous flight guidance functionality",
             },
         })
-        
+
         # Add operating conditions
         basic["operating_conditions"] = {
             "flight_phases": ["approach", "final_approach", "landing", "rollout"],
             "weather_conditions": ["clear", "fog", "rain", "crosswind", "low_visibility"],
             "runway_types": ["asphalt", "concrete", "grass", "short_field", "contaminated"],
         }
-        
+
         # Add more collectors
         basic["collectors"].extend([
             {
@@ -165,7 +165,7 @@ class TemplateFactory:
                 "compliance_metrics": ["safety_margins", "operational_limits"],
             },
         ])
-        
+
         # Add more evaluators
         basic["evaluators"].extend([
             {
@@ -179,7 +179,7 @@ class TemplateFactory:
                 "drift_metrics": ["flight_path_accuracy", "weather_assessment", "runway_identification"],
             },
         ])
-        
+
         # Add reports
         basic["reports"] = [
             {
@@ -193,7 +193,7 @@ class TemplateFactory:
                 "stakeholders": ["maintenance_crew", "operations_manager"],
             },
         ]
-        
+
         return basic
 
     def _create_energy_basic(self) -> dict[str, Any]:

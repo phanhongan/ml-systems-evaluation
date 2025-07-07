@@ -15,19 +15,24 @@ class ExampleRegistry:
         """Load all available examples"""
         return {
             "aviation": {
-                "name": "Aircraft Landing Decision System",
+                "name": "Autonomous Flight Guidance System",
                 "type": "safety_critical",
                 "criticality": "safety_critical",
                 "slos": {
-                    "safety_margin": {
+                    "flight_path_accuracy": {
                         "target": 0.9999,
                         "window": "24h",
-                        "description": "Safety margin for landing decisions",
+                        "description": "Accuracy of autonomous flight path predictions",
                     },
-                    "response_time": {
-                        "target": 0.99,
-                        "window": "1h",
-                        "description": "Response time for critical decisions",
+                    "runway_identification": {
+                        "target": 0.9995,
+                        "window": "24h",
+                        "description": "Accuracy of runway detection and classification",
+                    },
+                    "landing_decision_confidence": {
+                        "target": 0.99999,
+                        "window": "24h",
+                        "description": "Confidence level in autonomous landing decisions",
                     },
                 },
             },

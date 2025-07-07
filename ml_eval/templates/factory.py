@@ -54,55 +54,65 @@ class TemplateFactory:
         """Create basic aviation template"""
         return {
             "system": {
-                "name": "Aviation ML System",
-                "type": "single_model",
+                "name": "Autonomous Flight Guidance System",
+                "type": "workflow",
+                "persona": "Flight Crew",
                 "criticality": "safety_critical",
+                "description": "Advanced autonomous system for flight path optimization and landing assistance",
             },
             "slos": {
-                "accuracy": {
-                    "target": 0.99,
+                "flight_path_accuracy": {
+                    "target": 0.9999,
                     "window": "24h",
-                    "description": "Model accuracy for flight safety",
-                    "safety_critical": True,
-                    "compliance_standard": "DO-178C",
+                    "description": "Accuracy of autonomous flight path predictions and trajectory optimization",
                 },
-                "latency": {
-                    "target": 100,
+                "runway_identification": {
+                    "target": 0.9995,
+                    "window": "24h",
+                    "description": "Accuracy of runway detection, classification, and approach path identification",
+                },
+                "landing_decision_confidence": {
+                    "target": 0.99999,
+                    "window": "24h",
+                    "description": "Confidence level in autonomous landing decisions and safety assessments",
+                },
+                "system_response_time": {
+                    "target": 0.99,
                     "window": "1h",
-                    "description": "Inference latency (ms)",
-                    "safety_critical": True,
+                    "description": "Proportion of system responses within 500ms for critical flight decisions",
+                },
+            },
+            "safety_thresholds": {
+                "decision_confidence_threshold": {
+                    "min": 0.95,
+                    "description": "Minimum confidence threshold required for autonomous decisions",
+                },
+                "response_time_p99": {
+                    "max": 500,
+                    "description": "99th percentile response time for critical flight decisions",
                 },
             },
             "collectors": [
                 {
                     "type": "online",
-                    "endpoint": "http://aviation-system:8080/metrics",
+                    "endpoints": ["http://flight-systems:8080/metrics"],
+                    "metrics": ["flight_path_accuracy", "runway_detection", "weather_assessment"],
                 },
                 {
                     "type": "environmental",
-                    "sensor_types": ["temperature", "pressure", "humidity"],
+                    "sources": ["weather_station", "radar", "gps", "altimeter"],
                 },
             ],
             "evaluators": [
                 {
                     "type": "safety",
                     "compliance_standards": ["DO-178C"],
+                    "critical_metrics": ["landing_decision_confidence", "false_positive_rate"],
                 },
                 {
                     "type": "reliability",
-                    "error_budget_window": "7d",
-                    "slos": {
-                        "decision_accuracy": {
-                            "target": 0.999,
-                            "window": "24h",
-                            "description": "Safety-critical decision accuracy",
-                        },
-                        "response_time": {
-                            "target": 0.99,
-                            "window": "1h",
-                            "description": "Response time compliance",
-                        },
-                    },
+                    "error_budget_window": "30d",
+                    "critical_metrics": ["system_availability", "flight_path_accuracy"],
                 },
             ],
         }
@@ -110,13 +120,80 @@ class TemplateFactory:
     def _create_aviation_advanced(self) -> dict[str, Any]:
         """Create advanced aviation template"""
         basic = self._create_aviation_basic()
-        basic["system"]["name"] = "Advanced Aviation ML System"
-        basic["collectors"].append(
+        basic["system"]["name"] = "Advanced Autonomous Flight Guidance System"
+        
+        # Add more comprehensive SLOs
+        basic["slos"].update({
+            "weather_condition_assessment": {
+                "target": 0.995,
+                "window": "24h",
+                "description": "Accuracy of weather condition evaluation and impact assessment on landing",
+            },
+            "obstacle_detection": {
+                "target": 0.9999,
+                "window": "24h",
+                "description": "Accuracy of obstacle detection and avoidance recommendations",
+            },
+            "false_positive_rate": {
+                "target": 0.001,
+                "window": "7d",
+                "description": "Rate of false positive alerts for safety-critical scenarios",
+            },
+            "system_availability": {
+                "target": 0.9999,
+                "window": "30d",
+                "description": "System uptime for autonomous flight guidance functionality",
+            },
+        })
+        
+        # Add operating conditions
+        basic["operating_conditions"] = {
+            "flight_phases": ["approach", "final_approach", "landing", "rollout"],
+            "weather_conditions": ["clear", "fog", "rain", "crosswind", "low_visibility"],
+            "runway_types": ["asphalt", "concrete", "grass", "short_field", "contaminated"],
+        }
+        
+        # Add more collectors
+        basic["collectors"].extend([
+            {
+                "type": "offline",
+                "log_paths": ["/var/log/flight-systems/", "/var/log/navigation/"],
+            },
             {
                 "type": "regulatory",
-                "compliance_standards": ["DO-178C", "ISO-26262"],
-            }
-        )
+                "standards": ["FAA", "EASA", "ICAO"],
+                "compliance_metrics": ["safety_margins", "operational_limits"],
+            },
+        ])
+        
+        # Add more evaluators
+        basic["evaluators"].extend([
+            {
+                "type": "performance",
+                "metrics": ["system_response_time", "decision_confidence"],
+                "real_time_threshold": 500,
+            },
+            {
+                "type": "drift",
+                "detection_methods": ["statistical", "ml_model"],
+                "drift_metrics": ["flight_path_accuracy", "weather_assessment", "runway_identification"],
+            },
+        ])
+        
+        # Add reports
+        basic["reports"] = [
+            {
+                "type": "safety",
+                "frequency": "daily",
+                "stakeholders": ["flight_crew", "safety_officer", "regulatory_authority"],
+            },
+            {
+                "type": "reliability",
+                "frequency": "weekly",
+                "stakeholders": ["maintenance_crew", "operations_manager"],
+            },
+        ]
+        
         return basic
 
     def _create_energy_basic(self) -> dict[str, Any]:

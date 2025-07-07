@@ -223,38 +223,41 @@ ml-eval report --type reliability --period 30d
 The framework provides ready-to-use templates for these industrial sectors:
 
 #### **🏭 Manufacturing Industry**
-- **🔍 quality_control**: Quality control system for defect detection and inspection
-- **🔧 predictive_maintenance**: Predictive maintenance system for equipment monitoring
+- **🔍 basic**: Basic quality control system for defect detection and inspection
+- **🔧 advanced**: Advanced manufacturing with predictive maintenance and equipment monitoring
 
 #### **✈️ Aviation Industry**  
-- **🛡️ safety_decision**: Safety-critical decision system for aviation safety
-- **✈️ flight_control**: Flight control assistance system for aircraft control
+- **🛡️ basic**: Basic aviation safety system for flight control and safety monitoring
+- **✈️ advanced**: Advanced aviation system with comprehensive safety and regulatory compliance
 
 #### **⚡ Energy Industry**
-- **⚡ grid_optimization**: Power grid optimization system for demand prediction and supply management
-- **📊 demand_prediction**: Energy demand forecasting system
+- **⚡ basic**: Basic grid management system for power distribution and monitoring
+- **📊 advanced**: Advanced energy system with grid optimization and demand prediction
+
+#### **🚢 Maritime Industry**
+- **🚢 basic**: Basic maritime safety system for collision avoidance and navigation
+- **🚢 advanced**: Advanced maritime system with comprehensive safety and regulatory compliance
 
 ### ⚡ Quick Commands
 
 ```bash
 # Get help and examples
-ml-eval quickstart --industry aviation
-ml-eval example --type aircraft-model --detailed
+ml-eval --help
 
 # Show all available commands
 ml-eval --help
 
-# Additional template examples
-ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
-ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
+# Create configuration examples
+ml-eval create-config --system-name "My Manufacturing System" --industry manufacturing --output my-config.yaml
+ml-eval create-config --system-name "My Aviation System" --industry aviation --output aviation-config.yaml
 
 # Using example configurations
-ml-eval dev --config examples/aircraft-landing-model.yaml --mode validation --strict
-ml-eval evaluate --config examples/fish-classification-workflow.yaml --mode single
-ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
+ml-eval run examples/aircraft-landing-model.yaml
+ml-eval validate examples/fish-classification-workflow.yaml
+ml-eval collect examples/maritime-collision-avoidance.yaml --output data.json
 
 # Additional reporting
-ml-eval report --type safety --period 30d
+ml-eval report examples/aircraft-landing-model.yaml --results results.json
 ```
 
 ### 📋 Configuration Examples
@@ -270,11 +273,12 @@ The framework includes several complete example configurations in the [`examples
 #### **📋 Using Industry Templates (Recommended)**
 
 ```bash
-# List available templates
-ml-eval template --industry manufacturing --type list
+# Create configuration for specific industry
+ml-eval create-config --system-name "My Manufacturing System" --industry manufacturing --output manufacturing-config.yaml
+ml-eval create-config --system-name "My Aviation System" --industry aviation --output aviation-config.yaml
 
-# Get a specific template
-ml-eval template --industry manufacturing --type quality_control > quality-control.yaml
+# Validate your configuration
+ml-eval validate manufacturing-config.yaml
 ```
 
 #### **🏭 Manufacturing Quality Control Example**
@@ -432,8 +436,8 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **🏭 Industry-Specific Templates**
-- Ready-to-use configurations for 6 industrial sectors
-- Multiple template types per industry
+- Ready-to-use configurations for 4 industrial sectors (Manufacturing, Aviation, Energy, Maritime)
+- Multiple template types per industry (basic and advanced)
 - Industry-specific SLOs with appropriate safety and compliance standards
 
 #### **🖥️ Industrial-Focused CLI**

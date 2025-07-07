@@ -131,20 +131,22 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **💰 Business metrics**: Connect technical performance to fishing efficiency and regulatory compliance
 - **🌊 Environmental adaptation**: Monitor water conditions and adjust model behavior for different fishing environments
 
-### ✈️ Aircraft Landing Systems (Single Model Example)
-**Problem**: Safety-critical decision model with zero tolerance for false positives.
+### ✈️ Autonomous Flight Guidance Systems (Comprehensive Example)
+**Problem**: Advanced autonomous flight guidance system with comprehensive safety and compliance requirements.
 
 **Challenges**:
-- **🛡️ Safety Requirements**: 99.99% accuracy with sub-100ms response time
-- **📋 Regulatory Compliance**: Must meet aviation safety standards (DO-178C)
-- **⚡ Real-time Constraints**: Decisions must be made within strict time limits
+- **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
+- **📋 Regulatory Compliance**: Must meet multiple aviation safety standards (DO-178C, DO-254, ARP4754A)
+- **⚡ Real-time Constraints**: Complex flight path optimization and obstacle detection
 - **🚨 Failure Consequences**: Incorrect decisions can lead to catastrophic outcomes
+- **🌊 Environmental Adaptation**: System must adapt to various weather and runway conditions
 
 **Framework Solution**:
-- **🛡️ Safety validation**: Continuous monitoring of false positive rates and response times
-- **📋 Regulatory compliance**: Automated validation against aviation safety standards
-- **🚨 Real-time alerting**: Immediate notification of any performance degradation
-- **🚨 Incident response**: Structured approach to handling safety-critical failures
+- **🛡️ Multi-faceted safety validation**: Flight path accuracy, runway identification, weather assessment, obstacle detection
+- **📋 Comprehensive regulatory compliance**: Automated validation against multiple aviation standards
+- **🚨 Real-time alerting**: Immediate notification of any performance degradation across all critical metrics
+- **🚨 Incident response**: Structured approach to handling safety-critical failures with multiple stakeholders
+- **🌊 Environmental monitoring**: Continuous adaptation to changing flight conditions
 
 ## 🏗️ Architecture
 
@@ -261,7 +263,7 @@ ml-eval report --type safety --period 30d
 
 The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
 
-- **[✈️ aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml)**: Safety-critical aviation decision system with DO-178C compliance
+- **[✈️ aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml)**: Comprehensive autonomous flight guidance system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
 - **[🐟 fish-classification-workflow.yaml](./examples/fish-classification-workflow.yaml)**: Multi-stage workflow for underwater fish species classification
 - **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
 
@@ -281,7 +283,7 @@ See [examples/fish-classification-workflow.yaml](./examples/fish-classification-
 
 #### **✈️ Aviation Safety System Example**
 
-See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml) for a complete safety-critical system configuration.
+See [examples/aircraft-landing-model.yaml](./examples/aircraft-landing-model.yaml) for a comprehensive autonomous flight guidance system with multiple evaluators, collectors, and safety thresholds.
 
 ## 🔧 Core Components
 

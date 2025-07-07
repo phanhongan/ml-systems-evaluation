@@ -1,14 +1,14 @@
-# Your First Evaluation
+# 🎯 Your First Evaluation
 
 This guide walks you through running your first evaluation using the ML Systems Evaluation Framework.
 
-## Prerequisites
+## 🔧 Prerequisites
 
-- Framework installed (see [Installation Guide](installation.md))
-- Access to your ML system's data
-- Basic understanding of your system's architecture
+- 📦 Framework installed (see [Installation Guide](installation.md))
+- 📊 Access to your ML system's data
+- 🏗️ Basic understanding of your system's architecture
 
-## Step 1: Choose Your Industry Template
+## 📋 Step 1: Choose Your Industry Template
 
 Start with a template that matches your industry:
 
@@ -20,7 +20,7 @@ ml-eval templates list
 ml-eval templates use manufacturing-basic
 ```
 
-## Step 2: Configure Your Data Sources
+## 📊 Step 2: Configure Your Data Sources
 
 Edit the generated configuration file to point to your data:
 
@@ -33,7 +33,7 @@ data_sources:
     tables: ["predictions", "actuals", "metadata"]
 ```
 
-## Step 3: Define Your Metrics
+## 📈 Step 3: Define Your Metrics
 
 Configure what metrics to collect:
 
@@ -50,7 +50,7 @@ collectors:
     features: ["feature_1", "feature_2", "feature_3"]
 ```
 
-## Step 4: Set Up Evaluators
+## 🔍 Step 4: Set Up Evaluators
 
 Configure how to evaluate your system:
 
@@ -69,7 +69,7 @@ evaluators:
     sensitivity: 0.05
 ```
 
-## Step 5: Define SLOs
+## 📋 Step 5: Define SLOs
 
 Set your Service Level Objectives:
 
@@ -80,7 +80,7 @@ slo:
   latency_p95: 100  # milliseconds
 ```
 
-## Step 6: Run Your Evaluation
+## ⚡ Step 6: Run Your Evaluation
 
 Execute the evaluation:
 
@@ -93,7 +93,7 @@ ml-eval collect --config config.yaml
 ml-eval evaluate --config config.yaml --evaluator performance
 ```
 
-## Step 7: Review Results
+## 📊 Step 7: Review Results
 
 Check the generated reports:
 
@@ -105,33 +105,33 @@ ml-eval report --config config.yaml
 open reports/business_report.html
 ```
 
-## Understanding Your Results
+## 📈 Understanding Your Results
 
-### Key Metrics
+### 🎯 Key Metrics
 
-1. **Accuracy**: Overall prediction accuracy
-2. **Precision**: True positive rate
-3. **Recall**: Sensitivity of the model
-4. **Drift Score**: Data distribution changes
-5. **Latency**: Response time percentiles
+1. **📊 Accuracy**: Overall prediction accuracy
+2. **🎯 Precision**: True positive rate
+3. **🔍 Recall**: Sensitivity of the model
+4. **📈 Drift Score**: Data distribution changes
+5. **⚡ Latency**: Response time percentiles
 
-### Alert Thresholds
+### 🚨 Alert Thresholds
 
 The framework alerts you when:
-- Performance metrics fall below thresholds
-- Data drift is detected
-- System availability drops
-- Compliance violations occur
+- 📉 Performance metrics fall below thresholds
+- 📊 Data drift is detected
+- 🔴 System availability drops
+- 📋 Compliance violations occur
 
-## Next Steps
+## 🎯 Next Steps
 
-1. **Customize Configuration**: Adapt to your specific needs
-2. **Set Up Monitoring**: Configure continuous monitoring
-3. **Define SLOs**: Establish Service Level Objectives
-4. **Create Dashboards**: Visualize your metrics
-5. **Set Up Alerts**: Configure notification systems
+1. **⚙️ Customize Configuration**: Adapt to your specific needs
+2. **📊 Set Up Monitoring**: Configure continuous monitoring
+3. **📋 Define SLOs**: Establish Service Level Objectives
+4. **📈 Create Dashboards**: Visualize your metrics
+5. **🚨 Set Up Alerts**: Configure notification systems
 
-## Example: Manufacturing Quality Control
+## 💡 Example: Manufacturing Quality Control
 
 Here's a complete example for a manufacturing quality control system:
 
@@ -173,21 +173,21 @@ reports:
     format: "html"
 ```
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-### Common Issues
+### ❌ Common Issues
 
-**Issue**: "No data found"
-- **Solution**: Verify your data source configuration and connection
+**🚨 Issue**: "No data found"
+- **✅ Solution**: Verify your data source configuration and connection
 
-**Issue**: "Evaluation failed"
-- **Solution**: Check your evaluator configuration and thresholds
+**🚨 Issue**: "Evaluation failed"
+- **✅ Solution**: Check your evaluator configuration and thresholds
 
-**Issue**: "Template not found"
-- **Solution**: Update to the latest version: `poetry update`
+**🚨 Issue**: "Template not found"
+- **✅ Solution**: Update to the latest version: `poetry update`
 
-### Getting Help
+### 🆘 Getting Help
 
-- Check the [Configuration Guide](configuration.md) for detailed options
-- Review [CLI Reference](cli-reference.md) for command details
-- Consult [Templates Guide](templates.md) for your specific domain 
+- ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
+- 🖥️ Review [CLI Reference](cli-reference.md) for command details
+- 📋 Consult [Templates Guide](templates.md) for your specific domain 

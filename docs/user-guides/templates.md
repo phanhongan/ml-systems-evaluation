@@ -1,15 +1,15 @@
-# Industry Templates
+# 📋 Industry Templates
 
 This directory contains pre-configured templates for different industries, designed to help you quickly set up evaluations for your specific domain.
 
-## Available Templates
+## 📁 Available Templates
 
-### Manufacturing Templates
+### 🏭 Manufacturing Templates
 
-#### Basic Manufacturing Quality Control
-**File**: `manufacturing-basic.yaml`
-**Use Case**: General quality control systems
-**Key Metrics**: Accuracy, precision, recall, defect rate
+#### 🔍 Basic Manufacturing Quality Control
+**📄 File**: `manufacturing-basic.yaml`
+**🎯 Use Case**: General quality control systems
+**📊 Key Metrics**: Accuracy, precision, recall, defect rate
 
 ```yaml
 system:
@@ -54,17 +54,17 @@ slo:
   latency_p95: 100
 ```
 
-#### Advanced Manufacturing with Predictive Maintenance
-**File**: `manufacturing-advanced.yaml`
-**Use Case**: Predictive maintenance and quality control
-**Key Metrics**: Equipment health, failure prediction, maintenance costs
+#### 🔧 Advanced Manufacturing with Predictive Maintenance
+**📄 File**: `manufacturing-advanced.yaml`
+**🎯 Use Case**: Predictive maintenance and quality control
+**📊 Key Metrics**: Equipment health, failure prediction, maintenance costs
 
-### Aviation Templates
+### ✈️ Aviation Templates
 
-#### Safety-Critical Flight Systems
-**File**: `aviation-safety.yaml`
-**Use Case**: Flight control and safety systems
-**Key Metrics**: Safety margins, failure probability, response time
+#### 🛡️ Safety-Critical Flight Systems
+**📄 File**: `aviation-safety.yaml`
+**🎯 Use Case**: Flight control and safety systems
+**📊 Key Metrics**: Safety margins, failure probability, response time
 
 ```yaml
 system:
@@ -108,17 +108,17 @@ slo:
   response_time_p99: 50
 ```
 
-#### Aircraft Maintenance Prediction
-**File**: `aviation-maintenance.yaml`
-**Use Case**: Predictive maintenance for aircraft components
-**Key Metrics**: Component health, maintenance scheduling, cost optimization
+#### 🔧 Aircraft Maintenance Prediction
+**📄 File**: `aviation-maintenance.yaml`
+**🎯 Use Case**: Predictive maintenance for aircraft components
+**📊 Key Metrics**: Component health, maintenance scheduling, cost optimization
 
-### Energy Templates
+### ⚡ Energy Templates
 
-#### Grid Optimization Systems
-**File**: `energy-grid.yaml`
-**Use Case**: Power grid optimization and demand prediction
-**Key Metrics**: Grid stability, demand accuracy, efficiency
+#### ⚡ Grid Optimization Systems
+**📄 File**: `energy-grid.yaml`
+**🎯 Use Case**: Power grid optimization and demand prediction
+**📊 Key Metrics**: Grid stability, demand accuracy, efficiency
 
 ```yaml
 system:
@@ -162,17 +162,17 @@ slo:
   grid_stability: 0.99
 ```
 
-#### Renewable Energy Forecasting
-**File**: `energy-renewable.yaml`
-**Use Case**: Solar and wind power forecasting
-**Key Metrics**: Forecast accuracy, energy production, cost optimization
+#### 🌞 Renewable Energy Forecasting
+**📄 File**: `energy-renewable.yaml`
+**🎯 Use Case**: Solar and wind power forecasting
+**📊 Key Metrics**: Forecast accuracy, energy production, cost optimization
 
-### Maritime Templates
+### 🚢 Maritime Templates
 
-#### Maritime Collision Avoidance
-**File**: `maritime-collision-avoidance.yaml`
-**Use Case**: Ship collision avoidance and navigational safety
-**Key Metrics**: Collision avoidance accuracy, alert latency, false alarm rate, STW/SOG discrepancy, system availability
+#### 🚢 Maritime Collision Avoidance
+**📄 File**: `maritime-collision-avoidance.yaml`
+**🎯 Use Case**: Ship collision avoidance and navigational safety
+**📊 Key Metrics**: Collision avoidance accuracy, alert latency, false alarm rate, STW/SOG discrepancy, system availability
 
 ```yaml
 system:

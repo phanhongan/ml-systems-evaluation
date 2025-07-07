@@ -1,17 +1,17 @@
-# Getting Started with ML Systems Evaluation Framework
+# 🚀 Getting Started with ML Systems Evaluation Framework
 
 This guide will help you quickly set up and run your first evaluation using the ML Systems Evaluation Framework.
 
-## Prerequisites
+## 🔧 Prerequisites
 
-- Python 3.9 or higher
-- Poetry package manager (https://python-poetry.org/)
-- Access to your ML system's monitoring data
-- Basic understanding of your system's architecture
+- 🐍 Python 3.9 or higher
+- 📦 Poetry package manager (https://python-poetry.org/)
+- 📊 Access to your ML system's monitoring data
+- 🏗️ Basic understanding of your system's architecture
 
-## Installation
+## 📦 Installation
 
-### 1. Install the Framework
+### 1️⃣ Install the Framework
 
 ```bash
 # Clone the repository
@@ -25,15 +25,15 @@ poetry install
 poetry shell
 ```
 
-### 2. Verify Installation
+### 2️⃣ Verify Installation
 
 ```bash
 ml-eval --version
 ```
 
-## Quick Start: Your First Evaluation
+## ⚡ Quick Start: Your First Evaluation
 
-### 1. Choose a Template
+### 1️⃣ Choose a Template
 
 The framework provides industry-specific templates. For your first evaluation, we recommend starting with a basic template:
 
@@ -45,7 +45,7 @@ ml-eval templates list
 ml-eval templates use manufacturing-basic
 ```
 
-### 2. Configure Your System
+### 2️⃣ Configure Your System
 
 Create a configuration file for your system:
 
@@ -93,7 +93,7 @@ slo:
   latency_p95: 100  # milliseconds
 ```
 
-### 3. Run Your First Evaluation
+### 3️⃣ Run Your First Evaluation
 
 ```bash
 # Run a complete evaluation
@@ -105,60 +105,60 @@ ml-eval evaluate --config config.yaml --evaluator performance
 ml-eval report --config config.yaml --report business
 ```
 
-### 4. Review Results
+### 4️⃣ Review Results
 
 Check the generated reports in the `./reports/` directory:
 
-- **Business Report**: High-level metrics and recommendations
-- **Performance Report**: Detailed performance analysis
-- **Compliance Report**: Regulatory compliance status
+- **📊 Business Report**: High-level metrics and recommendations
+- **📈 Performance Report**: Detailed performance analysis
+- **📋 Compliance Report**: Regulatory compliance status
 
-## Understanding Your Results
+## 📊 Understanding Your Results
 
-### Key Metrics to Monitor
+### 🎯 Key Metrics to Monitor
 
-1. **Accuracy**: Overall prediction accuracy
-2. **Precision**: True positive rate
-3. **Recall**: Sensitivity of the model
-4. **Drift Score**: Data distribution changes
-5. **Latency**: Response time percentiles
+1. **📊 Accuracy**: Overall prediction accuracy
+2. **🎯 Precision**: True positive rate
+3. **🔍 Recall**: Sensitivity of the model
+4. **📈 Drift Score**: Data distribution changes
+5. **⚡ Latency**: Response time percentiles
 
-### Alert Thresholds
+### 🚨 Alert Thresholds
 
 The framework automatically alerts you when:
-- Performance metrics fall below thresholds
-- Data drift is detected
-- System availability drops
-- Compliance violations occur
+- 📉 Performance metrics fall below thresholds
+- 📊 Data drift is detected
+- 🔴 System availability drops
+- 📋 Compliance violations occur
 
-## Next Steps
+## 🎯 Next Steps
 
-1. **Customize Configuration**: Adapt the template to your specific needs
-2. **Set Up Monitoring**: Configure continuous monitoring
-3. **Define SLOs**: Establish Service Level Objectives
-4. **Create Dashboards**: Visualize your metrics
-5. **Set Up Alerts**: Configure notification systems
+1. **⚙️ Customize Configuration**: Adapt the template to your specific needs
+2. **📊 Set Up Monitoring**: Configure continuous monitoring
+3. **📋 Define SLOs**: Establish Service Level Objectives
+4. **📈 Create Dashboards**: Visualize your metrics
+5. **🚨 Set Up Alerts**: Configure notification systems
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-### Common Issues
+### ❌ Common Issues
 
-**Issue**: "No data found"
-- **Solution**: Verify your data source configuration and connection
+**🚨 Issue**: "No data found"
+- **✅ Solution**: Verify your data source configuration and connection
 
-**Issue**: "Evaluation failed"
-- **Solution**: Check your evaluator configuration and thresholds
+**🚨 Issue**: "Evaluation failed"
+- **✅ Solution**: Check your evaluator configuration and thresholds
 
-**Issue**: "Template not found"
-- **Solution**: Update to the latest version: `poetry update`
+**🚨 Issue**: "Template not found"
+- **✅ Solution**: Update to the latest version: `poetry update`
 
-### Getting Help
+### 🆘 Getting Help
 
-- Check the [Configuration Guide](configuration.md) for detailed options
-- Review [CLI Reference](cli-reference.md) for command details
-- Consult [Templates Guide](templates.md) for your specific domain
+- ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
+- 🖥️ Review [CLI Reference](cli-reference.md) for command details
+- 📋 Consult [Templates Guide](templates.md) for your specific domain
 
-## Example: Manufacturing Quality Control
+## 💡 Example: Manufacturing Quality Control
 
 Here's a complete example for a manufacturing quality control system:
 

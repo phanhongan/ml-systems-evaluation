@@ -1,8 +1,8 @@
-# Configuration Guide
+# ⚙️ Configuration Guide
 
 This guide provides detailed information about all configuration options available in the ML Systems Evaluation Framework.
 
-## Configuration File Structure
+## 📁 Configuration File Structure
 
 The framework uses YAML configuration files with the following structure:
 
@@ -36,9 +36,9 @@ slo:
   # Service Level Objectives
 ```
 
-## System Configuration
+## 🏗️ System Configuration
 
-### Basic System Settings
+### 🔧 Basic System Settings
 
 ```yaml
 system:
@@ -50,23 +50,23 @@ system:
   environment: "production"  # production, staging, development
 ```
 
-### System Types
+### 🏭 System Types
 
-- **manufacturing**: Manufacturing and quality control systems
-- **aviation**: Aviation and aerospace systems
-- **energy**: Energy and utility systems
-- **healthcare**: Healthcare and medical systems
-- **automotive**: Automotive and transportation systems
-- **custom**: Custom system type
+- **🏭 manufacturing**: Manufacturing and quality control systems
+- **✈️ aviation**: Aviation and aerospace systems
+- **⚡ energy**: Energy and utility systems
+- **🏥 healthcare**: Healthcare and medical systems
+- **🚗 automotive**: Automotive and transportation systems
+- **🔧 custom**: Custom system type
 
-### Criticality Levels
+### 🚨 Criticality Levels
 
-- **business-critical**: Systems where failures result in financial loss
-- **safety-critical**: Systems where failures can cause harm to people or environment
+- **💰 business-critical**: Systems where failures result in financial loss
+- **🛡️ safety-critical**: Systems where failures can cause harm to people or environment
 
-## Data Sources
+## 📊 Data Sources
 
-### Database Sources
+### 🗄️ Database Sources
 
 ```yaml
 data_sources:
@@ -80,15 +80,15 @@ data_sources:
     ssl_mode: "require"
 ```
 
-#### Supported Database Types
+#### 🗄️ Supported Database Types
 
-- **postgresql**: PostgreSQL database
-- **mysql**: MySQL database
-- **sqlite**: SQLite database
-- **oracle**: Oracle database
-- **sqlserver**: Microsoft SQL Server
+- **🐘 postgresql**: PostgreSQL database
+- **🐬 mysql**: MySQL database
+- **📱 sqlite**: SQLite database
+- **🔷 oracle**: Oracle database
+- **🪟 sqlserver**: Microsoft SQL Server
 
-### API Sources
+### 🌐 API Sources
 
 ```yaml
 data_sources:
@@ -104,7 +104,7 @@ data_sources:
     rate_limit: 100  # requests per minute
 ```
 
-### File Sources
+### 📁 File Sources
 
 ```yaml
 data_sources:
@@ -118,15 +118,15 @@ data_sources:
     compression: "gzip"  # optional
 ```
 
-#### Supported File Formats
+#### 📄 Supported File Formats
 
-- **csv**: Comma-separated values
-- **json**: JSON files
-- **parquet**: Apache Parquet files
-- **excel**: Microsoft Excel files
-- **xml**: XML files
+- **📊 csv**: Comma-separated values
+- **📋 json**: JSON files
+- **📦 parquet**: Apache Parquet files
+- **📊 excel**: Microsoft Excel files
+- **📄 xml**: XML files
 
-### Streaming Sources
+### 🌊 Streaming Sources
 
 ```yaml
 data_sources:
@@ -140,9 +140,9 @@ data_sources:
     session_timeout_ms: 30000
 ```
 
-## Collectors
+## 📊 Collectors
 
-### Offline Collectors
+### 📁 Offline Collectors
 
 ```yaml
 collectors:
@@ -163,7 +163,7 @@ collectors:
           value: "completed"
 ```
 
-### Online Collectors
+### ⚡ Online Collectors
 
 ```yaml
 collectors:
@@ -178,7 +178,7 @@ collectors:
     max_retries: 3
 ```
 
-### Environmental Collectors
+### 🌊 Environmental Collectors
 
 ```yaml
 collectors:
@@ -191,9 +191,9 @@ collectors:
     include_disk_metrics: true
 ```
 
-## Evaluators
+## 🔍 Evaluators
 
-### Performance Evaluator
+### 📊 Performance Evaluator
 
 ```yaml
 evaluators:

@@ -1,18 +1,18 @@
-# Monitoring Setup
+# 📊 Monitoring Setup
 
 This guide helps you set up continuous monitoring for your ML systems using the ML Systems Evaluation Framework.
 
-## Overview
+## 📋 Overview
 
 Continuous monitoring is essential for Industrial AI systems to:
-- Detect performance degradation early
-- Identify data drift before it impacts predictions
-- Ensure compliance with safety and business requirements
-- Provide real-time alerts for critical issues
+- 🔍 Detect performance degradation early
+- 📈 Identify data drift before it impacts predictions
+- 📋 Ensure compliance with safety and business requirements
+- 🚨 Provide real-time alerts for critical issues
 
-## Setting Up Continuous Monitoring
+## ⚙️ Setting Up Continuous Monitoring
 
-### Step 1: Configure Data Collection
+### 📊 Step 1: Configure Data Collection
 
 Set up automated data collection from your ML system:
 
@@ -43,7 +43,7 @@ collectors:
     metrics: ["drift_score", "performance_trends"]
 ```
 
-### Step 2: Define Monitoring Rules
+### 📋 Step 2: Define Monitoring Rules
 
 Configure what to monitor and when to alert:
 
@@ -71,7 +71,7 @@ monitoring:
       severity: "critical"
 ```
 
-### Step 3: Set Up Alerting
+### 🚨 Step 3: Set Up Alerting
 
 Configure notification channels:
 
@@ -96,7 +96,7 @@ alerts:
     info: ["email"]
 ```
 
-### Step 4: Start Monitoring
+### ⚡ Step 4: Start Monitoring
 
 Run the monitoring service:
 
@@ -111,9 +111,9 @@ nohup ml-eval monitor --config monitoring-config.yaml > monitoring.log 2>&1 &
 ml-eval monitor --status
 ```
 
-## Monitoring Dashboards
+## 📈 Monitoring Dashboards
 
-### Setting Up Dashboards
+### 🎨 Setting Up Dashboards
 
 Create visualizations for your metrics:
 
@@ -128,40 +128,40 @@ dashboards:
     template: "business_dashboard.html"
 ```
 
-### Key Dashboards
+### 🎯 Key Dashboards
 
-1. **Performance Dashboard**
+1. **📊 Performance Dashboard**
    - Real-time accuracy, precision, recall
    - Latency percentiles
    - Throughput metrics
 
-2. **Drift Dashboard**
+2. **📈 Drift Dashboard**
    - Feature distribution changes
    - Statistical drift scores
    - Historical trends
 
-3. **Business Dashboard**
+3. **💰 Business Dashboard**
    - Revenue impact
    - Cost savings
    - Risk metrics
 
-4. **Compliance Dashboard**
+4. **📋 Compliance Dashboard**
    - Regulatory compliance status
    - Safety metrics
    - Audit trails
 
-## Alert Management
+## 🚨 Alert Management
 
-### Alert Lifecycle
+### 🔄 Alert Lifecycle
 
-1. **Detection**: System detects violation of monitoring rules
-2. **Notification**: Alerts sent to configured channels
-3. **Acknowledgment**: Team acknowledges the alert
-4. **Investigation**: Root cause analysis
-5. **Resolution**: Fix applied and verified
-6. **Post-mortem**: Document lessons learned
+1. **🔍 Detection**: System detects violation of monitoring rules
+2. **📢 Notification**: Alerts sent to configured channels
+3. **✅ Acknowledgment**: Team acknowledges the alert
+4. **🔍 Investigation**: Root cause analysis
+5. **🔧 Resolution**: Fix applied and verified
+6. **📝 Post-mortem**: Document lessons learned
 
-### Escalation Policies
+### 📈 Escalation Policies
 
 ```yaml
 escalation:
@@ -179,9 +179,9 @@ escalation:
       channels: ["slack", "email", "pagerduty"]
 ```
 
-## Integration with Existing Systems
+## 🔌 Integration with Existing Systems
 
-### Prometheus Integration
+### 📊 Prometheus Integration
 
 ```yaml
 exporters:
@@ -194,7 +194,7 @@ exporters:
       - "ml_drift_score"
 ```
 
-### Grafana Integration
+### 📈 Grafana Integration
 
 ```yaml
 dashboards:
@@ -207,45 +207,44 @@ dashboards:
         type: "graph"
 ```
 
-## Best Practices
+## 🏆 Best Practices
 
-### Monitoring Strategy
+### 📋 Monitoring Strategy
 
-1. **Start Simple**: Begin with basic performance metrics
-2. **Add Gradually**: Introduce drift detection and business metrics
-3. **Test Alerts**: Verify alerting works before going live
-4. **Document Everything**: Keep runbooks for common issues
-5. **Review Regularly**: Update thresholds based on system evolution
+1. **🚀 Start Simple**: Begin with basic performance metrics
+2. **📈 Add Gradually**: Introduce drift detection and business metrics
+3. **🧪 Test Alerts**: Verify alerting works before going live
+4. **📝 Document Everything**: Keep runbooks for common issues
+5. **🔄 Review Regularly**: Update thresholds based on system evolution
 
-### Performance Considerations
+### ⚡ Performance Considerations
 
-1. **Sampling**: Use sampling for high-volume data
-2. **Aggregation**: Pre-aggregate metrics where possible
-3. **Retention**: Set appropriate data retention policies
-4. **Scaling**: Plan for monitoring system scaling
+1. **📊 Sampling**: Use sampling for high-volume data
+2. **📈 Aggregation**: Pre-aggregate metrics where possible
+3. **💾 Retention**: Set appropriate data retention policies
+4. **📈 Scaling**: Plan for monitoring system scaling
 
-### Security
+### 🛡️ Security
 
-1. **Access Control**: Limit access to monitoring data
-2. **Encryption**: Encrypt sensitive metrics in transit
-3. **Audit Logs**: Log all monitoring system access
-4. **Compliance**: Ensure monitoring meets regulatory requirements
+1. **🔐 Access Control**: Limit access to monitoring data
+2. **🔒 Encryption**: Encrypt sensitive metrics in transit
+3. **📋 Audit Logs**: Log all monitoring system access
+4. **📋 Compliance**: Ensure monitoring meets regulatory requirements
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-### Common Issues
+### ❌ Common Issues
 
-**Issue**: "No data being collected"
-- **Solution**: Check data source connections and permissions
+**🚨 Issue**: "No data being collected"
+- **✅ Solution**: Check data source connections and permissions
 
-**Issue**: "Alerts not firing"
-- **Solution**: Verify monitoring rules and thresholds
+**🚨 Issue**: "Alerts not firing"
+- **✅ Solution**: Verify monitoring rules and thresholds
 
-**Issue**: "High resource usage"
-- **Solution**: Optimize collection intervals and sampling
+**🚨 Issue**: "High resource usage"
+- **✅ Solution**: Optimize collection intervals and sampling
 
-### Getting Help
+### 🆘 Getting Help
 
-- Check the [Configuration Guide](configuration.md) for detailed options
-- Review [CLI Reference](cli-reference.md) for command details
-- Consult [Incident Response](../reference/incident-response.md) for handling alerts 
+- ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
+- 🖥️ Review [CLI Reference](cli-reference.md) for command details 

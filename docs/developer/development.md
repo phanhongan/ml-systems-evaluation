@@ -1,16 +1,16 @@
-# Development Guide
+# 🛠️ Development Guide
 
 This guide provides comprehensive information for developers contributing to the ML Systems Evaluation Framework, including code quality standards, testing practices, and development workflows.
 
-## Development Environment Setup
+## 🔧 Development Environment Setup
 
-### Prerequisites
+### 🔧 Prerequisites
 
-- Python 3.9 or higher
-- Poetry package manager
-- Git for version control
+- 🐍 Python 3.9 or higher
+- 📦 Poetry package manager
+- 📥 Git for version control
 
-### Initial Setup
+### 🚀 Initial Setup
 
 ```bash
 # Clone the repository
@@ -24,15 +24,15 @@ poetry install
 poetry shell
 ```
 
-## Code Quality Tools
+## 🔧 Code Quality Tools
 
 The project uses several tools to maintain code quality and consistency:
 
-### 1. Black - Code Formatting
+### 1. ⚫ Black - Code Formatting
 
 [Black](https://black.readthedocs.io/) is an opinionated code formatter that automatically formats Python code to a consistent style.
 
-#### Configuration
+#### ⚙️ Configuration
 
 Black is configured in `pyproject.toml`:
 
@@ -56,7 +56,7 @@ extend-exclude = '''
 '''
 ```
 
-#### Usage
+#### 💻 Usage
 
 ```bash
 # Format all Python files
@@ -69,7 +69,7 @@ poetry run black --check .
 poetry run black ml_eval/core/ tests/
 ```
 
-#### Pre-commit Hook
+#### 🔗 Pre-commit Hook
 
 To automatically format code before commits, install the pre-commit hook:
 
@@ -81,11 +81,11 @@ poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
 
-### 2. Flake8 - Linting
+### 2. 🔍 Flake8 - Linting
 
 [Flake8](https://flake8.pycqa.org/) is a Python linting tool that checks code style and potential errors.
 
-#### Configuration
+#### ⚙️ Configuration
 
 Flake8 is configured in `.flake8`:
 
@@ -105,7 +105,7 @@ exclude =
     dist
 ```
 
-#### Usage
+#### 💻 Usage
 
 ```bash
 # Lint all Python files
@@ -118,11 +118,11 @@ poetry run flake8 ml_eval/ tests/
 poetry run flake8 --statistics .
 ```
 
-### 3. MyPy - Type Checking
+### 3. 🔍 MyPy - Type Checking
 
 [MyPy](https://mypy.readthedocs.io/) is a static type checker for Python that helps catch type-related errors.
 
-#### Configuration
+#### ⚙️ Configuration
 
 MyPy configuration is in `pyproject.toml`:
 
@@ -143,7 +143,7 @@ warn_unreachable = true
 strict_equality = true
 ```
 
-#### Usage
+#### 💻 Usage
 
 ```bash
 # Type check all Python files
@@ -156,11 +156,11 @@ poetry run mypy ml_eval/core/ ml_eval/collectors/
 poetry run mypy --html-report mypy-report ml_eval
 ```
 
-### 4. isort - Import Sorting
+### 4. 📦 isort - Import Sorting
 
 [isort](https://pycqa.github.io/isort/) automatically sorts and organizes Python imports.
 
-#### Configuration
+#### ⚙️ Configuration
 
 isort is configured in `pyproject.toml`:
 
@@ -175,7 +175,7 @@ use_parentheses = true
 ensure_newline_before_comments = true
 ```
 
-#### Usage
+#### 💻 Usage
 
 ```bash
 # Sort imports in all Python files
@@ -188,9 +188,9 @@ poetry run isort --check-only .
 poetry run isort ml_eval/core/ tests/
 ```
 
-## Development Workflow
+## 🔄 Development Workflow
 
-### 1. Code Quality Checks
+### 1. 🔧 Code Quality Checks
 
 Before committing code, run all quality checks:
 
@@ -238,7 +238,7 @@ poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
 
-## Testing
+## 🧪 Testing
 
 ### Running Tests
 
@@ -307,7 +307,7 @@ class TestEvaluationFramework:
         pass
 ```
 
-## Continuous Integration
+## 📋 Continuous Integration
 
 The project uses GitHub Actions for continuous integration. The workflow runs:
 
@@ -337,7 +337,7 @@ poetry run pytest --cov=ml_eval --cov-report=xml
 poetry build
 ```
 
-## Code Style Guidelines
+## 📝 Code Style Guidelines
 
 ### Python Style
 
@@ -406,7 +406,7 @@ class CustomCollector(BaseCollector):
         pass
 ```
 
-## Debugging
+## 🛡️ Debugging
 
 ### Debugging Tools
 
@@ -422,7 +422,7 @@ class CustomCollector(BaseCollector):
 3. **Style Issues**: Use Black and Flake8 for consistent formatting
 4. **Test Failures**: Use pytest with verbose output for detailed error information
 
-## Performance Considerations
+## 📊 Performance Considerations
 
 ### Code Performance
 
@@ -438,7 +438,7 @@ class CustomCollector(BaseCollector):
 3. **Memory Testing**: Monitor memory usage during tests
 4. **Profiling Tests**: Profile test execution for slow tests
 
-## Security Considerations
+## 🛡️ Security Considerations
 
 ### Code Security
 
@@ -454,7 +454,7 @@ class CustomCollector(BaseCollector):
 3. **Code Review**: Security-focused code reviews
 4. **Dependency Updates**: Keep dependencies updated
 
-## Contributing
+## 📋 Contributing
 
 ### Pull Request Process
 
@@ -487,7 +487,7 @@ refactor: simplify configuration loading
 - [ ] No security vulnerabilities
 - [ ] Performance impact considered
 
-## Troubleshooting
+## 📝 Troubleshooting
 
 ### Common Issues
 

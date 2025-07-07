@@ -4,7 +4,7 @@ This guide provides detailed installation instructions for the ML Systems Evalua
 
 ## 🔧 Prerequisites
 
-- 🐍 Python 3.9 or higher
+- 🐍 Python 3.11 or higher
 - 📦 Poetry package manager (https://python-poetry.org/)
 - 📥 Git (for cloning the repository)
 
@@ -78,7 +78,7 @@ If you're using Poetry, you can configure it for your project:
 
 ```bash
 # Set Python version
-poetry env use python3.9
+poetry env use python3.11
 
 # Add dependencies if needed
 poetry add pandas numpy scikit-learn

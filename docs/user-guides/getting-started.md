@@ -4,7 +4,7 @@ This guide will help you quickly set up and run your first evaluation using the 
 
 ## 🔧 Prerequisites
 
-- 🐍 Python 3.9 or higher
+- 🐍 Python 3.11 or higher
 - 📦 Poetry package manager (https://python-poetry.org/)
 - 📊 Access to your ML system's monitoring data
 - 🏗️ Basic understanding of your system's architecture

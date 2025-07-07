@@ -73,8 +73,8 @@ class TemplateType(Enum):
     """Template types per industry"""
 
     # Manufacturing
-    QUALITY_CONTROL = "quality_control"
     PREDICTIVE_MAINTENANCE = "predictive_maintenance"
+    DEMAND_FORECASTING = "demand_forecasting"
 
     # Aviation
     SAFETY_DECISION = "safety_decision"

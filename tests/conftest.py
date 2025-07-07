@@ -99,21 +99,21 @@ def manufacturing_config():
     """Configuration for manufacturing industry testing"""
     return {
         "system": {
-            "name": "quality_control_system",
+            "name": "predictive_maintenance_system",
             "type": "workflow",
             "criticality": "business_critical",
         },
         "slos": {
-            "defect_detection": {
-                "target": 0.98,
+            "equipment_failure_prediction": {
+                "target": 0.92,
                 "window": "24h",
-                "description": "Quality control defect detection",
+                "description": "Equipment failure prediction accuracy",
                 "business_impact": "millions_per_hour",
             },
-            "prediction_latency": {
-                "target": 0.99,
-                "window": "1h",
-                "description": "Real-time prediction latency",
+            "maintenance_cost_reduction": {
+                "target": 0.15,
+                "window": "30d",
+                "description": "Maintenance cost reduction",
             },
         },
     }

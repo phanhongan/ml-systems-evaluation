@@ -202,8 +202,8 @@ ml-eval config template [OPTIONS] TYPE
 
 **Examples:**
 ```bash
-# Generate basic template
-ml-eval config template basic --output my_config.yaml
+# Generate predictive maintenance template
+ml-eval config template predictive_maintenance --output my_config.yaml
 
 # Generate industry-specific template
 ml-eval config template manufacturing --output manufacturing_config.yaml
@@ -260,7 +260,7 @@ ml-eval templates use [OPTIONS] TEMPLATE
 **Examples:**
 ```bash
 # Use manufacturing template
-ml-eval templates use manufacturing-basic --output config.yaml
+ml-eval templates use manufacturing-predictive_maintenance --output config.yaml
 
 # Use with customization
 ml-eval templates use aviation-safety --customize
@@ -288,7 +288,7 @@ ml-eval templates customize [OPTIONS] TEMPLATE
 **Examples:**
 ```bash
 # Customize template
-ml-eval templates customize manufacturing-basic --output my_config.yaml
+ml-eval templates customize manufacturing-predictive_maintenance --output my_config.yaml
 
 # Interactive customization
 ml-eval templates customize aviation-safety --interactive
@@ -319,7 +319,7 @@ ml-eval templates create [OPTIONS] NAME
 ml-eval templates create my-industry --output my_template.yaml
 
 # Create based on existing template
-ml-eval templates create my-manufacturing --base manufacturing-basic
+ml-eval templates create my-manufacturing --base manufacturing-predictive_maintenance
 
 # Create with description
 ml-eval templates create my-aviation --industry aviation --description "Custom aviation template"
@@ -343,7 +343,7 @@ ml-eval templates edit [OPTIONS] TEMPLATE
 **Examples:**
 ```bash
 # Edit template
-ml-eval templates edit manufacturing-basic
+ml-eval templates edit manufacturing-predictive_maintenance
 
 # Edit with specific editor
 ml-eval templates edit aviation-safety --editor vim
@@ -370,7 +370,7 @@ ml-eval templates validate [OPTIONS] TEMPLATE
 **Examples:**
 ```bash
 # Validate template
-ml-eval templates validate manufacturing-basic
+ml-eval templates validate manufacturing-predictive_maintenance
 
 # Strict validation
 ml-eval templates validate aviation-safety --strict
@@ -398,7 +398,7 @@ ml-eval templates test [OPTIONS] TEMPLATE
 **Examples:**
 ```bash
 # Test with sample data
-ml-eval templates test manufacturing-basic --sample-data
+ml-eval templates test manufacturing-predictive_maintenance --sample-data
 
 # Test with specific data
 ml-eval templates test aviation-safety --data-file test_data.csv
@@ -686,7 +686,7 @@ The CLI uses the following exit codes:
 
 ```bash
 # 1. Create configuration from template
-ml-eval templates use manufacturing-basic --output config.yaml
+ml-eval templates use manufacturing-predictive_maintenance --output config.yaml
 
 # 2. Customize configuration
 ml-eval config template manufacturing --customize

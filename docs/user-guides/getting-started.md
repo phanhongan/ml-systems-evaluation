@@ -35,14 +35,14 @@ ml-eval --version
 
 ### 1️⃣ Choose a Template
 
-The framework provides industry-specific templates. For your first evaluation, we recommend starting with a basic template:
+The framework provides industry-specific templates. For your first evaluation, we recommend starting with a functional template:
 
 ```bash
 # List available templates
 ml-eval templates list
 
-# Use a basic template for manufacturing
-ml-eval templates use manufacturing-basic
+# Use a predictive maintenance template for manufacturing
+ml-eval templates use manufacturing-predictive_maintenance
 ```
 
 ### 2️⃣ Configure Your System

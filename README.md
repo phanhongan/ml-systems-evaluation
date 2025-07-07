@@ -217,7 +217,7 @@ For detailed installation instructions, see [docs/user-guides/installation.md](.
 ml-eval template --industry manufacturing --type list
 
 # 2. Get a specific template for your industry
-ml-eval template --industry manufacturing --type quality_control > quality-system.yaml
+ml-eval template --industry manufacturing --type predictive_maintenance > maintenance-system.yaml
 
 # 3. Customize your configuration
 # Edit the generated .yaml file with your specific requirements
@@ -240,8 +240,8 @@ ml-eval report --type reliability --period 30d
 The framework provides ready-to-use templates for these industrial sectors:
 
 #### **🏭 Manufacturing Industry**
-- **🔍 quality_control**: Quality control system for defect detection and inspection
-- **🔧 predictive_maintenance**: Predictive maintenance system for equipment monitoring
+- **🔧 predictive_maintenance**: Predictive maintenance system for equipment monitoring and failure prediction
+- **📊 demand_forecasting**: Demand forecasting system for supply chain optimization
 
 #### **✈️ Aviation Industry**  
 - **🛡️ safety_decision**: Safety-critical decision system for aviation safety
@@ -269,6 +269,7 @@ ml-eval template --industry energy --type grid_optimization --output grid-system
 ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
 ml-eval evaluate --config examples/fish-species-classification.yaml --mode single
 ml-eval monitor --config examples/maritime-collision-avoidance.yaml --interval 60
+ml-eval evaluate --config examples/predictive-maintenance.yaml --mode continuous
 
 # Additional reporting
 ml-eval report --type safety --period 30d
@@ -283,6 +284,7 @@ The framework includes several complete example configurations in the [`examples
 - **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
 - **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
 - **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
+- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance with failure prediction and cost optimization
 
 #### **📋 Using Industry Templates (Recommended)**
 
@@ -291,7 +293,7 @@ The framework includes several complete example configurations in the [`examples
 ml-eval template --industry manufacturing --type list
 
 # Get a specific template
-ml-eval template --industry manufacturing --type quality_control > quality-control.yaml
+ml-eval template --industry manufacturing --type predictive_maintenance > maintenance-system.yaml
 ```
 
 #### **🏭 Manufacturing Quality Control Example**

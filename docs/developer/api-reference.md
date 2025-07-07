@@ -114,10 +114,10 @@ GET /templates
 {
   "templates": [
     {
-      "id": "manufacturing-basic",
-      "name": "Basic Manufacturing",
+      "id": "manufacturing-predictive_maintenance",
+      "name": "Manufacturing Predictive Maintenance",
       "industry": "manufacturing",
-      "description": "Basic manufacturing quality control template",
+      "description": "Manufacturing predictive maintenance template",
       "version": "1.0.0"
     }
   ],
@@ -492,7 +492,7 @@ validation = client.validate_configuration("config_123")
 templates = client.list_templates(industry="manufacturing")
 
 # Use template
-config = client.use_template("manufacturing-basic", {
+config = client.use_template("manufacturing-predictive_maintenance", {
     "system.name": "My System",
     "data_sources.0.connection": "postgresql://user:pass@localhost/db"
 })

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-from setuptools import find_packages, setup  # noqa: E501
+from setuptools import find_packages, setup
 
 
 # Read the README file for long description
@@ -9,7 +9,7 @@ def read_readme():
     """Read README.md for long description"""
     readme_path = os.path.join(os.path.dirname(__file__), "README.md")
     if os.path.exists(readme_path):
-        with open(readme_path, "r", encoding="utf-8") as fh:
+        with open(readme_path, encoding="utf-8") as fh:
             return fh.read()
     return "ML Systems Evaluation Framework - Industrial AI Reliability Assessment"
 
@@ -19,7 +19,7 @@ def read_requirements(filename):
     """Read requirements from file"""
     requirements_path = os.path.join(os.path.dirname(__file__), filename)
     if os.path.exists(requirements_path):
-        with open(requirements_path, "r", encoding="utf-8") as fh:
+        with open(requirements_path, encoding="utf-8") as fh:
             return [
                 line.strip() for line in fh if line.strip() and not line.startswith("#")
             ]
@@ -79,9 +79,7 @@ setup(
         "test": read_requirements("requirements-test.txt"),
         "dev": [
             "black>=23.7.0",
-            "flake8>=6.0.0",
-            "isort>=5.12.0",
-            "mypy>=1.5.0",
+            "ruff>=0.0.292",
             "pre-commit>=3.3.0",
         ],
         "docs": [

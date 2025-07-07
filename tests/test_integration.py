@@ -439,7 +439,7 @@ class TestConfigurationManagement:
 
         try:
             # Load configuration from file
-            with open(config_file, "r") as f:
+            with open(config_file) as f:
                 loaded_config = yaml.safe_load(f)
 
             # Create framework with loaded config

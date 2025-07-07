@@ -1,7 +1,7 @@
 """Reliability evaluator for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from .base import BaseEvaluator
 
@@ -9,21 +9,21 @@ from .base import BaseEvaluator
 class ReliabilityEvaluator(BaseEvaluator):
     """Evaluate system reliability using SLOs and error budgets"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         super().__init__(config)
         self.error_budget_window = config.get("error_budget_window", "30d")
         self.slos = config.get("slos", {})
 
-    def get_required_metrics(self) -> List[str]:
+    def get_required_metrics(self) -> list[str]:
         """Get required metrics for reliability evaluation"""
         return list(self.slos.keys())
 
-    def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def evaluate(self, metrics: dict[str, Any]) -> dict[str, Any]:
         """Evaluate reliability metrics against SLOs"""
         if not self.validate_metrics(metrics):
             return {"error": "Missing required metrics"}
 
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "slos": {},
             "error_budgets": {},
             "overall_reliability": 0.0,
@@ -57,8 +57,8 @@ class ReliabilityEvaluator(BaseEvaluator):
         return results
 
     def _evaluate_slo(
-        self, slo_name: str, slo_config: Dict[str, Any], current_value: Any
-    ) -> Dict[str, Any]:
+        self, slo_name: str, slo_config: dict[str, Any], current_value: Any
+    ) -> dict[str, Any]:
         """Evaluate a single SLO"""
         # Get target (required)
         target = slo_config.get("target", 0.95)  # Default to 95% if not specified
@@ -90,8 +90,8 @@ class ReliabilityEvaluator(BaseEvaluator):
         }
 
     def _calculate_error_budget(
-        self, slo_name: str, slo_config: Dict[str, Any], slo_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, slo_name: str, slo_config: dict[str, Any], slo_result: dict[str, Any]
+    ) -> dict[str, Any]:
         """Calculate error budget for an SLO"""
         # Always infer error_budget from target
         target = slo_config.get("target", 0.95)
@@ -123,7 +123,7 @@ class ReliabilityEvaluator(BaseEvaluator):
             and not slo_result["compliant"],
         }
 
-    def _generate_alerts(self, results: Dict[str, Any]) -> List[str]:
+    def _generate_alerts(self, results: dict[str, Any]) -> list[str]:
         """Generate alerts based on evaluation results"""
         alerts = []
 

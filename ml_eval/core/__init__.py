@@ -5,10 +5,10 @@ from .framework import EvaluationFramework
 from .types import ComplianceStandard, CriticalityLevel, SystemType
 
 __all__ = [
+    "ComplianceStandard",
+    "CriticalityLevel",
+    "ErrorBudget",
     "EvaluationFramework",
     "SLOConfig",
-    "ErrorBudget",
     "SystemType",
-    "CriticalityLevel",
-    "ComplianceStandard",
 ]

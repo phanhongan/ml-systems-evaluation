@@ -8,8 +8,8 @@ from .safety import SafetyReport
 
 __all__ = [
     "BaseReport",
+    "BusinessImpactReport",
+    "ComplianceReport",
     "ReliabilityReport",
     "SafetyReport",
-    "ComplianceReport",
-    "BusinessImpactReport",
 ]

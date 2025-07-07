@@ -2,7 +2,7 @@
 
 import tempfile
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any
 
 import pytest
 import yaml
@@ -236,7 +236,7 @@ def error_budget():
 def temp_config_file():
     """Create a temporary configuration file"""
 
-    def _create_temp_config(config: Dict[str, Any]):
+    def _create_temp_config(config: dict[str, Any]):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(config, f)
             return f.name
@@ -249,17 +249,13 @@ def mock_collector():
     """Mock collector for testing"""
 
     class MockCollector:
-        def __init__(self, config: Dict[str, Any]):
+        def __init__(self, config: dict[str, Any]):
             self.config = config
             self.name = config.get("name", "MockCollector")
 
-        def collect(self) -> Dict[str, List[MetricData]]:
+        def collect(self) -> dict[str, list[MetricData]]:
             now = datetime.now()
-            return {
-                "mock_metric": [
-                    MetricData(timestamp=now, value=0.95, metadata={"source": "mock"})
-                ]
-            }
+            return {"mock_metric": [MetricData(timestamp=now, value=1.0, metadata={})]}
 
         def health_check(self) -> bool:
             return True
@@ -275,21 +271,21 @@ def mock_evaluator():
     """Mock evaluator for testing"""
 
     class MockEvaluator:
-        def __init__(self, config: Dict[str, Any]):
+        def __init__(self, config: dict[str, Any]):
             self.config = config
 
-        def evaluate(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+        def evaluate(self, _metrics: dict[str, Any]) -> dict[str, Any]:
             return {
                 "slo_compliance": {"accuracy": True, "latency": True},
                 "error_budgets": {},
                 "incidents": [],
-                "recommendations": ["Mock recommendation"],
+                "recommendations": ["Test recommendation"],
             }
 
-        def get_required_metrics(self) -> List[str]:
+        def get_required_metrics(self) -> list[str]:
             return ["mock_metric"]
 
-        def validate_metrics(self, metrics: Dict[str, Any]) -> bool:
+        def validate_metrics(self, _metrics: dict[str, Any]) -> bool:
             return True
 
     return MockEvaluator

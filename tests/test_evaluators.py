@@ -21,7 +21,7 @@ class TestBaseEvaluator:
         config = {"name": "test_evaluator"}
 
         class TestEvaluator(BaseEvaluator):
-            def evaluate(self, metrics):
+            def evaluate(self, _metrics):
                 return {"result": "test"}
 
             def get_required_metrics(self):
@@ -35,7 +35,7 @@ class TestBaseEvaluator:
         config = {"name": "test_evaluator"}
 
         class TestEvaluator(BaseEvaluator):
-            def evaluate(self, metrics):
+            def evaluate(self, _metrics):
                 return {"result": "test"}
 
             def get_required_metrics(self):

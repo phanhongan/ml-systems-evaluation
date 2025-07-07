@@ -1,7 +1,7 @@
 """Configuration types and structures for ML Systems Evaluation Framework"""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class MetricData:
@@ -11,9 +11,9 @@ class MetricData:
         self,
         timestamp: datetime,
         value: float,
-        metadata: Optional[Dict[str, Any]] = None,
-        environmental_conditions: Optional[Dict[str, Any]] = None,
-        compliance_info: Optional[Dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
+        environmental_conditions: dict[str, Any] | None = None,
+        compliance_info: dict[str, Any] | None = None,
     ):
         self.timestamp = timestamp
         self.value = value
@@ -21,7 +21,7 @@ class MetricData:
         self.environmental_conditions = environmental_conditions or {}
         self.compliance_info = compliance_info or {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation"""
         return {
             "timestamp": self.timestamp.isoformat(),
@@ -32,7 +32,7 @@ class MetricData:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MetricData":
+    def from_dict(cls, data: dict[str, Any]) -> "MetricData":
         """Create MetricData from dictionary"""
         timestamp = datetime.fromisoformat(data["timestamp"])
         return cls(
@@ -52,9 +52,9 @@ class SystemConfig:
         name: str,
         system_type: str = "single_model",
         criticality: str = "operational",
-        description: Optional[str] = None,
-        industry: Optional[str] = None,
-        compliance_standards: Optional[List[str]] = None,
+        description: str | None = None,
+        industry: str | None = None,
+        compliance_standards: list[str] | None = None,
     ):
         self.name = name
         self.system_type = system_type
@@ -63,7 +63,7 @@ class SystemConfig:
         self.industry = industry
         self.compliance_standards = compliance_standards or []
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation"""
         return {
             "name": self.name,
@@ -75,7 +75,7 @@ class SystemConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SystemConfig":
+    def from_dict(cls, data: dict[str, Any]) -> "SystemConfig":
         """Create SystemConfig from dictionary"""
         return cls(
             name=data["name"],
@@ -95,10 +95,10 @@ class SLOConfig:
         name: str,
         target: float,
         window: str,
-        error_budget: Optional[float] = None,
-        description: Optional[str] = None,
+        error_budget: float | None = None,
+        description: str | None = None,
         safety_critical: bool = False,
-        business_impact: Optional[str] = None,
+        business_impact: str | None = None,
     ):
         self.name = name
         self.target = target
@@ -109,7 +109,7 @@ class SLOConfig:
         self.safety_critical = safety_critical
         self.business_impact = business_impact
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation"""
         return {
             "name": self.name,
@@ -122,7 +122,7 @@ class SLOConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SLOConfig":
+    def from_dict(cls, data: dict[str, Any]) -> "SLOConfig":
         """Create SLOConfig from dictionary"""
         return cls(
             name=data["name"],
@@ -141,10 +141,10 @@ class EvaluationConfig:
     def __init__(
         self,
         system_config: SystemConfig,
-        slos: Optional[Dict[str, SLOConfig]] = None,
-        collectors: Optional[List[Dict[str, Any]]] = None,
-        evaluators: Optional[List[Dict[str, Any]]] = None,
-        reports: Optional[List[Dict[str, Any]]] = None,
+        slos: dict[str, SLOConfig] | None = None,
+        collectors: list[dict[str, Any]] | None = None,
+        evaluators: list[dict[str, Any]] | None = None,
+        reports: list[dict[str, Any]] | None = None,
     ):
         self.system_config = system_config
         self.slos = slos or {}
@@ -152,7 +152,7 @@ class EvaluationConfig:
         self.evaluators = evaluators or []
         self.reports = reports or []
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation"""
         return {
             "system": self.system_config.to_dict(),
@@ -163,7 +163,7 @@ class EvaluationConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EvaluationConfig":
+    def from_dict(cls, data: dict[str, Any]) -> "EvaluationConfig":
         """Create EvaluationConfig from dictionary"""
         system_config = SystemConfig.from_dict(data["system"])
 
@@ -201,7 +201,7 @@ class EvaluationResult:
         self.recommendations = recommendations
         self.alerts = alerts
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert EvaluationResult to dictionary representation"""
         return {
             "system_name": self.system_name,
@@ -218,7 +218,7 @@ class EvaluationResult:
     def safety_violations(self):
         violations = []
         for result in self.evaluator_results.values():
-            if "safety_violations" in result and result["safety_violations"]:
+            if result.get("safety_violations"):
                 violations.extend(result["safety_violations"])
         return violations
 
@@ -229,14 +229,14 @@ class ErrorBudget:
         slo_name: str,
         budget_remaining: float,
         burn_rate: float,
-        alerts: Optional[list] = None,
+        alerts: list | None = None,
     ) -> None:
         self.slo_name = slo_name
         self.budget_remaining = budget_remaining
         self.burn_rate = burn_rate
         self.alerts = alerts or []
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "slo_name": self.slo_name,
             "budget_remaining": self.budget_remaining,

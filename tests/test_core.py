@@ -113,13 +113,11 @@ class TestSLOConfig:
         """Test compliance standard validation"""
         # SLOConfig doesn't have compliance_standard parameter
         # This validation would be handled elsewhere in the framework
-        pass
 
     def test_slo_with_environmental_conditions(self):
         """Test SLO with environmental conditions"""
         # SLOConfig doesn't have environmental_conditions parameter
         # This would be handled elsewhere in the framework
-        pass
 
 
 class TestMetricData:

@@ -19,7 +19,7 @@ class TestBaseReport:
         """Test base report creation"""
 
         class TestReport(BaseReport):
-            def generate(self, data):
+            def generate(self, _data):
                 return ReportData(
                     title="Test Report",
                     generated_at=datetime.now(),
@@ -29,7 +29,7 @@ class TestBaseReport:
                     recommendations=[],
                 )
 
-            def format_report(self, report_data):
+            def format_report(self, _report_data):
                 return "test_report"
 
         config = {"name": "test_report", "format": "json"}
@@ -40,7 +40,7 @@ class TestBaseReport:
         """Test base report configuration validation"""
 
         class TestReport(BaseReport):
-            def generate(self, data):
+            def generate(self, _data):
                 return ReportData(
                     title="Test Report",
                     generated_at=datetime.now(),
@@ -50,7 +50,7 @@ class TestBaseReport:
                     recommendations=[],
                 )
 
-            def format_report(self, report_data):
+            def format_report(self, _report_data):
                 return "test_report"
 
             def get_required_config_fields(self):
@@ -65,7 +65,7 @@ class TestBaseReport:
         """Test getting report information"""
 
         class TestReport(BaseReport):
-            def generate(self, data):
+            def generate(self, _data):
                 return ReportData(
                     title="Test Report",
                     generated_at=datetime.now(),
@@ -75,7 +75,7 @@ class TestBaseReport:
                     recommendations=[],
                 )
 
-            def format_report(self, report_data):
+            def format_report(self, _report_data):
                 return "test_report"
 
         config = {"name": "test_report"}
@@ -462,7 +462,7 @@ class TestReportIntegration:
 
         try:
             # Verify file was written
-            with open("test_file.json", "r") as f:
+            with open("test_file.json") as f:
                 content = f.read()
                 assert len(content) > 0
         finally:
@@ -524,7 +524,7 @@ class TestReportIntegration:
 
                 # Verify file was created
                 assert os.path.exists("test_file.json")
-                with open("test_file.json", "r") as f:
+                with open("test_file.json") as f:
                     content = f.read()
                     assert len(content) > 0
         finally:

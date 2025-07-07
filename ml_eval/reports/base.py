@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 
 @dataclass
@@ -13,27 +13,25 @@ class ReportData:
     title: str
     generated_at: datetime
     period: str
-    metrics: Dict[str, Any]
-    summary: Dict[str, Any]
-    recommendations: List[str]
-    alerts: List[str] | None = None
+    metrics: dict[str, Any]
+    summary: dict[str, Any]
+    recommendations: list[str]
+    alerts: list[str] | None = None
 
 
 class BaseReport(ABC):
     """Base class for all report types"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
 
     @abstractmethod
-    def generate(self, data: Dict[str, Any]) -> ReportData:
+    def generate(self, data: dict[str, Any]) -> ReportData:
         """Generate report from evaluation data"""
-        pass
 
     @abstractmethod
     def format_report(self, report_data: ReportData) -> str:
         """Format report data for output"""
-        pass
 
     def save_report(self, report_data: ReportData, output_path: str) -> bool:
         """Save report to file"""

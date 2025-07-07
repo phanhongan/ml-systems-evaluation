@@ -47,15 +47,15 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install --extras dev
-      - name: Lint with flake8
+      - name: Lint, type check, and sort imports with Ruff
         run: |
-          poetry run flake8 ml_eval tests --max-line-length=88 --extend-ignore=E203,W503
+          poetry run ruff check .
       - name: Check formatting with black
         run: |
-          poetry run black --check ml_eval tests
-      - name: Check import order with isort
+          poetry run black --check .
+      - name: Check formatting with ruff
         run: |
-          poetry run isort --check-only ml_eval tests
+          poetry run ruff format --check .
 
   type-check:
     runs-on: ubuntu-latest
@@ -74,9 +74,9 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install --extras dev
-      - name: Type check with mypy
+      - name: Type check with Ruff
         run: |
-          poetry run mypy ml_eval
+          poetry run ruff check .
 
   build:
     runs-on: ubuntu-latest

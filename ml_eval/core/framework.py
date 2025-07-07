@@ -1,7 +1,7 @@
 """Main evaluation framework for Industrial AI systems"""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .config import EvaluationResult, MetricData, SLOConfig
 from .types import CriticalityLevel, SystemType
@@ -10,7 +10,7 @@ from .types import CriticalityLevel, SystemType
 class EvaluationFramework:
     """Main framework orchestrating evaluation process for Industrial AI systems"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
         self.system_name = config.get("system", {}).get("name", "Unknown")
         self.system_type = SystemType(
@@ -20,13 +20,13 @@ class EvaluationFramework:
             config.get("system", {}).get("criticality", "operational")
         )
         self.slos = self._parse_slos(config.get("slos", {}))
-        self.collectors: List[Any] = []
-        self.evaluators: List[Any] = []
+        self.collectors: list[Any] = []
+        self.evaluators: list[Any] = []
 
         # Automatically create collectors and evaluators from config
         self._create_components_from_config()
 
-    def _parse_slos(self, slos_config: Dict[str, Any]) -> List[SLOConfig]:
+    def _parse_slos(self, slos_config: dict[str, Any]) -> list[SLOConfig]:
         """Parse SLO configuration into objects for Industrial AI systems"""
         slos = []
         for name, config in slos_config.items():
@@ -63,15 +63,15 @@ class EvaluationFramework:
                 collector = self._create_collector(collector_config)
                 if collector:
                     self.collectors.append(collector)
-                    print(f"Created collector {i+1}: {collector.__class__.__name__}")
+                    print(f"Created collector {i + 1}: {collector.__class__.__name__}")
                 else:
                     print(
-                        f"Failed to create collector {i+1}: "
+                        f"Failed to create collector {i + 1}: "
                         f"{collector_config.get('type', 'unknown')}"
                     )
             except Exception:
                 print(
-                    f"Failed to create collector {i+1}: "
+                    f"Failed to create collector {i + 1}: "
                     f"{collector_config.get('type', 'unknown')}"
                 )
 
@@ -83,19 +83,19 @@ class EvaluationFramework:
                 evaluator = self._create_evaluator(evaluator_config)
                 if evaluator:
                     self.evaluators.append(evaluator)
-                    print(f"Created evaluator {i+1}: {evaluator.__class__.__name__}")
+                    print(f"Created evaluator {i + 1}: {evaluator.__class__.__name__}")
                 else:
                     print(
-                        f"Failed to create evaluator {i+1}: "
+                        f"Failed to create evaluator {i + 1}: "
                         f"{evaluator_config.get('type', 'unknown')}"
                     )
             except Exception:
                 print(
-                    f"Failed to create evaluator {i+1}: "
+                    f"Failed to create evaluator {i + 1}: "
                     f"{evaluator_config.get('type', 'unknown')}"
                 )
 
-    def _create_collector(self, config: Dict[str, Any]) -> Optional[Any]:
+    def _create_collector(self, config: dict[str, Any]) -> Any | None:
         """Create a collector instance from configuration"""
         collector_type = config.get("type", "")
 
@@ -119,7 +119,7 @@ class EvaluationFramework:
             print(f"Unknown collector type: {collector_type}")
             return None
 
-    def _create_evaluator(self, config: Dict[str, Any]) -> Optional[Any]:
+    def _create_evaluator(self, config: dict[str, Any]) -> Any | None:
         """Create an evaluator instance from configuration"""
         evaluator_type = config.get("type", "")
 
@@ -168,7 +168,7 @@ class EvaluationFramework:
         except Exception:
             raise
 
-    def _collect_all_metrics(self) -> Dict[str, List[MetricData]]:
+    def _collect_all_metrics(self) -> dict[str, list[MetricData]]:
         """Collect metrics from all collectors with error handling"""
         all_metrics = {}
 
@@ -183,8 +183,8 @@ class EvaluationFramework:
         return all_metrics
 
     def _run_all_evaluations(
-        self, metrics: Dict[str, List[MetricData]]
-    ) -> Dict[str, Any]:
+        self, metrics: dict[str, list[MetricData]]
+    ) -> dict[str, Any]:
         """Run all evaluators on collected metrics"""
         results = {}
 
@@ -198,7 +198,7 @@ class EvaluationFramework:
 
         return results
 
-    def _build_result(self, results: Dict[str, Any]) -> EvaluationResult:
+    def _build_result(self, results: dict[str, Any]) -> EvaluationResult:
         """Build final evaluation result from all evaluator results"""
         # Determine overall system status
         has_critical_violations = any(
@@ -223,13 +223,13 @@ class EvaluationFramework:
 
         # Build recommendations
         recommendations = []
-        for evaluator_name, result in results.items():
+        for _evaluator_name, result in results.items():
             if result.get("recommendations"):
                 recommendations.extend(result["recommendations"])
 
         # Build alerts
         alerts = []
-        for evaluator_name, result in results.items():
+        for _evaluator_name, result in results.items():
             if result.get("alerts"):
                 alerts.extend(result["alerts"])
 
@@ -244,7 +244,7 @@ class EvaluationFramework:
             alerts=alerts,
         )
 
-    def get_system_info(self) -> Dict[str, Any]:
+    def get_system_info(self) -> dict[str, Any]:
         """Get information about the configured system"""
         return {
             "name": self.system_name,
@@ -255,7 +255,7 @@ class EvaluationFramework:
             "evaluator_count": len(self.evaluators),
         }
 
-    def get_slo_summary(self) -> List[Dict[str, Any]]:
+    def get_slo_summary(self) -> list[dict[str, Any]]:
         """Get summary of all SLOs"""
         return [
             {
@@ -268,7 +268,7 @@ class EvaluationFramework:
             for slo in self.slos
         ]
 
-    def generate_reports(self, results: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_reports(self, results: dict[str, Any]) -> dict[str, Any]:
         """Generate reports from evaluation results"""
         try:
             from ..reports import (
@@ -310,9 +310,9 @@ class EvaluationFramework:
             return reports
 
         except Exception as e:
-            return {"error": f"Failed to generate reports: {str(e)}"}
+            return {"error": f"Failed to generate reports: {e!s}"}
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Perform health check on all components"""
         try:
             health_status = {
@@ -351,7 +351,7 @@ class EvaluationFramework:
                     health_status["overall_healthy"] = False
                     errors = health_status["errors"]
                     if isinstance(errors, list):
-                        errors.append(f"Collector error: {str(e)}")
+                        errors.append(f"Collector error: {e!s}")
 
             # Check evaluators (basic check)
             for evaluator in self.evaluators:
@@ -379,7 +379,7 @@ class EvaluationFramework:
                     health_status["overall_healthy"] = False
                     errors = health_status["errors"]
                     if isinstance(errors, list):
-                        errors.append(f"Evaluator error: {str(e)}")
+                        errors.append(f"Evaluator error: {e!s}")
 
             return health_status
 
@@ -387,5 +387,5 @@ class EvaluationFramework:
             return {
                 "overall_healthy": False,
                 "timestamp": datetime.now().isoformat(),
-                "error": f"Health check failed: {str(e)}",
+                "error": f"Health check failed: {e!s}",
             }

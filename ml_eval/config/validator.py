@@ -1,7 +1,7 @@
 """Configuration validation for ML Systems Evaluation Framework"""
 
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from ..core.types import ComplianceStandard, CriticalityLevel, SystemType
 
@@ -11,11 +11,11 @@ class ConfigValidator:
 
     def __init__(self) -> None:
         """Initialize validator"""
-        self.errors: List[str] = []
-        self.warnings: List[str] = []
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
         self.logger = logging.getLogger(__name__)
 
-    def validate_config(self, config: Dict[str, Any]) -> bool:
+    def validate_config(self, config: dict[str, Any]) -> bool:
         """Validate complete configuration"""
         self.errors = []
         self.warnings = []
@@ -46,7 +46,7 @@ class ConfigValidator:
 
         return len(self.errors) == 0
 
-    def _validate_structure(self, config: Dict[str, Any]) -> bool:
+    def _validate_structure(self, config: dict[str, Any]) -> bool:
         """Validate basic configuration structure"""
         required_sections = ["system", "slos"]
         missing_sections = [
@@ -59,7 +59,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_system_config(self, system: Dict[str, Any]) -> bool:
+    def _validate_system_config(self, system: dict[str, Any]) -> bool:
         """Validate system configuration"""
         if not isinstance(system, dict):
             self.errors.append("System configuration must be a dictionary")
@@ -90,7 +90,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_slos(self, slos: Dict[str, Any]) -> bool:
+    def _validate_slos(self, slos: dict[str, Any]) -> bool:
         """Validate SLO configuration"""
         if not isinstance(slos, dict):
             self.errors.append("SLOs configuration must be a dictionary")
@@ -102,7 +102,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_single_slo(self, name: str, config: Dict[str, Any]) -> bool:
+    def _validate_single_slo(self, name: str, config: dict[str, Any]) -> bool:
         """Validate a single SLO configuration"""
         # Check for required fields
         if "target" not in config:
@@ -115,19 +115,16 @@ class ConfigValidator:
 
         # Validate target value
         target = config.get("target")
-        if not isinstance(target, (int, float)) or target < 0 or target > 1:
+        if not isinstance(target, int | float) or target < 0 or target > 1:
             self.errors.append(f"SLO '{name}' target must be a number between 0 and 1")
             return False
 
         # Validate safety-critical requirements
-        if config.get("safety_critical", False):
-            # For safety-critical SLOs, target should be >= 0.999
-            # (error_budget <= 0.001)
-            if target < 0.999:
-                self.errors.append(
-                    f"Safety-critical SLO '{name}' must have target >= 0.999"
-                )
-                return False
+        if config.get("safety_critical", False) and target < 0.999:
+            self.errors.append(
+                f"Safety-critical SLO '{name}' must have target >= 0.999"
+            )
+            return False
 
         # Validate compliance standard
         if "compliance_standard" in config:
@@ -142,7 +139,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_collectors(self, collectors: List[Dict[str, Any]]) -> bool:
+    def _validate_collectors(self, collectors: list[dict[str, Any]]) -> bool:
         """Validate collectors configuration"""
         if not isinstance(collectors, list):
             self.errors.append("Collectors configuration must be a list")
@@ -159,7 +156,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_evaluators(self, evaluators: List[Dict[str, Any]]) -> bool:
+    def _validate_evaluators(self, evaluators: list[dict[str, Any]]) -> bool:
         """Validate evaluators configuration"""
         if not isinstance(evaluators, list):
             self.errors.append("Evaluators configuration must be a list")
@@ -176,7 +173,7 @@ class ConfigValidator:
 
         return True
 
-    def _validate_industry_requirements(self, config: Dict[str, Any]) -> bool:
+    def _validate_industry_requirements(self, config: dict[str, Any]) -> bool:
         """Validate industry-specific requirements"""
         system = config.get("system", {})
         criticality = system.get("criticality", "operational")
@@ -212,11 +209,11 @@ class ConfigValidator:
 
         return True
 
-    def get_errors(self) -> List[str]:
+    def get_errors(self) -> list[str]:
         """Get validation errors"""
         return self.errors.copy()
 
-    def get_warnings(self) -> List[str]:
+    def get_warnings(self) -> list[str]:
         """Get validation warnings"""
         return self.warnings.copy()
 

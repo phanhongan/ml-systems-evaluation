@@ -2,7 +2,6 @@
 
 import argparse
 import sys
-from typing import List
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -86,7 +85,7 @@ Examples:
     )
     health_parser.add_argument("config", help="Configuration file path")
     health_parser.add_argument(
-        "--output", help="Output file for health check results " "(default: stdout)"
+        "--output", help="Output file for health check results (default: stdout)"
     )
 
     # Create configuration command
@@ -112,7 +111,7 @@ Examples:
     return parser
 
 
-def main(args: List[str] | None = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """Main CLI entry point"""
     parser = create_parser()
     parsed_args = parser.parse_args(args)

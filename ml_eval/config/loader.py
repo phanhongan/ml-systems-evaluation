@@ -3,7 +3,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import yaml
 
@@ -17,7 +17,7 @@ class ConfigLoader:
         self.supported_formats = [".yaml", ".yml", ".json"]
         self.template_dir = Path(__file__).parent.parent / "templates"
 
-    def load_config(self, config_path: str) -> Dict[str, Any]:
+    def load_config(self, config_path: str) -> dict[str, Any]:
         """Load configuration from file or directory"""
         path = Path(config_path)
 
@@ -28,7 +28,7 @@ class ConfigLoader:
         else:
             raise FileNotFoundError(f"Configuration path not found: {config_path}")
 
-    def load_template(self, template_name: str) -> Dict[str, Any]:
+    def load_template(self, template_name: str) -> dict[str, Any]:
         """Load configuration template by name"""
         template_path = self.template_dir / f"{template_name}.yaml"
 
@@ -37,7 +37,7 @@ class ConfigLoader:
 
         return self._load_single_file(template_path)
 
-    def _load_single_file(self, file_path: Path) -> Dict[str, Any]:
+    def _load_single_file(self, file_path: Path) -> dict[str, Any]:
         """Load configuration from a single file"""
         if not file_path.exists():
             raise FileNotFoundError(f"Configuration file not found: {file_path}")
@@ -51,7 +51,7 @@ class ConfigLoader:
             )
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 if file_extension in [".yaml", ".yml"]:
                     return yaml.safe_load(f) or {}
                 elif file_extension == ".json":
@@ -60,15 +60,17 @@ class ConfigLoader:
                     raise ValueError(f"Unsupported file format: {file_extension}")
 
         except yaml.YAMLError as e:
-            raise ValueError(f"Invalid YAML in {file_path}: {e}")
+            raise ValueError(f"Invalid YAML in {file_path}: {e}") from e
         except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON in {file_path}: {e}")
+            raise ValueError(f"Invalid JSON in {file_path}: {e}") from e
         except Exception as e:
-            raise ValueError(f"Failed to load configuration from {file_path}: {e}")
+            raise ValueError(
+                f"Failed to load configuration from {file_path}: {e}"
+            ) from e
 
-    def _load_directory(self, dir_path: Path) -> Dict[str, Any]:
+    def _load_directory(self, dir_path: Path) -> dict[str, Any]:
         """Load configuration from a directory (merge all config files)"""
-        config: Dict[str, Any] = {}
+        config: dict[str, Any] = {}
 
         # Find all configuration files in the directory
         config_files = []
@@ -88,13 +90,15 @@ class ConfigLoader:
                 file_config = self._load_single_file(file_path)
                 config = self._merge_configs(config, file_config)
             except Exception as e:
-                raise ValueError(f"Failed to load configuration from {file_path}: {e}")
+                raise ValueError(
+                    f"Failed to load configuration from {file_path}: {e}"
+                ) from e
 
         return config
 
     def _merge_configs(
-        self, base_config: Dict[str, Any], new_config: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, base_config: dict[str, Any], new_config: dict[str, Any]
+    ) -> dict[str, Any]:
         """Merge two configuration dictionaries"""
         merged = base_config.copy()
 
@@ -112,7 +116,7 @@ class ConfigLoader:
 
         return merged
 
-    def list_templates(self) -> List[str]:
+    def list_templates(self) -> list[str]:
         """List available configuration templates"""
         templates = []
 
@@ -127,7 +131,7 @@ class ConfigLoader:
         path = Path(file_path)
         return path.suffix.lower() in self.supported_formats
 
-    def get_file_info(self, file_path: str) -> Dict[str, Any]:
+    def get_file_info(self, file_path: str) -> dict[str, Any]:
         """Get information about a configuration file"""
         path = Path(file_path)
 

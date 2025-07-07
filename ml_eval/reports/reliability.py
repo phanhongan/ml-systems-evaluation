@@ -1,7 +1,7 @@
 """Reliability reports for ML Systems Evaluation"""
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from .base import BaseReport, ReportData
 
@@ -9,7 +9,7 @@ from .base import BaseReport, ReportData
 class ReliabilityReport(BaseReport):
     """Generate reliability reports with SLO compliance and error budgets"""
 
-    def generate(self, data: Dict[str, Any]) -> ReportData:
+    def generate(self, data: dict[str, Any]) -> ReportData:
         """Generate reliability report from evaluation data"""
         slos = data.get("slos", {})
         error_budgets = data.get("error_budgets", {})

@@ -4,7 +4,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from ..config.factory import ConfigFactory
 from ..core.framework import EvaluationFramework
@@ -34,7 +34,7 @@ def run_evaluation_command(args: argparse.Namespace) -> int:
                         continue
                     result[key] = convert_to_dict(value)
                 return result
-            elif isinstance(obj, (list, tuple)):
+            elif isinstance(obj, list | tuple):
                 return [convert_to_dict(item) for item in obj]
             elif isinstance(obj, dict):
                 return {key: convert_to_dict(value) for key, value in obj.items()}
@@ -85,7 +85,7 @@ def validate_config_command(args: argparse.Namespace) -> int:
         from ..config.validator import ConfigValidator
 
         try:
-            with open(args.config, "r") as f:
+            with open(args.config) as f:
                 config_data = yaml.safe_load(f)
             validator = ConfigValidator()
             validator.validate_config(config_data)
@@ -223,7 +223,7 @@ def evaluate_metrics_command(args: argparse.Namespace) -> int:
         # Load data if provided
         data = {}
         if args.data:
-            with open(args.data, "r") as f:
+            with open(args.data) as f:
                 data = json.load(f)
 
         # Evaluate metrics using internal method
@@ -260,7 +260,7 @@ def generate_reports_command(args: argparse.Namespace) -> int:
         # Load results if provided
         results = {}
         if args.results:
-            with open(args.results, "r") as f:
+            with open(args.results) as f:
                 results = json.load(f)
 
         # Generate reports
@@ -324,7 +324,7 @@ def create_config_command(args: argparse.Namespace) -> int:
     """Create a new configuration file"""
     try:
         # Create basic configuration
-        config: Dict[str, Any] = {
+        config: dict[str, Any] = {
             "system": {
                 "name": args.system_name,
                 "type": args.system_type,

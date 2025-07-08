@@ -32,7 +32,7 @@ class MonitoringAgent:
         # - LLM integration for intelligent monitoring
         # - Autonomous decision making
         # - Adaptive monitoring strategies
-        # - Integration with alerting and scheduling agents
+        # - Integration with alerting and RL agents
 
     async def start_monitoring(self) -> bool:
         """Start autonomous monitoring operations"""

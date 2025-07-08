@@ -1,0 +1,208 @@
+# RL Agent Configuration Example
+# This configuration demonstrates how to set up the RL agent for adaptive decision-making
+
+system:
+  name: "Adaptive ML System"
+  description: "ML system with RL-powered adaptive optimization"
+  criticality: "business_critical"
+  persona: "System Engineer"
+
+# RL Agent Configuration
+rl_agent:
+  enabled: true
+  learning_rate: 0.01
+  exploration_rate: 0.1
+  
+  # Safety constraints for RL decisions
+  safety_constraints:
+    max_threshold_adjustment: 0.2
+    min_safety_margin: 0.1
+    max_resource_usage: 0.8
+    human_approval_required: false
+    
+  # Compliance requirements
+  compliance_requirements:
+    required_approval_level: "high_impact"
+    audit_trail: true
+    fallback_mechanisms: true
+    deterministic_fallback: true
+    
+  # Decision domains for RL optimization
+  decision_domains:
+    - threshold_optimization
+    - resource_allocation
+    - alert_strategy
+    - maintenance_scheduling
+    
+  # Learning parameters
+  learning_parameters:
+    batch_size: 32
+    experience_replay_size: 10000
+    target_update_frequency: 1000
+    exploration_decay: 0.995
+    
+  # Reward function configuration
+  reward_function:
+    performance_improvement_weight: 0.4
+    resource_efficiency_weight: 0.3
+    safety_violation_penalty: -1.0
+    compliance_violation_penalty: -1.0
+    exploration_bonus: 0.1
+
+# SLOs for RL agent to optimize
+slos:
+  system_availability:
+    target: 0.999
+    window: 24h
+    description: "System availability target"
+    
+  response_time:
+    target: 0.99
+    window: 1h
+    description: "Response time within 500ms"
+    
+  resource_efficiency:
+    target: 0.8
+    window: 24h
+    description: "Resource utilization efficiency"
+
+# Data collection for RL learning
+collectors:
+  - type: online
+    name: "performance_collector"
+    endpoints:
+      - http://system:8080/metrics
+    metrics:
+      - cpu_usage
+      - memory_usage
+      - response_time
+      - error_rate
+      - throughput
+      
+  - type: environmental
+    name: "environmental_collector"
+    sensors:
+      - temperature
+      - humidity
+      - pressure
+      
+  - type: regulatory
+    name: "compliance_collector"
+    standards:
+      - ISO_27001
+      - SOC_2
+
+# Evaluators for RL feedback
+evaluators:
+  - type: performance
+    name: "performance_evaluator"
+    metrics:
+      - accuracy
+      - precision
+      - recall
+      - latency
+      
+  - type: reliability
+    name: "reliability_evaluator"
+    error_budget: 0.001
+    slo_window: 30d
+    
+  - type: safety
+    name: "safety_evaluator"
+    critical_metrics:
+      - system_availability
+      - response_time
+    safety_thresholds:
+      failure_probability: 0.001
+      safety_margin: 0.1
+
+# LLM integration for enhanced RL
+llm:
+  enabled: true
+  provider: "openai"
+  provider_config:
+    api_key: "${OPENAI_API_KEY}"
+    model: "gpt-4"
+    
+  # LLM assistance for RL decisions
+  assistant:
+    enabled: true
+    rl_decision_assistance: true
+    safety_validation: true
+    
+  # LLM analysis for RL context
+  analysis:
+    enabled: true
+    pattern_recognition: true
+    anomaly_detection: true
+    
+  # LLM enhancement for RL reports
+  enhancement:
+    enabled: true
+    rl_learning_reports: true
+    decision_explanation: true
+
+# Agent coordination
+agents:
+  monitoring:
+    enabled: true
+    check_interval: 30
+    health_thresholds:
+      cpu: 80
+      memory: 85
+      
+  alerting:
+    enabled: true
+    channels: ["email", "slack"]
+    severity_levels: ["low", "medium", "high", "critical"]
+    
+  scheduling:
+    enabled: true
+    max_concurrent_tasks: 5
+    resource_limits:
+      cpu: "80%"
+      memory: "8GB"
+
+# RL Agent specific configurations
+rl_agent_config:
+  # State space definition
+  state_space:
+    system_metrics: ["cpu", "memory", "response_time", "error_rate"]
+    resource_metrics: ["cpu_usage", "memory_usage", "storage_usage"]
+    performance_metrics: ["accuracy", "throughput", "latency"]
+    environmental_metrics: ["temperature", "humidity"]
+    
+  # Action space definition
+  action_space:
+    threshold_adjustments: ["cpu_threshold", "memory_threshold", "response_threshold"]
+    resource_allocations: ["cpu_allocation", "memory_allocation", "storage_allocation"]
+    alert_strategies: ["severity_thresholds", "routing_rules", "cooldown_periods"]
+    maintenance_schedules: ["preventive_schedule", "predictive_schedule"]
+    
+  # Learning environment
+  environment:
+    episode_length: 1000
+    max_episodes: 10000
+    evaluation_frequency: 100
+    model_save_frequency: 500
+    
+  # Safety mechanisms
+  safety_mechanisms:
+    constraint_validation: true
+    action_filtering: true
+    fallback_decisions: true
+    human_oversight: true
+    
+  # Monitoring and logging
+  monitoring:
+    log_decisions: true
+    log_rewards: true
+    log_constraints: true
+    log_exploration: true
+    
+  # Performance tracking
+  performance_tracking:
+    track_learning_progress: true
+    track_safety_violations: true
+    track_compliance_violations: true
+    track_optimization_gains: true 

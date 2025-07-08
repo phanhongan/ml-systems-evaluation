@@ -19,7 +19,7 @@ class AlertingAgent:
     - Generate and route alerts based on system state
     - Prioritize alerts intelligently
     - Adapt alerting strategies based on context
-    - Coordinate with monitoring and scheduling agents
+    - Coordinate with monitoring and RL agents
     """
 
     def __init__(self, config: dict[str, Any]):
@@ -32,7 +32,7 @@ class AlertingAgent:
         # - LLM integration for intelligent alerting
         # - Autonomous decision making
         # - Context-aware alert generation
-        # - Integration with monitoring and scheduling agents
+        # - Integration with monitoring and RL agents
 
     async def start_alerting(self) -> bool:
         """Start autonomous alerting operations"""

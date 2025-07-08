@@ -11,7 +11,7 @@ and business-critical ML systems in industrial environments.
 # Autonomous agents (future implementation)
 from .agents.alerting import AlertingAgent
 from .agents.monitoring import MonitoringAgent
-from .agents.scheduling import SchedulingAgent
+from .agents.rl import RLAgent
 from .cli.main import cli as cli_main
 
 # Data collection
@@ -77,12 +77,12 @@ __all__ = [
     "OfflineCollector",
     "OnlineCollector",
     "PerformanceEvaluator",
+    "RLAgent",
     "RegulatoryCollector",
     "ReliabilityEvaluator",
     "ReliabilityReport",
     "SLOConfig",
     "SafetyEvaluator",
     "SafetyReport",
-    "SchedulingAgent",
     "cli_main",
 ]

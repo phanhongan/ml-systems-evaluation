@@ -31,29 +31,48 @@ class TemplateManager:
         self, industry: str, template_type: str
     ) -> dict[str, Any] | None:
         """Load template from external YAML file"""
-        template_path = self.template_dir / f"{industry}-{template_type}.yaml"
+        # Search in all subdirectories for the template
+        for subdir in self.template_dir.iterdir():
+            if subdir.is_dir():
+                template_path = subdir / f"{industry}-{template_type}.yaml"
+                if template_path.exists():
+                    try:
+                        import yaml
 
-        if not template_path.exists():
-            return None
+                        with open(template_path) as f:
+                            return yaml.safe_load(f)
+                    except Exception:
+                        continue
 
-        try:
-            import yaml
-
-            with open(template_path) as f:
-                return yaml.safe_load(f)
-        except Exception:
-            return None
+        return None
 
     def list_available_templates(self) -> list[str]:
         """List all available external YAML templates"""
         templates = []
 
-        # Add external templates
+        # Add external templates from all subdirectories
         if self.template_dir.exists():
-            for template_file in self.template_dir.glob("*.yaml"):
-                templates.append(template_file.stem)
+            for subdir in self.template_dir.iterdir():
+                if subdir.is_dir():
+                    for template_file in subdir.glob("*.yaml"):
+                        templates.append(template_file.stem)
 
         return templates
+
+    def list_templates_by_category(self) -> dict[str, list[str]]:
+        """List templates organized by category"""
+        categories = {}
+
+        if self.template_dir.exists():
+            for subdir in self.template_dir.iterdir():
+                if subdir.is_dir():
+                    category = subdir.name
+                    templates = []
+                    for template_file in subdir.glob("*.yaml"):
+                        templates.append(template_file.stem)
+                    categories[category] = sorted(templates)
+
+        return categories
 
     def create_template_file(
         self, _industry: str, _template_type: str, _output_path: str | None = None

@@ -1,0 +1,29 @@
+collectors:
+- endpoints:
+  - http://equipment-monitor:8080/metrics
+  metrics:
+  - failure_prediction
+  - availability
+  type: online
+evaluators:
+- metrics:
+  - equipment_failure_prediction
+  type: performance
+- critical_metrics:
+  - system_availability
+  error_budget_window: 30d
+  type: reliability
+slos:
+  equipment_failure_prediction:
+    description: Accuracy of equipment failure prediction
+    target: 0.92
+    window: 24h
+  system_availability:
+    description: System uptime for maintenance functionality
+    target: 0.999
+    window: 30d
+system:
+  criticality: business_critical
+  description: ML system for manufacturing equipment monitoring
+  name: Manufacturing Predictive Maintenance System
+  persona: Maintenance Engineer

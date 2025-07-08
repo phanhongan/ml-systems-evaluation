@@ -1,0 +1,18 @@
+collectors:
+- metrics:
+  - temperature
+  - pressure
+  type: online
+evaluators:
+- metrics:
+  - yield_prediction_accuracy
+  type: performance
+slos:
+  yield_prediction_accuracy:
+    description: Accuracy of wafer yield prediction
+    target: 0.95
+    window: 7d
+system:
+  description: ML system for wafer yield prediction
+  name: Semiconductor Yield Prediction System
+  persona: Process Engineer

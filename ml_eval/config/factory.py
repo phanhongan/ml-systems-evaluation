@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+from ..templates import TemplateManager
 from .loader import ConfigLoader
 from .validator import ConfigValidator
 
@@ -15,6 +16,7 @@ class ConfigFactory:
         self.config_dir = config_dir or os.getcwd()
         self.loader = ConfigLoader()
         self.validator = ConfigValidator()
+        self.template_manager = TemplateManager()
         self._config_cache: dict[str, dict[str, Any]] = {}
 
     def create_config(self, config_path: str) -> dict[str, Any]:
@@ -44,7 +46,14 @@ class ConfigFactory:
 
     def create_collector_config(self, collector_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific collector type"""
-        base_config = self._get_base_collector_config(collector_type)
+        # Try to get from template first
+        try:
+            base_config = self.template_manager.get_template(
+                "base", f"collector_{collector_type}"
+            )
+        except ValueError:
+            # Fallback to hardcoded config
+            base_config = self._get_base_collector_config(collector_type)
 
         # Merge with provided kwargs
         config = {**base_config, **kwargs}
@@ -58,7 +67,14 @@ class ConfigFactory:
 
     def create_evaluator_config(self, evaluator_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific evaluator type"""
-        base_config = self._get_base_evaluator_config(evaluator_type)
+        # Try to get from template first
+        try:
+            base_config = self.template_manager.get_template(
+                "base", f"evaluator_{evaluator_type}"
+            )
+        except ValueError:
+            # Fallback to hardcoded config
+            base_config = self._get_base_evaluator_config(evaluator_type)
 
         # Merge with provided kwargs
         config = {**base_config, **kwargs}
@@ -72,7 +88,14 @@ class ConfigFactory:
 
     def create_report_config(self, report_type: str, **kwargs) -> dict[str, Any]:
         """Create configuration for a specific report type"""
-        base_config = self._get_base_report_config(report_type)
+        # Try to get from template first
+        try:
+            base_config = self.template_manager.get_template(
+                "base", f"report_{report_type}"
+            )
+        except ValueError:
+            # Fallback to hardcoded config
+            base_config = self._get_base_report_config(report_type)
 
         # Merge with provided kwargs
         config = {**base_config, **kwargs}
@@ -85,123 +108,35 @@ class ConfigFactory:
         return config
 
     def _get_base_collector_config(self, collector_type: str) -> dict[str, Any]:
-        """Get base configuration for a collector type"""
-        base_configs = {
-            "environmental": {
-                "type": "environmental",
-                "sensor_types": ["temperature", "pressure", "humidity"],
-                "sampling_interval": 60,
-                "alert_thresholds": {},
-            },
-            "offline": {
-                "type": "offline",
-                "data_sources": [],
-                "file_patterns": ["*.json", "*.csv"],
-                "parsing_rules": {},
-            },
-            "online": {
-                "type": "online",
-                "endpoints": [],
-                "polling_interval": 30,
-                "timeout": 10,
-                "retry_attempts": 3,
-            },
-            "regulatory": {
-                "type": "regulatory",
-                "compliance_frameworks": [],
-                "audit_requirements": {},
-                "reporting_frequency": "monthly",
-            },
-        }
-
-        result = base_configs.get(collector_type, {"type": collector_type})
-        if not isinstance(result, dict):
-            result = {"type": collector_type}
-        return result
+        """Get base configuration for a collector type from template"""
+        try:
+            return self.template_manager.get_template(
+                "base", f"collector_{collector_type}"
+            )
+        except Exception as e:
+            raise ValueError(
+                f"No template found for collector type '{collector_type}': {e}"
+            ) from e
 
     def _get_base_evaluator_config(self, evaluator_type: str) -> dict[str, Any]:
-        """Get base configuration for an evaluator type"""
-        base_configs = {
-            "performance": {
-                "type": "performance",
-                "metrics": ["accuracy", "precision", "recall", "f1"],
-                "thresholds": {},
-                "baseline_comparison": True,
-            },
-            "reliability": {
-                "type": "reliability",
-                "availability_threshold": 0.99,
-                "slo_targets": {
-                    "slos": {
-                        "availability": {
-                            "target": 0.99,
-                            "window": "24h",
-                            "description": "System availability",
-                        },
-                    },
-                },
-            },
-            "safety": {
-                "type": "safety",
-                "safety_thresholds": {},
-                "risk_assessment": True,
-                "incident_tracking": True,
-            },
-            "compliance": {
-                "type": "compliance",
-                "standards": [],
-                "audit_requirements": {},
-                "reporting_frequency": "monthly",
-            },
-            "drift": {
-                "type": "drift",
-                "detection_methods": ["statistical", "ml_based"],
-                "sensitivity": 0.05,
-                "window_size": 1000,
-            },
-        }
-
-        result = base_configs.get(evaluator_type, {"type": evaluator_type})
-        if not isinstance(result, dict):
-            result = {"type": evaluator_type}
-        return result
+        """Get base configuration for an evaluator type from template"""
+        try:
+            return self.template_manager.get_template(
+                "base", f"evaluator_{evaluator_type}"
+            )
+        except Exception as e:
+            raise ValueError(
+                f"No template found for evaluator type '{evaluator_type}': {e}"
+            ) from e
 
     def _get_base_report_config(self, report_type: str) -> dict[str, Any]:
-        """Get base configuration for a report type"""
-        base_configs = {
-            "business": {
-                "type": "business",
-                "metrics": ["revenue_impact", "cost_savings", "efficiency_gains"],
-                "format": "html",
-                "frequency": "weekly",
-            },
-            "compliance": {
-                "type": "compliance",
-                "standards": [],
-                "audit_trail": True,
-                "format": "pdf",
-                "frequency": "monthly",
-            },
-            "reliability": {
-                "type": "reliability",
-                "slo_metrics": [],
-                "error_budgets": {},
-                "format": "html",
-                "frequency": "daily",
-            },
-            "safety": {
-                "type": "safety",
-                "safety_metrics": [],
-                "incident_reports": True,
-                "format": "html",
-                "frequency": "daily",
-            },
-        }
-
-        result = base_configs.get(report_type, {"type": report_type})
-        if not isinstance(result, dict):
-            result = {"type": report_type}
-        return result
+        """Get base configuration for a report type from template"""
+        try:
+            return self.template_manager.get_template("base", f"report_{report_type}")
+        except Exception as e:
+            raise ValueError(
+                f"No template found for report type '{report_type}': {e}"
+            ) from e
 
     def list_available_configs(self) -> list[str]:
         """List all available configuration files"""
@@ -225,6 +160,51 @@ class ConfigFactory:
     def get_cached_config(self, config_path: str) -> dict[str, Any] | None:
         """Get cached configuration if available"""
         return self._config_cache.get(config_path)
+
+    def create_template_files(self, output_dir: str | None = None) -> list[str]:
+        """Create external template files from hardcoded configurations"""
+        created_files = []
+
+        # Create base collector templates
+        collector_types = ["environmental", "offline", "online", "regulatory"]
+        for collector_type in collector_types:
+            self._get_base_collector_config(collector_type)
+            file_path = self.template_manager.create_template_file(
+                "base",
+                f"collector_{collector_type}",
+                output_dir and f"{output_dir}/base-collector_{collector_type}.yaml",
+            )
+            created_files.append(file_path)
+
+        # Create base evaluator templates
+        evaluator_types = [
+            "performance",
+            "reliability",
+            "safety",
+            "compliance",
+            "drift",
+        ]
+        for evaluator_type in evaluator_types:
+            self._get_base_evaluator_config(evaluator_type)
+            file_path = self.template_manager.create_template_file(
+                "base",
+                f"evaluator_{evaluator_type}",
+                output_dir and f"{output_dir}/base-evaluator_{evaluator_type}.yaml",
+            )
+            created_files.append(file_path)
+
+        # Create base report templates
+        report_types = ["business", "compliance", "reliability", "safety"]
+        for report_type in report_types:
+            self._get_base_report_config(report_type)
+            file_path = self.template_manager.create_template_file(
+                "base",
+                f"report_{report_type}",
+                output_dir and f"{output_dir}/base-report_{report_type}.yaml",
+            )
+            created_files.append(file_path)
+
+        return created_files
 
     def _validate_collector(self, collector: dict[str, Any]) -> bool:
         """Validate a collector configuration"""

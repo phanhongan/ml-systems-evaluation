@@ -1,0 +1,26 @@
+collectors:
+- endpoints:
+  - http://grid-monitor:8080/metrics
+  metrics:
+  - load_prediction
+  - response_time
+  type: online
+evaluators:
+- metrics:
+  - load_prediction_accuracy
+  - response_time
+  type: performance
+slos:
+  load_prediction_accuracy:
+    description: Accuracy of energy demand prediction
+    target: 0.95
+    window: 24h
+  response_time:
+    description: Proportion of system responses within 2 seconds
+    target: 0.99
+    window: 1h
+system:
+  criticality: business_critical
+  description: ML system for energy grid optimization and load balancing
+  name: Energy Grid Optimization System
+  persona: Grid Operator

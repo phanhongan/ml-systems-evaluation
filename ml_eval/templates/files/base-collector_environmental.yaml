@@ -1,0 +1,7 @@
+alert_thresholds: {}
+sampling_interval: 60
+sensor_types:
+- temperature
+- pressure
+- humidity
+type: environmental

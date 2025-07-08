@@ -48,9 +48,6 @@ from .reports.compliance import ComplianceReport
 from .reports.reliability import ReliabilityReport
 from .reports.safety import SafetyReport
 
-# Templates and examples
-from .templates.factory import TemplateFactory
-
 __version__ = "0.1.0"
 __author__ = "ML Systems Evaluation Team"
 __description__ = "Industrial AI Reliability Assessment Framework"
@@ -87,6 +84,5 @@ __all__ = [
     "SafetyEvaluator",
     "SafetyReport",
     "SchedulingAgent",
-    "TemplateFactory",
     "cli_main",
 ]

@@ -1,0 +1,6 @@
+detection_methods:
+- statistical
+- ml_based
+sensitivity: 0.05
+type: drift
+window_size: 1000

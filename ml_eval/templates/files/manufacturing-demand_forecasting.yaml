@@ -1,0 +1,26 @@
+collectors:
+- endpoints:
+  - http://forecast-engine:8080/metrics
+  metrics:
+  - demand_prediction
+  - response_time
+  type: online
+evaluators:
+- metrics:
+  - demand_forecast_accuracy
+  - forecast_response_time
+  type: performance
+slos:
+  demand_forecast_accuracy:
+    description: Accuracy of demand forecasting
+    target: 0.9
+    window: 30d
+  forecast_response_time:
+    description: Proportion of forecast requests completed within 5 minutes
+    target: 0.99
+    window: 1h
+system:
+  criticality: business_critical
+  description: ML system for manufacturing demand forecasting
+  name: Manufacturing Demand Forecasting System
+  persona: Supply Chain Manager

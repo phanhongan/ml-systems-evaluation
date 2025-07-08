@@ -262,7 +262,7 @@ class RLAgent:
 
     def _validate_action_safety(
         self,
-        action: dict[str, Any],
+        action: dict[str, Any],  # noqa: ARG002
         state: dict[str, Any],  # noqa: ARG002
     ) -> bool:
         """Validate action against safety constraints"""

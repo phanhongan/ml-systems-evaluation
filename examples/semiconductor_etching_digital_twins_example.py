@@ -245,7 +245,7 @@ class EtchingDigitalTwin:
                 {
                     "type": "temperature_excursion",
                     "severity": "medium",
-                    "message": f'Temperature {params["temperature"]}°C exceeds normal range',
+                    "message": f"Temperature {params['temperature']}°C exceeds normal range",
                     "timestamp": datetime.now().isoformat(),
                 }
             )
@@ -256,7 +256,7 @@ class EtchingDigitalTwin:
                 {
                     "type": "high_defect_density",
                     "severity": "high",
-                    "message": f'Defect density {metrics["defect_density"]:.4f} exceeds threshold',
+                    "message": f"Defect density {metrics['defect_density']:.4f} exceeds threshold",
                     "timestamp": datetime.now().isoformat(),
                 }
             )
@@ -267,7 +267,7 @@ class EtchingDigitalTwin:
                 {
                     "type": "high_etch_rate",
                     "severity": "medium",
-                    "message": f'Etch rate {metrics["etch_rate"]:.1f} nm/min exceeds specification',
+                    "message": f"Etch rate {metrics['etch_rate']:.1f} nm/min exceeds specification",
                     "timestamp": datetime.now().isoformat(),
                 }
             )

@@ -158,7 +158,7 @@ The framework supports multiple industrial sectors with ready-to-use configurati
 
 See the [`examples/industries/`](./examples/industries/) directory for complete configuration files covering all scenarios. Each industry directory contains detailed README files with specific use cases, requirements, and implementation guidance.
 
-For a comprehensive overview of all examples, templates, and tutorials, see the [Examples Directory README](./examples/README.md).
+For a comprehensive overview of all examples, templates, and tutorials, see the [examples/](./examples/).
 
 ## 🏗️ Architecture
 

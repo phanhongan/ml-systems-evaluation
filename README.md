@@ -289,7 +289,7 @@ ml-eval report --type safety --period 30d
 ### 🤖 Autonomous Agents (Future)
 - **🤖 MonitoringAgent**: Autonomous real-time monitoring and health checks
 - **🤖 AlertingAgent**: Intelligent alert prioritization and routing
-- **🤖 SchedulingAgent**: Autonomous task scheduling and resource allocation
+- **🤖 RLAgent**: Adaptive decision-making and scheduling
 
 ### 📊 Reports
 - **🛡️ ReliabilityReport**: Error budgets, SLO compliance, incident analysis

@@ -47,11 +47,145 @@ The framework follows a hybrid architecture that combines deterministic componen
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │  Monitoring*│  │  Alerting*  │  │  Scheduling*│          │
-│  │  Agent      │  │  Agent      │  │  Agent      │          │
+│  │  RL Agent*  │  │  Monitoring*│  │  Alerting*  │          │
+│  │             │  │  Agent      │  │  Agent      │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+### **Current Agent Roles and Extensibility**
+
+The framework currently includes the following agents:
+
+**RL Agent**
+- **Adaptive Decision-Making**: Learn optimal strategies based on system performance
+- **Resource Allocation**: Optimize resource usage based on workload patterns
+- **Task Scheduling**: Intelligent task scheduling and execution (as a feature)
+- **Maintenance Planning**: Proactive maintenance scheduling based on failure patterns
+- **Threshold Optimization**: Dynamic monitoring threshold adjustment
+
+**Monitoring Agent**
+- **System Health Monitoring**: Real-time system health and performance monitoring
+- **Anomaly Detection**: Proactive issue detection and prevention
+- **Predictive Analysis**: Predictive maintenance and health forecasting
+- **Resource Monitoring**: Continuous resource usage monitoring
+
+**Alerting Agent**
+- **Intelligent Alerting**: Context-aware alert generation and routing
+- **Alert Prioritization**: Smart alert filtering and deduplication
+- **User Feedback Learning**: Adapt alerting strategies based on effectiveness
+- **Multi-channel Notifications**: Email, Slack, SMS, and custom integrations
+
+> **Note:** Scheduling is a feature of the RL Agent, not a separate architectural component. In future, scheduling features could be distributed to other agents if needed.
+
+> **Extensibility:**
+> The agent layer is designed to be extensible. Additional agents can be introduced in the future to support new capabilities or domains as requirements evolve.
+
+### **Cross-Cutting Concerns: Safety, Compliance, and Performance Constraints**
+- All agents must respect safety, compliance, and performance constraints.
+- These constraints are enforced in agent logic and configuration, not as separate architectural layers.
+- This ensures the system remains reliable, auditable, and safe by design.
+
+### **Benefits of the Agent-Based Architecture**
+
+**1. Clear Separation of Concerns**
+- **RL Agent**: Adaptive optimization and scheduling
+- **Monitoring Agent**: System observation and health assessment
+- **Alerting Agent**: Communication and notification management
+
+**2. Reduced Complexity**
+- **Simpler Coordination**: Fewer inter-agent communication paths
+- **Easier Testing**: Clearer test boundaries for each agent
+- **Better Maintainability**: Simpler codebase and deployment
+
+**3. Optimal Resource Usage**
+- **Efficient Resource Allocation**: RL agent handles both optimization and scheduling
+- **Reduced Overhead**: Fewer agents mean less computational overhead
+- **Simpler State Management**: Less complex state synchronization
+
+### **Agent Coordination Strategy**
+
+**Primary Coordination Flow:**
+```
+Monitoring Agent → RL Agent → Alerting Agent
+     ↓              ↓           ↓
+System State → Adaptive Decisions → Notifications
+```
+
+**RL Agent as Coordinator:**
+- Receives monitoring data from Monitoring Agent
+- Makes adaptive decisions based on system state
+- Triggers appropriate alerts through Alerting Agent
+- Handles scheduling and resource allocation internally
+
+### **Implementation Considerations**
+
+**1. RL Agent Enhanced Responsibilities**
+```python
+class RLAgent:
+    async def optimize_and_schedule(self, monitoring_data: dict) -> dict:
+        """Optimize system parameters and schedule tasks"""
+        # Adaptive optimization
+        optimal_params = await self.optimize_parameters(monitoring_data)
+        
+        # Task scheduling
+        scheduled_tasks = await self.schedule_tasks(monitoring_data)
+        
+        return {
+            "optimization": optimal_params,
+            "scheduling": scheduled_tasks
+        }
+```
+
+**2. Simplified Agent Communication**
+```python
+# Monitoring Agent provides data
+monitoring_data = await monitoring_agent.get_system_state()
+
+# RL Agent makes decisions
+decisions = await rl_agent.optimize_and_schedule(monitoring_data)
+
+# Alerting Agent handles notifications
+await alerting_agent.process_decisions(decisions)
+```
+
+### **Development Roadmap**
+
+**Phase 1: Core Agent Development**
+- **RL Agent**: Implement adaptive decision-making with safety constraints
+- **Monitoring Agent**: Develop real-time system health monitoring capabilities
+- **Alerting Agent**: Build intelligent alerting and notification management
+- **Key Principle**: Agents handle adaptive optimization and communication; deterministic core handles safety-critical operations
+
+**Phase 2: Agent Coordination and Integration**
+- Implement efficient inter-agent communication protocols
+- Develop coordination strategies for optimal system performance
+- Establish clear boundaries between agent responsibilities and deterministic operations
+- **Key Principle**: Agents coordinate for optimization; deterministic systems ensure safety and compliance
+
+**Phase 3: Advanced Capabilities and Extensibility**
+- Add advanced RL capabilities for combined optimization and scheduling
+- Implement sophisticated coordination strategies across agents
+- Develop extensible agent architecture for future capabilities
+- **Key Principle**: Agents provide intelligent automation; human oversight and deterministic fallbacks ensure reliability
+
+**Agent Responsibilities: What Agents Should and Shouldn't Do**
+
+**What Agents Should Do:**
+- **Adaptive Optimization**: Learn and optimize system parameters based on performance data
+- **Resource Management**: Intelligently allocate and manage system resources
+- **Communication**: Handle notifications, alerts, and user interactions
+- **Coordination**: Work together to achieve optimal system performance
+- **Learning**: Continuously improve based on feedback and historical data
+
+**What Agents Should NOT Do:**
+- **Safety-Critical Decisions**: Never make decisions that could compromise system safety
+- **Compliance Violations**: Never bypass regulatory or compliance requirements
+- **Deterministic Operations**: Never replace core deterministic algorithms for critical functions
+- **Human Oversight**: Never operate without appropriate human oversight for high-impact decisions
+- **Fallback Mechanisms**: Never disable or override deterministic fallback systems
+
+This roadmap ensures we build the right capabilities from the start, with clear boundaries between agent intelligence and deterministic reliability.
 
 ### Implemented Components
 
@@ -73,7 +207,6 @@ The framework follows a hybrid architecture that combines deterministic componen
 - **API**: REST API for programmatic access
 - **Monitoring Agent**: Autonomous real-time monitoring and health checks
 - **Alerting Agent**: Autonomous configurable alerts and notifications
-- **Scheduling Agent**: Autonomous task scheduling and execution
 
 *Note: Planned components are marked with asterisks (*) in the architecture diagram.*
 
@@ -204,74 +337,6 @@ enhanced_report = await enhancement_engine.enhance_business_report(
 )
 ```
 
-## Autonomous Agents (Future)
-
-### Monitoring Agent
-
-**Capabilities:**
-- Autonomous real-time monitoring and health checks
-- Intelligent system state assessment
-- Proactive issue detection and prevention
-- Adaptive monitoring strategies
-
-**Key Features:**
-- Continuous system health monitoring
-- Intelligent threshold adaptation
-- Predictive issue detection
-- Resource usage optimization
-
-**Implementation:**
-```python
-# Example: Autonomous monitoring
-monitoring_agent = MonitoringAgent(config)
-await monitoring_agent.start_monitoring()
-health_assessment = await monitoring_agent.assess_system_health()
-```
-
-### Alerting Agent
-
-**Capabilities:**
-- Autonomous configurable alerts and notifications
-- Intelligent alert prioritization and routing
-- Context-aware alert generation
-- Adaptive alerting strategies
-
-**Key Features:**
-- Smart alert filtering and deduplication
-- Context-aware severity assessment
-- Intelligent routing to appropriate recipients
-- Learning from alert effectiveness
-
-**Implementation:**
-```python
-# Example: Autonomous alerting
-alerting_agent = AlertingAgent(config)
-await alerting_agent.start_alerting()
-alert = await alerting_agent.generate_alert(system_event)
-```
-
-### Scheduling Agent
-
-**Capabilities:**
-- Autonomous task scheduling and execution
-- Intelligent resource allocation
-- Dynamic schedule optimization
-- Proactive maintenance scheduling
-
-**Key Features:**
-- Intelligent task prioritization
-- Resource-aware scheduling
-- Conflict resolution and optimization
-- Proactive maintenance planning
-
-**Implementation:**
-```python
-# Example: Autonomous scheduling
-scheduling_agent = SchedulingAgent(config)
-await scheduling_agent.start_scheduling()
-scheduled_task = await scheduling_agent.schedule_task(maintenance_task)
-```
-
 ## Data Flow
 
 ### 1. Configuration Loading
@@ -296,7 +361,7 @@ Evaluation Results → Reporting Engine (Deterministic) → LLM Enhancement Engi
 
 ### 5. Future Autonomous Flow
 ```
-System State → Monitoring Agent → Alerting Agent → Scheduling Agent → Autonomous Actions
+System State → Monitoring Agent → RL Agent → Alerting Agent → Autonomous Actions
 ```
 
 ## Component Relationships
@@ -447,17 +512,19 @@ agents:
       cpu: 80
       memory: 85
   
+  rl:
+    enabled: true
+    learning_rate: 0.01
+    exploration_rate: 0.1
+    safety_constraints:
+      max_threshold_adjustment: 0.2
+      min_safety_margin: 0.1
+      max_resource_usage: 0.8
+  
   alerting:
     enabled: true
     channels: ["email", "slack"]
     severity_levels: ["low", "medium", "high", "critical"]
-  
-  scheduling:
-    enabled: true
-    max_concurrent_tasks: 5
-    resource_limits:
-      cpu: "80%"
-      memory: "8GB"
 ```
 
 ## Provider Configuration
@@ -519,18 +586,18 @@ enhanced_report = await enhancement_engine.enhance_business_report(
 ```python
 # Initialize agents
 monitoring_agent = MonitoringAgent(config)
+rl_agent = RLAgent(config)
 alerting_agent = AlertingAgent(config)
-scheduling_agent = SchedulingAgent(config)
 
 # Start autonomous operations
 await monitoring_agent.start_monitoring()
+await rl_agent.start_learning()
 await alerting_agent.start_alerting()
-await scheduling_agent.start_scheduling()
 
 # Agents coordinate autonomously
-health_assessment = await monitoring_agent.assess_system_health()
-alert = await alerting_agent.generate_alert(system_event)
-scheduled_task = await scheduling_agent.schedule_task(maintenance_task)
+monitoring_data = await monitoring_agent.get_system_state()
+decisions = await rl_agent.optimize_and_schedule(monitoring_data)
+await alerting_agent.process_decisions(decisions)
 ```
 
 ## Best Practices
@@ -607,7 +674,7 @@ ml_eval/
 ├── agents/        # Future autonomous agents
 │   ├── monitoring/ # Monitoring agent
 │   ├── alerting/  # Alerting agent
-│   └── scheduling/ # Scheduling agent
+│   └── rl/        # RL agent (adaptive + scheduling)
 └── safety/        # Safety-critical components
 ```
 

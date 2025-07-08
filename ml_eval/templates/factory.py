@@ -28,6 +28,10 @@ class TemplateFactory:
                 "collision_avoidance": self._create_maritime_collision_avoidance(),
                 "navigation_system": self._create_maritime_navigation_system(),
             },
+            "semiconductor": {
+                "digital_twins": self._create_semiconductor_digital_twins(),
+                "yield_prediction": self._create_semiconductor_yield_prediction(),
+            },
         }
 
     def get_template(self, industry: str, template_type: str) -> dict[str, Any]:
@@ -367,6 +371,64 @@ class TemplateFactory:
                     "type": "reliability",
                     "error_budget_window": "30d",
                     "critical_metrics": ["system_availability"],
+                },
+            ],
+        }
+
+    def _create_semiconductor_digital_twins(self) -> dict[str, Any]:
+        """Create minimum viable semiconductor digital twins template"""
+        return {
+            "system": {
+                "name": "Semiconductor Digital Twins System",
+                "persona": "Process Engineer",
+                "description": "Digital twins for semiconductor etching process monitoring",
+            },
+            "slos": {
+                "yield_prediction_accuracy": {
+                    "target": 0.95,
+                    "window": "7d",
+                    "description": "Accuracy of wafer yield prediction",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "metrics": ["temperature", "pressure"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["yield_prediction_accuracy"],
+                },
+            ],
+        }
+
+    def _create_semiconductor_yield_prediction(self) -> dict[str, Any]:
+        """Create minimum viable semiconductor yield prediction template"""
+        return {
+            "system": {
+                "name": "Semiconductor Yield Prediction System",
+                "persona": "Process Engineer",
+                "description": "ML system for wafer yield prediction",
+            },
+            "slos": {
+                "yield_prediction_accuracy": {
+                    "target": 0.95,
+                    "window": "7d",
+                    "description": "Accuracy of wafer yield prediction",
+                },
+            },
+            "collectors": [
+                {
+                    "type": "online",
+                    "metrics": ["temperature", "pressure"],
+                },
+            ],
+            "evaluators": [
+                {
+                    "type": "performance",
+                    "metrics": ["yield_prediction_accuracy"],
                 },
             ],
         }

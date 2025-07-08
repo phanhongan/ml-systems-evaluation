@@ -282,6 +282,10 @@ The framework provides ready-to-use templates for these industrial sectors:
 - **⚡ grid_optimization**: Power grid optimization system for demand prediction and supply management
 - **📊 demand_prediction**: Energy demand forecasting system
 
+#### **🔬 Semiconductor Industry**
+- **🤖 digital_twins**: Digital twins system for semiconductor manufacturing processes and equipment monitoring
+- **📊 yield_prediction**: Yield prediction system for wafer fabrication quality control
+
 ### ⚡ Quick Commands
 
 ```bash
@@ -295,11 +299,13 @@ ml-eval --help
 # Additional template examples
 ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
 ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
+ml-eval template --industry semiconductor --type digital_twins --output digital-twins-system.yaml
 
 # Using example configurations
 ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
 ml-eval evaluate --config examples/maritime-collision-avoidance.yaml --mode single
 ml-eval monitor --config examples/predictive-maintenance.yaml --interval 60
+ml-eval evaluate --config examples/semiconductor-etching-digital-twins.yaml --mode single
 
 # Additional reporting
 ml-eval report --type safety --period 30d
@@ -328,6 +334,7 @@ The framework includes complete example configurations in the [`examples/`](./ex
 Additional examples include:
 - **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater classification
 - **[📊 product-demand-forecasting.yaml](./examples/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
+- **[🔬 semiconductor-etching-digital-twins.yaml](./examples/semiconductor-etching-digital-twins.yaml)**: Semiconductor etching digital twins with real-time monitoring and yield prediction
 
 ## 🔧 Core Components
 

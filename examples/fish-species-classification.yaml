@@ -53,11 +53,8 @@ operating_conditions:
     current_speeds: [0, 3]  # m/s
   
   fishing_methods:
-    - "trawl_fishing"
     - "gill_net"
-    - "longline"
-    - "purse_seine"
-    - "pole_and_line"
+    - "buoy_net"
   
   target_species:
     - "cod"

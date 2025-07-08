@@ -1,0 +1,96 @@
+system:
+  name: "Basic ML System"
+  persona: "ML Engineer"
+  criticality: "business_critical"
+  description: "Basic template for ML system evaluation"
+
+slos:
+  accuracy:
+    target: 0.90
+    window: "24h"
+    description: "Model accuracy for primary prediction task"
+  
+  latency:
+    target: 0.95
+    window: "1h"
+    description: "Proportion of predictions completed within target time"
+  
+  availability:
+    target: 0.99
+    window: "30d"
+    description: "System uptime for ML inference functionality"
+
+operating_conditions:
+  environments: ["production", "staging", "development"]
+  data_sources: ["real_time", "batch", "historical"]
+  model_types: ["classification", "regression", "anomaly_detection"]
+
+collectors:
+  - type: "online"
+    endpoints: ["http://ml-system:8080/metrics"]
+    metrics: ["accuracy", "latency", "throughput"]
+    polling_interval: 30  # seconds
+  
+  - type: "offline"
+    log_paths: ["/var/log/ml-system/"]
+    data_retention: "30d"
+  
+  - type: "environmental"
+    sources: ["cpu_usage", "memory_usage", "gpu_usage"]
+    sampling_interval: 60  # seconds
+
+evaluators:
+  - type: "performance"
+    metrics: ["accuracy", "latency", "throughput"]
+    thresholds:
+      latency_ms: 1000
+      accuracy: 0.85
+    baseline_period: "last_7_days"
+  
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "accuracy": {
+        "target": 0.90,
+        "window": "24h"
+      },
+      "availability": {
+        "target": 0.99,
+        "window": "30d"
+      }
+    }
+    failure_modes: ["model_degradation", "data_drift", "infrastructure_failure"]
+  
+  - type: "drift"
+    drift_detection: ["feature_distribution", "model_performance", "data_quality"]
+    adaptation_threshold: 0.1
+    environmental_factors: ["data_source_changes", "model_updates"]
+
+alerts:
+  critical:
+    - "accuracy_below_threshold"
+    - "latency_above_threshold"
+    - "system_unavailable"
+  
+  warning:
+    - "performance_degrading"
+    - "drift_detected"
+    - "resource_usage_high"
+  
+  info:
+    - "model_retraining_scheduled"
+    - "performance_optimization_available"
+
+reports:
+  - type: "business"
+    format: "html"
+    schedule: "0 9 * * *"  # Daily at 9 AM
+    recipients: ["ml-team@company.com"]
+    include_charts: true
+    include_recommendations: true
+  
+  - type: "technical"
+    format: "json"
+    schedule: "0 */6 * * *"  # Every 6 hours
+    include_system_metrics: true
+    include_performance_data: true

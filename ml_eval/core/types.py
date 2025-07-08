@@ -66,6 +66,7 @@ class IndustryType(Enum):
     AVIATION = "aviation"
     ENERGY = "energy"
     MARITIME = "maritime"
+    AQUACULTURE = "aquaculture"
     CUSTOM = "custom"
 
 
@@ -87,3 +88,7 @@ class TemplateType(Enum):
     # Maritime
     COLLISION_AVOIDANCE = "collision_avoidance"
     NAVIGATION_SYSTEM = "navigation_system"
+
+    # Aquaculture
+    SPECIES_CLASSIFICATION = "species_classification"
+    ENVIRONMENTAL_MONITORING = "environmental_monitoring"

@@ -25,10 +25,10 @@ slos:
     window: "24h"
     description: "Accuracy in identifying protected species to prevent bycatch and regulatory violations"
   
-  ghost_gear_avoidance:
+  environmental_hazard_avoidance:
     target: 0.90
     window: "24h"
-    description: "Success rate in avoiding detected ghost gear to prevent vessel damage and gear entanglement"
+    description: "Success rate in avoiding detected environmental hazards including ghost gear"
 
 operating_conditions:
   fishing_environments:
@@ -78,7 +78,7 @@ sonar_parameters:
     bottom_lock: true
     target_tracking: true
     depth_compensation: true
-    ghost_gear_detection: true
+    environmental_hazard_detection: true
     pattern_recognition: true
 
 collectors:
@@ -92,7 +92,7 @@ collectors:
       - "fish_detection_accuracy"
       - "species_classification_accuracy"
       - "bycatch_prevention"
-      - "ghost_gear_avoidance"
+      - "environmental_hazard_avoidance"
       - "accuracy"
       - "latency"
       - "throughput"
@@ -114,7 +114,7 @@ collectors:
     compliance_standards: ["fishery_management", "protected_species", "catch_limits", "gear_retrieval", "marine_debris_prevention"]
     reporting_frequency: "daily"
   
-  - type: "ghost_gear_database"
+  - type: "environmental_hazard_database"
     sources: ["global_ghost_gear_initiative", "local_fishery_reports", "satellite_detection_data"]
     update_frequency: "hourly"
     coverage_areas: ["fishing_grounds", "migration_routes", "protected_areas"]
@@ -138,35 +138,35 @@ evaluators:
         "window": "24h",
         "description": "Accuracy in identifying protected species"
       },
-      "ghost_gear_avoidance": {
+      "environmental_hazard_avoidance": {
         "target": 0.90,
         "window": "24h",
-        "description": "Success rate in avoiding detected ghost gear"
+        "description": "Success rate in avoiding detected environmental hazards"
       }
     }
-    failure_modes: ["sonar_signal_loss", "processing_failure", "environmental_interference", "ghost_gear_missed", "false_positive_gear_detection"]
+    failure_modes: ["sonar_signal_loss", "processing_failure", "environmental_interference", "hazard_missed", "false_positive_hazard_detection"]
   
   - type: "performance"
-    metrics: ["accuracy", "latency", "throughput", "catch_efficiency", "gear_detection_speed"]
+    metrics: ["accuracy", "latency", "throughput", "catch_efficiency", "hazard_detection_speed"]
     thresholds:
       latency_ms: 500
       catch_efficiency: 0.78
-      gear_detection_latency_ms: 200
+      hazard_detection_latency_ms: 200
     baseline_period: "last_30_days"
   
   - type: "drift"
-    drift_detection: ["water_conditions", "sonar_characteristics", "fish_behavior_patterns", "ghost_gear_patterns"]
+    drift_detection: ["water_conditions", "sonar_characteristics", "fish_behavior_patterns", "environmental_hazard_patterns"]
     adaptation_threshold: 0.15
     environmental_factors: ["temperature", "salinity", "turbidity", "depth", "current_patterns"]
   
   - type: "compliance"
     standards: ["fishery_management", "protected_species", "catch_limits", "gear_retrieval", "marine_debris_prevention"]
-    audit_requirements: ["catch_logs", "bycatch_reports", "gear_restrictions", "ghost_gear_reports", "retrieval_efforts"]
+    audit_requirements: ["catch_logs", "bycatch_reports", "gear_restrictions", "hazard_reports", "retrieval_efforts"]
     reporting_frequency: "daily"
   
   - type: "safety"
     safety_metrics: ["gear_entanglement_risk", "vessel_damage_risk", "crew_safety_incidents"]
-    risk_assessment: ["ghost_gear_density", "gear_type_risk", "environmental_conditions"]
+    risk_assessment: ["hazard_density", "hazard_type_risk", "environmental_conditions"]
     emergency_protocols: ["gear_entanglement_response", "vessel_damage_mitigation", "emergency_retrieval"]
 
 # Business metrics (not SLOs - can have any positive values)
@@ -191,9 +191,9 @@ business_metrics:
     target: 500  # USD per trip
     description: "Average cost of gear damage and replacement per trip"
   
-  ghost_gear_retrieval_value:
-    target: 2000  # USD per retrieval
-    description: "Value of retrieved ghost gear (recycling + environmental benefit)"
+  environmental_cleanup_value:
+    target: 2000  # USD per cleanup
+    description: "Value of environmental cleanup activities including ghost gear retrieval"
   
   insurance_premium_savings:
     target: 0.15
@@ -205,7 +205,7 @@ alerts:
     - "protected_species_detected"
     - "catch_limit_approaching"
     - "weather_conditions_deteriorating"
-    - "ghost_gear_detected_critical"
+    - "environmental_hazard_detected_critical"
     - "gear_entanglement_imminent"
     - "vessel_damage_risk_high"
   
@@ -214,15 +214,15 @@ alerts:
     - "species_confidence_low"
     - "processing_latency_high"
     - "environmental_conditions_changing"
-    - "ghost_gear_detected_warning"
-    - "gear_density_increasing"
+    - "environmental_hazard_detected_warning"
+    - "hazard_density_increasing"
     - "retrieval_opportunity_available"
   
   info:
     - "catch_efficiency_optimization"
     - "fuel_consumption_alert"
     - "maintenance_reminder"
-    - "ghost_gear_database_updated"
+    - "environmental_hazard_database_updated"
     - "retrieval_mission_successful"
 
 reports:
@@ -246,9 +246,9 @@ reports:
     include_system_metrics: true
     include_performance_data: true
   
-  - type: "ghost_gear"
+  - type: "environmental"
     format: "json"
     schedule: "0 */2 * * *"  # Every 2 hours
     include_detection_data: true
     include_retrieval_opportunities: true
-    recipients: ["ghost-gear-coordinator@fishing-company.com", "marine-conservation@fishing-company.com"]
+    recipients: ["environmental-coordinator@fishing-company.com", "marine-conservation@fishing-company.com"]

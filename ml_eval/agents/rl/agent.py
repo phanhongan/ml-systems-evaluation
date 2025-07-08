@@ -163,7 +163,8 @@ class RLAgent:
         }
 
     async def optimize_and_schedule(
-        self, monitoring_data: dict[str, Any]  # noqa: ARG002
+        self,
+        monitoring_data: dict[str, Any],  # noqa: ARG002
     ) -> dict[str, Any]:
         """Optimize system parameters and schedule tasks based on monitoring data"""
         # Future implementation
@@ -244,28 +245,33 @@ class RLAgent:
         }
 
     def _validate_safety_constraints(
-        self, state: dict[str, Any]  # noqa: ARG002
+        self,
+        state: dict[str, Any],  # noqa: ARG002
     ) -> bool:
         """Validate state against safety constraints"""
         # Future implementation
         return True
 
     def _validate_compliance_requirements(
-        self, state: dict[str, Any]  # noqa: ARG002
+        self,
+        state: dict[str, Any],  # noqa: ARG002
     ) -> bool:
         """Validate state against compliance requirements"""
         # Future implementation
         return True
 
     def _validate_action_safety(
-        self, action: dict[str, Any], state: dict[str, Any]  # noqa: ARG002
+        self,
+        action: dict[str, Any],
+        state: dict[str, Any],  # noqa: ARG002
     ) -> bool:
         """Validate action against safety constraints"""
         # Future implementation
         return True
 
     def _get_safe_fallback_decision(
-        self, state: dict[str, Any]  # noqa: ARG002
+        self,
+        state: dict[str, Any],  # noqa: ARG002
     ) -> dict[str, Any]:
         """Get deterministic fallback decision"""
         return {
@@ -277,7 +283,8 @@ class RLAgent:
         }
 
     def _get_compliant_fallback_decision(
-        self, state: dict[str, Any]  # noqa: ARG002
+        self,
+        state: dict[str, Any],  # noqa: ARG002
     ) -> dict[str, Any]:
         """Get compliant fallback decision"""
         return {

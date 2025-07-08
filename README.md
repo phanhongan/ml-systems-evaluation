@@ -2,15 +2,6 @@
 
 A reliability-focused evaluation framework for Industrial AI systems, applying Site Reliability Engineering (SRE) principles to machine learning evaluation.
 
----
-
-**Note:**
-- Example configurations are now organized by industry in `examples/industries/<industry>/`.
-- General-purpose templates are in `examples/templates/`.
-- Industry-specific templates are available via the CLI and in `ml_eval/templates/files/industries/` (for framework use).
-
----
-
 ## 🎯 The Problem
 
 Industrial AI systems face unique challenges that traditional ML evaluation approaches don't address:

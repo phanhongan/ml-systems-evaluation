@@ -1,0 +1,517 @@
+system:
+  name: "Semiconductor Etching Digital Twins"
+  persona: "Etch Process Engineer"
+  criticality: "business_critical"
+  description: "Digital twins system for semiconductor etching processes including equipment monitoring, yield prediction, and quality control"
+
+slos:
+  etch_yield_prediction_accuracy:
+    target: 0.95
+    window: "7d"
+    description: "Accuracy of etch yield prediction models"
+  etch_equipment_failure_prediction_accuracy:
+    target: 0.92
+    window: "30d"
+    description: "Accuracy of etch equipment failure prediction for etch chambers"
+  etch_defect_detection_accuracy:
+    target: 0.98
+    window: "24h"
+    description: "Accuracy of defect detection in etch process inspection"
+  etch_parameter_control_accuracy:
+    target: 0.99
+    window: "1h"
+    description: "Accuracy of etch process parameter control within specifications"
+  digital_twin_synchronization_latency:
+    target: 0.99
+    window: "1h"
+    description: "Proportion of digital twin updates completed within 5 seconds"
+  etch_quality_prediction_accuracy:
+    target: 0.94
+    window: "7d"
+    description: "Accuracy of final etch quality prediction"
+  system_availability:
+    target: 0.999
+    window: "30d"
+    description: "Digital twins system uptime"
+  real_time_monitoring_latency:
+    target: 0.99
+    window: "1h"
+    description: "Proportion of real-time monitoring updates within 1 second"
+  etch_throughput:
+    target: 0.95
+    window: "24h"
+    description: "Proportion of etch processes completed within target cycle time"
+  etch_uniformity:
+    target: 0.97
+    window: "24h"
+    description: "Etch uniformity across wafer surface"
+
+safety_thresholds:
+  critical_etch_equipment_failure:
+    max: 0.01
+    description: "Maximum acceptable false negative rate for critical etch equipment failure predictions"
+  chemical_exposure_alert:
+    max: 0.001
+    description: "Maximum acceptable false negative rate for chemical exposure alerts"
+  temperature_excursion:
+    max: 2.0
+    description: "Maximum temperature deviation from specification before safety alert (degrees Celsius)"
+  pressure_excursion:
+    max: 5.0
+    description: "Maximum pressure deviation from specification before safety alert (PSI)"
+
+operating_conditions:
+  etch_types: ["plasma_etch", "wet_etch", "dry_etch", "reactive_ion_etch"]
+  equipment_states:
+    ["operational", "maintenance", "idle", "error", "calibration"]
+  wafer_stages:
+    ["raw", "patterned", "etched", "cleaned", "inspected", "completed"]
+  environmental_conditions:
+    [
+      "clean_room",
+      "temperature_controlled",
+      "humidity_controlled",
+      "particle_free",
+    ]
+  quality_grades: ["premium", "standard", "rework", "scrap"]
+
+collectors:
+  - type: "online"
+    source: "mongo"
+    database: "semiconductor_fab"
+    collection: "real_time_data"
+    metrics:
+      [
+        "temperature",
+        "pressure",
+        "gas_flow",
+        "rf_power",
+        "dc_bias",
+        "particle_count",
+        "chemical_concentration",
+      ]
+    polling_interval: 1 # seconds
+    format: "json"
+  - type: "offline"
+    source: "s3"
+    bucket: "semiconductor-data"
+    prefix: "historical/"
+    data_types:
+      [
+        "wafer_measurements",
+        "equipment_logs",
+        "quality_metrics",
+        "process_recipes",
+        "maintenance_records",
+      ]
+    format: "parquet"
+    batch_size: 50000
+  - type: "environmental"
+    source: "s3"
+    bucket: "semiconductor-data"
+    prefix: "environmental/"
+    sources:
+      [
+        "clean_room_sensors",
+        "temperature_sensors",
+        "humidity_sensors",
+        "particle_counters",
+        "chemical_sensors",
+      ]
+    format: "json"
+  - type: "regulatory"
+    source: "s3"
+    bucket: "semiconductor-data"
+    prefix: "compliance/"
+    standards: ["ISO-14644", "SEMI-S2", "SEMI-S8", "OSHA-1910"]
+    compliance_metrics:
+      ["particle_limits", "chemical_exposure_limits", "temperature_limits"]
+    format: "json"
+
+evaluators:
+  - type: "performance"
+    metrics:
+      [
+        "etch_yield_prediction_accuracy",
+        "etch_equipment_failure_prediction_accuracy",
+        "etch_defect_detection_accuracy",
+        "etch_parameter_control_accuracy",
+      ]
+    real_time_threshold: 60 # seconds
+  - type: "drift"
+    detection_methods: ["statistical", "ml_model", "domain_knowledge"]
+    drift_metrics:
+      [
+        "etch_parameters",
+        "equipment_performance",
+        "quality_metrics",
+        "environmental_conditions",
+      ]
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics:
+      ["system_availability", "digital_twin_synchronization_latency"]
+  - type: "safety"
+    compliance_standards: ["ISO-14644", "SEMI-S2", "OSHA-1910"]
+    critical_metrics:
+      ["chemical_exposure_alert", "temperature_excursion", "pressure_excursion"]
+  - type: "compliance"
+    standards: ["ISO-14644", "SEMI-S2", "SEMI-S8"]
+    compliance_metrics:
+      ["particle_compliance", "chemical_compliance", "temperature_compliance"]
+
+reports:
+  - type: "business"
+    frequency: "daily"
+    stakeholders: ["fab_manager", "process_engineer", "quality_manager"]
+  - type: "reliability"
+    frequency: "hourly"
+    stakeholders: ["equipment_technician", "process_operator"]
+  - type: "compliance"
+    frequency: "weekly"
+    stakeholders: ["safety_officer", "regulatory_authority"]
+  - type: "safety"
+    frequency: "real_time"
+    stakeholders: ["fab_manager", "safety_officer", "emergency_response"]
+
+data_sources:
+  - name: "fab_data"
+    type: "mongo"
+    connection_string: "mongodb://fab-database:27017"
+    database: "semiconductor_fab"
+    authentication: "mongodb_auth"
+    offline_training:
+      collection: "historical_data"
+      data_types:
+        [
+          "wafer_measurements",
+          "equipment_logs",
+          "quality_metrics",
+          "process_recipes",
+        ]
+      format: "json"
+      compression: "gzip"
+    online_inference:
+      collection: "real_time_data"
+      data_types: ["sensor_readings", "equipment_status", "process_parameters"]
+      format: "json"
+      streaming: true
+    backup:
+      collection: "backup_data"
+      retention_days: 1095 # 3 years
+
+models:
+  - name: "etch_yield_predictor"
+    type: "regression"
+    algorithm: "gradient_boosting"
+    target: "etch_yield_percentage"
+    features:
+      [
+        "temperature",
+        "pressure",
+        "gas_flow",
+        "rf_power",
+        "dc_bias",
+        "process_time",
+        "equipment_age",
+        "maintenance_status",
+        "environmental_conditions",
+      ]
+    hyperparameters:
+      n_estimators: 200
+      max_depth: 8
+      learning_rate: 0.1
+      subsample: 0.8
+    description: "Predicts etch yield based on process parameters and equipment conditions"
+  - name: "etch_equipment_failure_predictor"
+    type: "classification"
+    algorithm: "random_forest"
+    target: "failure_probability"
+    features:
+      [
+        "vibration",
+        "temperature",
+        "rf_power",
+        "dc_bias",
+        "runtime_hours",
+        "maintenance_history",
+        "particle_count",
+        "chemical_concentration",
+      ]
+    hyperparameters:
+      n_estimators: 150
+      max_depth: 10
+      min_samples_split: 5
+      min_samples_leaf: 2
+    description: "Predicts etch equipment failure probability for preventive maintenance"
+  - name: "etch_defect_detection_classifier"
+    type: "classification"
+    algorithm: "convolutional_neural_network"
+    target: "defect_type"
+    features: ["wafer_image", "process_parameters", "equipment_conditions"]
+    hyperparameters:
+      layers: [64, 128, 256, 512]
+      dropout_rate: 0.3
+      learning_rate: 0.001
+      batch_size: 32
+      epochs: 100
+    description: "Detects and classifies etch defects using image analysis"
+  - name: "etch_parameter_controller"
+    type: "control"
+    algorithm: "model_predictive_control"
+    target: "parameter_adjustment"
+    features:
+      [
+        "current_parameters",
+        "target_parameters",
+        "historical_performance",
+        "equipment_status",
+      ]
+    hyperparameters:
+      prediction_horizon: 10
+      control_horizon: 5
+      weight_matrix: [1.0, 0.5, 0.3]
+    description: "Controls etch process parameters to maintain quality specifications"
+  - name: "etch_quality_predictor"
+    type: "regression"
+    algorithm: "neural_network"
+    target: "quality_score"
+    features:
+      [
+        "process_parameters",
+        "equipment_conditions",
+        "environmental_conditions",
+        "historical_yield",
+      ]
+    hyperparameters:
+      layers: [128, 64, 32, 16]
+      dropout_rate: 0.2
+      learning_rate: 0.001
+      batch_size: 64
+      epochs: 150
+    description: "Predicts final etch quality score"
+
+training:
+  workflow:
+    step1:
+      name: "etch_yield_predictor"
+      type: "supervised"
+      description: "Etch yield prediction model training"
+      data_freshness:
+        max_age: "30d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.03
+        data_drift_threshold: 0.08
+        time_interval: "14d"
+      validation:
+        test_size: 0.2
+        metrics: ["rmse", "mae", "r2_score"]
+    step2:
+      name: "etch_equipment_failure_predictor"
+      type: "supervised"
+      description: "Etch equipment failure prediction model training"
+      data_freshness:
+        max_age: "60d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.05
+        data_drift_threshold: 0.1
+        time_interval: "30d"
+      validation:
+        test_size: 0.2
+        metrics: ["precision", "recall", "f1_score", "auc"]
+    step3:
+      name: "etch_defect_detection_classifier"
+      type: "supervised"
+      description: "Etch defect detection model training"
+      data_freshness:
+        max_age: "14d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.02
+        data_drift_threshold: 0.05
+        time_interval: "7d"
+      validation:
+        test_size: 0.2
+        metrics: ["accuracy", "precision", "recall", "f1_score"]
+    step4:
+      name: "etch_parameter_controller"
+      type: "reinforcement_learning"
+      description: "Etch process parameter control model training"
+      data_freshness:
+        max_age: "7d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.05
+        data_drift_threshold: 0.1
+        time_interval: "7d"
+      validation:
+        test_size: 0.2
+        metrics:
+          ["control_accuracy", "parameter_stability", "quality_improvement"]
+    step5:
+      name: "etch_quality_predictor"
+      type: "supervised"
+      description: "Etch quality prediction model training"
+      data_freshness:
+        max_age: "21d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.04
+        data_drift_threshold: 0.08
+        time_interval: "14d"
+      validation:
+        test_size: 0.2
+        metrics: ["rmse", "mae", "r2_score"]
+  model_ensemble:
+    combination_method: "weighted_average"
+    weights:
+      etch_yield_predictor: 0.3
+      etch_equipment_failure_predictor: 0.25
+      etch_defect_detection_classifier: 0.25
+      etch_parameter_controller: 0.1
+      etch_quality_predictor: 0.1
+
+alerts:
+  - name: "etch_equipment_failure_imminent"
+    condition: "failure_probability > 0.8"
+    severity: "critical"
+    notification: ["fab_manager", "equipment_technician", "process_engineer"]
+    action: "schedule_immediate_maintenance"
+    source: "etch_equipment_failure_predictor"
+  - name: "etch_yield_drop_detected"
+    condition: "predicted_yield < 0.85"
+    severity: "high"
+    notification: ["process_engineer", "quality_manager"]
+    action: "investigate_process_parameters"
+    source: "etch_yield_predictor"
+  - name: "etch_defect_rate_high"
+    condition: "defect_rate > 0.05"
+    severity: "high"
+    notification: ["quality_manager", "process_engineer"]
+    action: "adjust_inspection_parameters"
+    source: "etch_defect_detection_classifier"
+  - name: "etch_parameter_excursion"
+    condition: "parameter_deviation > 2.0"
+    severity: "medium"
+    notification: ["process_operator", "process_engineer"]
+    action: "adjust_process_parameters"
+    source: "etch_parameter_controller"
+  - name: "etch_quality_degradation"
+    condition: "quality_score < 0.9"
+    severity: "high"
+    notification: ["quality_manager", "process_engineer"]
+    action: "review_process_conditions"
+    source: "etch_quality_predictor"
+  - name: "chemical_exposure_alert"
+    condition: "chemical_concentration > safety_limit"
+    severity: "critical"
+    notification: ["safety_officer", "fab_manager", "emergency_response"]
+    action: "activate_safety_protocols"
+    source: "environmental_monitoring"
+  - name: "temperature_excursion"
+    condition: "temperature_deviation > 2.0"
+    severity: "medium"
+    notification: ["process_operator", "process_engineer"]
+    action: "adjust_temperature_controls"
+    source: "environmental_monitoring"
+  - name: "digital_twin_sync_failure"
+    condition: "sync_latency > 10"
+    severity: "high"
+    notification: ["system_administrator", "fab_manager"]
+    action: "investigate_system_connectivity"
+    source: "digital_twin_system"
+
+monitoring:
+  dashboard:
+    url: "http://fab-dashboard:8080"
+    refresh_interval: 5 # seconds
+  metrics_export:
+    format: "prometheus"
+    endpoint: "http://metrics-exporter:9090"
+  log_aggregation:
+    system: "elasticsearch"
+    index: "semiconductor-fab-logs"
+  digital_twin_visualization:
+    url: "http://twin-visualization:3000"
+    refresh_interval: 1 # seconds
+    features:
+      [
+        "3d_equipment_view",
+        "process_flow_visualization",
+        "real_time_metrics",
+        "predictive_analytics",
+      ]
+
+digital_twin_configuration:
+  physical_assets:
+    - name: "plasma_etch_chamber"
+      type: "plasma_etch"
+      model: "LAM_2300"
+      digital_twin_id: "etch_001"
+      sensors: ["temperature", "pressure", "gas_flow", "rf_power", "dc_bias"]
+      control_points:
+        ["etch_rate", "selectivity", "uniformity", "profile_control"]
+    - name: "wet_etch_tank"
+      type: "wet_etch"
+      model: "Applied_Materials_Wet"
+      digital_twin_id: "etch_002"
+      sensors:
+        ["temperature", "chemical_concentration", "ph_level", "agitation_speed"]
+      control_points: ["etch_rate", "uniformity", "surface_quality"]
+    - name: "dry_etch_chamber"
+      type: "dry_etch"
+      model: "TEL_Dry_Etch"
+      digital_twin_id: "etch_003"
+      sensors: ["temperature", "pressure", "gas_flow", "rf_power"]
+      control_points: ["etch_rate", "anisotropy", "uniformity"]
+    - name: "rie_chamber"
+      type: "reactive_ion_etch"
+      model: "Oxford_RIE"
+      digital_twin_id: "etch_004"
+      sensors:
+        [
+          "temperature",
+          "pressure",
+          "gas_flow",
+          "rf_power",
+          "dc_bias",
+          "ion_current",
+        ]
+      control_points: ["etch_rate", "selectivity", "anisotropy", "uniformity"]
+
+  synchronization:
+    update_frequency: 1 # seconds
+    data_latency_threshold: 5 # seconds
+    connection_timeout: 30 # seconds
+    retry_attempts: 3
+
+  predictive_capabilities:
+    - capability: "equipment_failure_prediction"
+      horizon: "168h" # 7 days
+      confidence_threshold: 0.8
+    - capability: "yield_prediction"
+      horizon: "24h"
+      confidence_threshold: 0.9
+    - capability: "quality_prediction"
+      horizon: "48h"
+      confidence_threshold: 0.85
+    - capability: "process_optimization"
+      horizon: "1h"
+      confidence_threshold: 0.95
+
+  simulation_scenarios:
+    - scenario: "equipment_maintenance"
+      description: "Simulate impact of preventive maintenance on etch yield"
+      parameters:
+        ["maintenance_duration", "maintenance_type", "equipment_condition"]
+    - scenario: "process_parameter_adjustment"
+      description: "Simulate impact of parameter changes on etch quality"
+      parameters: ["temperature", "pressure", "gas_flow", "rf_power", "dc_bias"]
+    - scenario: "environmental_condition_change"
+      description: "Simulate impact of environmental changes on etch process"
+      parameters: ["humidity", "particle_count", "temperature", "pressure"]
+    - scenario: "equipment_failure"
+      description: "Simulate impact of equipment failure on etch production"
+      parameters: ["failure_type", "failure_duration", "backup_equipment"]

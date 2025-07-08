@@ -265,29 +265,6 @@ ml-eval evaluate --config examples/industries/semiconductor/etching-digital-twin
 ml-eval report --type safety --period 30d
 ```
 
-### 📋 Configuration Examples
-
-#### **📋 Using Industry Templates (Recommended)**
-
-```bash
-# List available templates
-ml-eval template --industry manufacturing --type list
-
-# Get a specific template
-ml-eval template --industry manufacturing --type predictive_maintenance > maintenance-system.yaml
-```
-
-#### **📁 Example Configurations**
-
-The framework includes complete example configurations in the [`examples/industries/`](./examples/industries/) directory for the scenarios described above:
-
-- **[✈️ aircraft-landing.yaml](./examples/industries/aviation/aircraft-landing.yaml)**: Aircraft landing system with safety-critical compliance
-- **[🚢 collision-avoidance.yaml](./examples/industries/maritime/collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance  
-- **[🔧 predictive-maintenance.yaml](./examples/industries/manufacturing/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance
-- **[🐟 fish-species-classification.yaml](./examples/industries/aquaculture/fish-species-classification.yaml)**: Commercial fishing sonar classification with environmental hazard detection
-- **[📊 product-demand-forecasting.yaml](./examples/industries/manufacturing/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
-- **[🔬 etching-digital-twins.yaml](./examples/industries/semiconductor/etching-digital-twins.yaml)**: Semiconductor etching digital twins with real-time monitoring and yield prediction
-
 ## 🔧 Core Components
 
 ### 📊 Collectors

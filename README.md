@@ -2,6 +2,15 @@
 
 A reliability-focused evaluation framework for Industrial AI systems, applying Site Reliability Engineering (SRE) principles to machine learning evaluation.
 
+---
+
+**Note:**
+- Example configurations are now organized by industry in `examples/industries/<industry>/`.
+- General-purpose templates are in `examples/templates/`.
+- Industry-specific templates are available via the CLI and in `ml_eval/templates/files/industries/` (for framework use).
+
+---
+
 ## 🎯 The Problem
 
 Industrial AI systems face unique challenges that traditional ML evaluation approaches don't address:
@@ -115,66 +124,41 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 - **⚡ Real-time & Batch**: Online and offline evaluation for continuous monitoring
 - **📋 Standards Enforcement**: Configurable quality gates with regulatory compliance checks
 
-## 🎯 Supported Scenarios
+## 🎯 Supported Industries
 
-The framework supports multiple industrial scenarios with ready-to-use configurations. Here are three representative scenarios covering different evaluation challenges:
+The framework supports multiple industrial sectors with ready-to-use configurations and industry-specific requirements. Each industry has its own directory with detailed examples and documentation:
 
-### ✈️ Aircraft Landing
-**Problem**: Advanced aircraft landing system with comprehensive safety and compliance requirements.
+### **🏭 Manufacturing**
+- **Predictive Maintenance**: Equipment failure prediction with VAE anomaly detection
+- **Demand Forecasting**: Supply chain optimization and production planning
+- **Key Features**: ISO compliance, cost optimization, real-time monitoring
+- **Examples**: [`examples/industries/manufacturing/`](./examples/industries/manufacturing/)
 
-**Challenges**:
-- **🛡️ Safety Requirements**: 99.999% accuracy for landing decisions with sub-500ms response time
-- **📋 Regulatory Compliance**: Must meet multiple aviation safety standards (DO-178C, DO-254, ARP4754A)
-- **⚡ Real-time Constraints**: Complex flight path optimization and obstacle detection
-- **🚨 Failure Consequences**: Incorrect decisions can lead to catastrophic outcomes
-- **🌊 Environmental Adaptation**: System must adapt to various weather and runway conditions
+### **✈️ Aviation**  
+- **Safety-Critical Systems**: Aircraft landing and flight control assistance
+- **Key Features**: DO-178C compliance, sub-500ms response times, environmental adaptation
+- **Examples**: [`examples/industries/aviation/`](./examples/industries/aviation/)
 
-**Framework Solution**:
-- **🛡️ Multi-faceted safety validation**: Flight path accuracy, runway identification, weather assessment, obstacle detection
-- **📋 Comprehensive regulatory compliance**: Automated validation against multiple aviation standards
-- **🚨 Real-time alerting**: Immediate notification of any performance degradation across all critical metrics
-- **🚨 Incident response**: Structured approach to handling safety-critical failures with multiple stakeholders
-- **🌊 Environmental monitoring**: Continuous adaptation to changing flight conditions
+### **🚢 Maritime**
+- **Collision Avoidance**: Vessel collision detection and navigation safety
+- **Key Features**: COLREGs compliance, real-time alerts, multi-vessel tracking
+- **Examples**: [`examples/industries/maritime/`](./examples/industries/maritime/)
 
-### 🚢 Maritime Collision Avoidance
-**Problem**: AI-powered collision avoidance system for commercial vessels operating in busy maritime environments with strict safety and regulatory requirements.
+### **🔬 Semiconductor**
+- **Digital Twins**: Manufacturing process monitoring and yield prediction
+- **Key Features**: Real-time process control, quality metrics, equipment monitoring
+- **Examples**: [`examples/industries/semiconductor/`](./examples/industries/semiconductor/)
 
-**Challenges**:
-- **🛡️ Safety-Critical Navigation**: 99.9% accuracy in collision detection with sub-2-second alert latency
-- **📋 International Maritime Law**: Must comply with COLREGs (International Regulations for Preventing Collisions at Sea) and IMO guidelines
-- **🌊 Harsh Marine Environment**: System must operate reliably in fog, storms, and extreme weather conditions
-- **🚢 Complex Vessel Dynamics**: Different vessel types (cargo, tanker, passenger, fishing) have varying collision characteristics
-- **⚡ Real-time Decision Making**: Rapid assessment of collision risk and recommended avoidance maneuvers
+### **🐟 Aquaculture**
+- **Species Classification**: Sonar-based fish species identification and environmental hazard detection
+- **Key Features**: Environmental monitoring, regulatory compliance, resource optimization
+- **Examples**: [`examples/industries/aquaculture/`](./examples/industries/aquaculture/)
 
-**Framework Solution**:
-- **🛡️ Multi-vessel collision detection**: Accurate identification of collision scenarios across different vessel types and weather conditions
-- **📋 Regulatory compliance monitoring**: Continuous validation against COLREGs and IMO safety standards
-- **🚨 Real-time alerting system**: Immediate notification of collision risks with recommended avoidance actions
-- **🌊 Environmental adaptation**: System performance monitoring under various weather and sea conditions
-- **📊 Navigation parameter validation**: Continuous monitoring of Speed Through Water (STW) vs Speed Over Ground (SOG) discrepancies
+### 📋 Additional Examples
 
-### 🔧 Predictive Maintenance
-**Problem**: Industrial equipment predictive maintenance system for manufacturing operations with business-critical reliability requirements.
+See the [`examples/industries/`](./examples/industries/) directory for complete configuration files covering all scenarios. Each industry directory contains detailed README files with specific use cases, requirements, and implementation guidance.
 
-**Challenges**:
-- **💰 Business Impact**: Equipment failures cause immediate production losses and safety risks
-- **⚡ Real-time Monitoring**: Continuous assessment of equipment health across multiple production lines
-- **📊 Data Quality**: Sensor data from harsh industrial environments varies in reliability and accuracy
-- **🛡️ Safety Requirements**: Equipment failures can create hazardous conditions for workers
-- **📋 Regulatory Compliance**: Must meet manufacturing safety standards and environmental regulations
-
-**Framework Solution**:
-- **🔍 Multi-equipment monitoring**: Track performance across different equipment types and production environments
-- **📊 Sensor data validation**: Detect drift in sensor characteristics and environmental conditions
-- **🛡️ Reliability assessment**: Ensure 99.5% prediction accuracy with automatic alerting for maintenance needs
-- **💰 Business metrics**: Connect technical performance to production efficiency and cost optimization
-- **🌊 Environmental adaptation**: Monitor operating conditions and adjust predictions for different equipment states
-
-### 📋 Additional Scenarios
-
-See the [`examples/`](./examples/) directory for complete configuration files covering additional scenarios:
-- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
-- **[📊 product-demand-forecasting.yaml](./examples/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
+For a comprehensive overview of all examples, templates, and tutorials, see the [Examples Directory README](./examples/README.md).
 
 ## 🏗️ Architecture
 
@@ -266,26 +250,6 @@ ml-eval monitor --config quality-system.yaml --interval 300
 ml-eval report --type reliability --period 30d
 ```
 
-### 🏭 Available Industries and Templates
-
-The framework provides ready-to-use templates for these industrial sectors:
-
-#### **🏭 Manufacturing Industry**
-- **🔧 predictive_maintenance**: Predictive maintenance system for equipment monitoring and failure prediction
-- **📊 demand_forecasting**: Demand forecasting system for supply chain optimization
-
-#### **✈️ Aviation Industry**  
-- **🛡️ safety_decision**: Safety-critical decision system for aviation safety
-- **✈️ flight_control**: Flight control assistance system for aircraft control
-
-#### **⚡ Energy Industry**
-- **⚡ grid_optimization**: Power grid optimization system for demand prediction and supply management
-- **📊 demand_prediction**: Energy demand forecasting system
-
-#### **🔬 Semiconductor Industry**
-- **🤖 digital_twins**: Digital twins system for semiconductor manufacturing processes and equipment monitoring
-- **📊 yield_prediction**: Yield prediction system for wafer fabrication quality control
-
 ### ⚡ Quick Commands
 
 ```bash
@@ -298,14 +262,13 @@ ml-eval --help
 
 # Additional template examples
 ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
-ml-eval template --industry energy --type grid_optimization --output grid-system.yaml
 ml-eval template --industry semiconductor --type digital_twins --output digital-twins-system.yaml
 
 # Using example configurations
-ml-eval dev --config examples/aircraft-landing.yaml --mode validation --strict
-ml-eval evaluate --config examples/maritime-collision-avoidance.yaml --mode single
-ml-eval monitor --config examples/predictive-maintenance.yaml --interval 60
-ml-eval evaluate --config examples/semiconductor-etching-digital-twins.yaml --mode single
+ml-eval dev --config examples/industries/aviation/aircraft-landing.yaml --mode validation --strict
+ml-eval evaluate --config examples/industries/maritime/collision-avoidance.yaml --mode single
+ml-eval monitor --config examples/industries/manufacturing/predictive-maintenance.yaml --interval 60
+ml-eval evaluate --config examples/industries/semiconductor/etching-digital-twins.yaml --mode single
 
 # Additional reporting
 ml-eval report --type safety --period 30d
@@ -325,16 +288,14 @@ ml-eval template --industry manufacturing --type predictive_maintenance > mainte
 
 #### **📁 Example Configurations**
 
-The framework includes complete example configurations in the [`examples/`](./examples/) directory for the scenarios described above:
+The framework includes complete example configurations in the [`examples/industries/`](./examples/industries/) directory for the scenarios described above:
 
-- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Aircraft landing system with safety-critical compliance
-- **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance  
-- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance
-
-Additional examples include:
-- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater classification
-- **[📊 product-demand-forecasting.yaml](./examples/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
-- **[🔬 semiconductor-etching-digital-twins.yaml](./examples/semiconductor-etching-digital-twins.yaml)**: Semiconductor etching digital twins with real-time monitoring and yield prediction
+- **[✈️ aircraft-landing.yaml](./examples/industries/aviation/aircraft-landing.yaml)**: Aircraft landing system with safety-critical compliance
+- **[🚢 collision-avoidance.yaml](./examples/industries/maritime/collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance  
+- **[🔧 predictive-maintenance.yaml](./examples/industries/manufacturing/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance
+- **[🐟 fish-species-classification.yaml](./examples/industries/aquaculture/fish-species-classification.yaml)**: Commercial fishing sonar classification with environmental hazard detection
+- **[📊 product-demand-forecasting.yaml](./examples/industries/manufacturing/product-demand-forecasting.yaml)**: Supply chain optimization and demand forecasting
+- **[🔬 etching-digital-twins.yaml](./examples/industries/semiconductor/etching-digital-twins.yaml)**: Semiconductor etching digital twins with real-time monitoring and yield prediction
 
 ## 🔧 Core Components
 
@@ -510,7 +471,7 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **🏭 Industry-Specific Templates**
-- Ready-to-use configurations for 4 industrial sectors
+- Ready-to-use configurations for 5 industrial sectors
 - Multiple template types per industry
 - Industry-specific SLOs with appropriate safety and compliance standards
 

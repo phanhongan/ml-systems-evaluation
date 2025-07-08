@@ -1,0 +1,134 @@
+system:
+  name: "Safety-Critical ML System"
+  persona: "Safety Engineer"
+  criticality: "safety_critical"
+  description: "Template for safety-critical ML systems with high reliability requirements"
+
+slos:
+  decision_accuracy:
+    target: 0.9999
+    window: "24h"
+    description: "Accuracy of safety-critical decisions and predictions"
+  
+  response_time:
+    target: 0.999
+    window: "1h"
+    description: "Proportion of responses within critical time threshold"
+  
+  false_positive_rate:
+    target: 0.001
+    window: "7d"
+    description: "Maximum allowed false positive rate for safety alerts"
+  
+  system_availability:
+    target: 0.9999
+    window: "30d"
+    description: "System uptime for safety-critical functionality"
+
+safety_thresholds:
+  decision_confidence_threshold:
+    min: 0.95
+    description: "Minimum confidence threshold for safety-critical decisions"
+  response_time_p99:
+    max: 500  # milliseconds
+    description: "99th percentile response time for critical decisions"
+  false_positive_rate:
+    max: 0.001
+    description: "Maximum allowed false positive rate"
+
+operating_conditions:
+  environments: ["production", "testing", "simulation"]
+  safety_levels: ["critical", "high", "medium", "low"]
+  failure_modes: ["hardware_failure", "software_failure", "sensor_failure", "communication_failure"]
+
+collectors:
+  - type: "online"
+    endpoints: ["http://safety-system:8080/metrics"]
+    metrics: ["decision_accuracy", "response_time", "false_positive_rate", "system_availability"]
+    polling_interval: 5  # seconds
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["/var/log/safety-system/", "/var/log/incidents/"]
+    data_retention: "1y"
+  
+  - type: "environmental"
+    sources: ["sensor_data", "environmental_conditions", "system_status"]
+    sampling_interval: 10  # seconds
+  
+  - type: "regulatory"
+    compliance_standards: ["ISO-26262", "DO-178C", "IEC-61508"]
+    reporting_frequency: "real_time"
+
+evaluators:
+  - type: "safety"
+    compliance_standards: ["ISO-26262", "DO-178C", "IEC-61508"]
+    critical_metrics: ["decision_accuracy", "false_positive_rate", "response_time"]
+    safety_margins:
+      decision_confidence: 0.05  # 5% safety margin
+      response_time: 0.1  # 10% safety margin
+    failure_analysis: ["fmea", "fault_tree_analysis", "hazard_analysis"]
+  
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["system_availability", "decision_accuracy"]
+    reliability_targets:
+      mttf: "10000h"  # Mean Time To Failure
+      mttr: "1h"      # Mean Time To Repair
+    redundancy_requirements: ["primary_system", "backup_system", "fail_safe_mode"]
+  
+  - type: "performance"
+    metrics: ["response_time", "decision_confidence"]
+    real_time_threshold: 500  # milliseconds
+    performance_baselines:
+      normal_operation: 200  # ms
+      degraded_operation: 500  # ms
+      emergency_mode: 100  # ms
+  
+  - type: "drift"
+    detection_methods: ["statistical", "ml_model", "expert_rules"]
+    drift_metrics: ["decision_accuracy", "response_time", "false_positive_rate"]
+    drift_thresholds:
+      statistical: 0.05
+      ml_model: 0.1
+    adaptation_strategies: ["retraining", "fallback_mode", "expert_intervention"]
+
+alerts:
+  critical:
+    - "safety_critical_failure"
+    - "decision_confidence_below_threshold"
+    - "response_time_above_critical"
+    - "false_positive_rate_above_limit"
+    - "system_unavailable"
+  
+  warning:
+    - "performance_degrading"
+    - "drift_detected"
+    - "backup_system_activated"
+    - "maintenance_required"
+  
+  info:
+    - "safety_margin_approaching"
+    - "redundancy_status"
+    - "compliance_check_passed"
+
+reports:
+  - type: "safety"
+    format: "pdf"
+    schedule: "0 0 * * *"  # Daily at midnight
+    recipients: ["safety-officer@company.com", "regulatory-authority@company.com"]
+    include_evidence: true
+    audit_trail: true
+  
+  - type: "reliability"
+    format: "html"
+    schedule: "0 0 1 * *"  # Monthly on 1st
+    recipients: ["reliability-engineer@company.com"]
+    include_failure_analysis: true
+  
+  - type: "compliance"
+    format: "pdf"
+    schedule: "0 0 1 * *"  # Monthly on 1st
+    standards: ["ISO-26262", "DO-178C", "IEC-61508"]
+    include_evidence: true
+    audit_trail: true

@@ -1,0 +1,146 @@
+system:
+  name: "Business-Critical ML System"
+  persona: "Business Analyst"
+  criticality: "business_critical"
+  description: "Template for business-critical ML systems with high ROI requirements"
+
+slos:
+  accuracy:
+    target: 0.95
+    window: "24h"
+    description: "Model accuracy for business-critical predictions"
+  
+  latency:
+    target: 0.98
+    window: "1h"
+    description: "Proportion of predictions completed within business SLA"
+  
+  availability:
+    target: 0.999
+    window: "30d"
+    description: "System uptime for business-critical functionality"
+  
+  throughput:
+    target: 0.95
+    window: "1h"
+    description: "Proportion of requests processed within capacity limits"
+
+business_metrics:
+  revenue_impact:
+    target: 1000000  # USD per month
+    description: "Expected revenue impact from ML system"
+  
+  cost_savings:
+    target: 500000  # USD per month
+    description: "Expected cost savings from ML system"
+  
+  customer_satisfaction:
+    target: 0.90
+    description: "Customer satisfaction score for ML-powered features"
+  
+  operational_efficiency:
+    target: 0.25
+    description: "Improvement in operational efficiency"
+
+operating_conditions:
+  business_environments: ["production", "staging", "development"]
+  customer_segments: ["enterprise", "mid_market", "small_business"]
+  business_hours: ["24_7", "business_hours", "peak_hours"]
+  seasonal_patterns: ["year_round", "seasonal", "event_driven"]
+
+collectors:
+  - type: "online"
+    endpoints: ["http://business-ml-system:8080/metrics"]
+    metrics: ["accuracy", "latency", "throughput", "revenue_impact", "cost_savings"]
+    polling_interval: 60  # seconds
+  
+  - type: "offline"
+    log_paths: ["/var/log/business-ml-system/", "/var/log/customer-interactions/"]
+    data_retention: "90d"
+  
+  - type: "environmental"
+    sources: ["system_performance", "customer_behavior", "market_conditions"]
+    sampling_interval: 300  # seconds
+  
+  - type: "regulatory"
+    compliance_standards: ["GDPR", "CCPA", "SOX", "PCI-DSS"]
+    reporting_frequency: "daily"
+
+evaluators:
+  - type: "performance"
+    metrics: ["accuracy", "latency", "throughput"]
+    thresholds:
+      latency_ms: 2000
+      accuracy: 0.90
+      throughput_rps: 1000
+    baseline_period: "last_30_days"
+    business_impact: ["revenue", "cost", "efficiency"]
+  
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "accuracy": {
+        "target": 0.95,
+        "window": "24h"
+      },
+      "availability": {
+        "target": 0.999,
+        "window": "30d"
+      }
+    }
+    failure_modes: ["model_degradation", "data_drift", "infrastructure_failure", "business_logic_error"]
+    business_impact_analysis: ["revenue_loss", "customer_churn", "operational_disruption"]
+  
+  - type: "drift"
+    drift_detection: ["feature_distribution", "model_performance", "business_metrics"]
+    adaptation_threshold: 0.15
+    environmental_factors: ["market_changes", "customer_behavior", "seasonal_patterns"]
+    business_adaptation: ["retraining_schedule", "feature_engineering", "model_ensemble"]
+  
+  - type: "compliance"
+    standards: ["GDPR", "CCPA", "SOX", "PCI-DSS"]
+    audit_requirements: ["data_privacy", "financial_reporting", "security_controls"]
+    reporting_frequency: "daily"
+    business_impact: ["compliance_fines", "reputation_damage", "legal_liability"]
+
+alerts:
+  critical:
+    - "accuracy_below_business_threshold"
+    - "latency_above_sla"
+    - "system_unavailable"
+    - "revenue_impact_negative"
+    - "compliance_violation"
+  
+  warning:
+    - "performance_degrading"
+    - "drift_detected"
+    - "customer_satisfaction_declining"
+    - "cost_savings_below_target"
+  
+  info:
+    - "business_optimization_opportunity"
+    - "model_retraining_scheduled"
+    - "market_condition_change"
+
+reports:
+  - type: "business"
+    format: "html"
+    schedule: "0 8 * * *"  # Daily at 8 AM
+    recipients: ["business-analyst@company.com", "product-manager@company.com"]
+    include_charts: true
+    include_recommendations: true
+    business_metrics: ["revenue", "cost", "efficiency", "satisfaction"]
+  
+  - type: "compliance"
+    format: "pdf"
+    schedule: "0 0 1 * *"  # Monthly on 1st
+    standards: ["GDPR", "CCPA", "SOX", "PCI-DSS"]
+    include_evidence: true
+    audit_trail: true
+  
+  - type: "technical"
+    format: "json"
+    schedule: "0 */4 * * *"  # Every 4 hours
+    include_system_metrics: true
+    include_performance_data: true
+    include_business_impact: true

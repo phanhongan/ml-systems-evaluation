@@ -240,10 +240,10 @@ evaluators:
 
 The framework includes several complete example configurations in the [`examples/`](./examples/) directory:
 
-- **[✈️ aircraft-landing.yaml](./examples/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
-- **[🐟 fish-species-classification.yaml](./examples/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
-- **[🚢 maritime-collision-avoidance.yaml](./examples/maritime-collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
-- **[🔧 predictive-maintenance.yaml](./examples/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance with failure prediction and cost optimization
+- **[✈️ aircraft-landing.yaml](./examples/industries/aviation/aircraft-landing.yaml)**: Comprehensive aircraft landing system with safety-critical compliance (DO-178C, DO-254, ARP4754A)
+- **[🐟 fish-species-classification.yaml](./examples/industries/aquaculture/fish-species-classification.yaml)**: Multi-stage workflow for underwater fish species classification
+- **[🚢 collision-avoidance.yaml](./examples/industries/maritime/collision-avoidance.yaml)**: Maritime safety system with COLREGs compliance
+- **[🔧 predictive-maintenance.yaml](./examples/industries/manufacturing/predictive-maintenance.yaml)**: Industrial equipment predictive maintenance with failure prediction and cost optimization
 
 #### **📋 Using Industry Templates (Recommended)**
 
@@ -260,15 +260,15 @@ ml-eval templates customize manufacturing-predictive_maintenance --output my-con
 
 #### **🏭 Manufacturing Predictive Maintenance Example**
 
-See [examples/fish-species-classification.yaml](./examples/fish-species-classification.yaml) for a complete workflow example with similar structure.
+See [examples/industries/aquaculture/fish-species-classification.yaml](./examples/industries/aquaculture/fish-species-classification.yaml) for a complete workflow example with similar structure.
 
 #### **✈️ Aviation Safety System Example**
 
-See [examples/aircraft-landing.yaml](./examples/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
+See [examples/industries/aviation/aircraft-landing.yaml](./examples/industries/aviation/aircraft-landing.yaml) for a comprehensive aircraft landing system with multiple evaluators, collectors, and safety thresholds.
 
 #### **🔧 Predictive Maintenance Example**
 
-See [examples/predictive-maintenance.yaml](./examples/predictive-maintenance.yaml) for a comprehensive predictive maintenance system with:
+See [examples/industries/manufacturing/predictive-maintenance.yaml](./examples/industries/manufacturing/predictive-maintenance.yaml) for a comprehensive predictive maintenance system with:
 
 - **Equipment Monitoring**: Vibration, temperature, pressure, current, voltage sensors
 - **Failure Prediction**: Random Forest classification for failure prediction within 48 hours

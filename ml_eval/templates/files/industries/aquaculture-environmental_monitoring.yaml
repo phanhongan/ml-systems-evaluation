@@ -1,0 +1,122 @@
+system:
+  name: "Aquaculture Environmental Monitoring System"
+  persona: "Environmental Monitor"
+  criticality: "business_critical"
+  stages: ["sensor_data_collection", "environmental_analysis", "quality_assessment", "alert_generation"]
+
+slos:
+  water_quality_monitoring:
+    target: 0.95
+    window: "24h"
+    description: "Accuracy of water quality parameter monitoring"
+  
+  environmental_alert_accuracy:
+    target: 0.90
+    window: "24h"
+    description: "Accuracy of environmental condition alerts"
+  
+  sensor_data_quality:
+    target: 0.88
+    window: "12h"
+    description: "Quality score of environmental sensor data"
+  
+  compliance_monitoring:
+    target: 0.92
+    window: "24h"
+    description: "Accuracy of environmental compliance monitoring"
+
+operating_conditions:
+  monitoring_environments:
+    - "coastal_waters"
+    - "offshore_facilities"
+    - "estuarine_systems"
+    - "freshwater_systems"
+    - "aquaculture_facilities"
+    - "protected_areas"
+  
+  environmental_conditions:
+    - "normal_conditions"
+    - "storm_conditions"
+    - "pollution_events"
+    - "seasonal_changes"
+    - "climate_events"
+  
+  water_parameters:
+    temperature_range: [0, 35]  # celsius
+    ph_range: [6.5, 8.5]
+    dissolved_oxygen_range: [4, 12]  # mg/L
+    salinity_range: [0, 40]  # ppt
+    turbidity_range: [0, 100]  # NTU
+    nutrient_levels: ["low", "moderate", "high", "excessive"]
+
+collectors:
+  - type: "online"
+    endpoints: ["http://environmental-monitoring:8080/metrics"]
+    metrics:
+      - "water_temperature"
+      - "ph_level"
+      - "dissolved_oxygen"
+      - "salinity"
+      - "turbidity"
+      - "nutrient_levels"
+      - "pollutant_concentrations"
+      - "alert_accuracy"
+      - "compliance_status"
+    polling_interval: 60  # seconds
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["/var/log/environmental-data/", "/var/log/water-quality/"]
+    data_retention: "365d"
+  
+  - type: "environmental"
+    sources: ["water_temperature", "ph_sensor", "oxygen_sensor", "salinity_sensor", "turbidity_sensor", "nutrient_sensors"]
+    sampling_interval: 300  # seconds
+  
+  - type: "regulatory"
+    compliance_standards: ["water_quality_standards", "environmental_protection", "aquaculture_regulations"]
+    reporting_frequency: "daily"
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "water_quality_monitoring": {
+        "target": 0.95,
+        "window": "24h",
+        "description": "Accuracy of water quality parameter monitoring"
+      },
+      "environmental_alert_accuracy": {
+        "target": 0.90,
+        "window": "24h",
+        "description": "Accuracy of environmental condition alerts"
+      },
+      "compliance_monitoring": {
+        "target": 0.92,
+        "window": "24h",
+        "description": "Accuracy of environmental compliance monitoring"
+      }
+    }
+    failure_modes: ["sensor_failure", "data_loss", "calibration_drift", "environmental_interference"]
+  
+  - type: "performance"
+    metrics: ["monitoring_accuracy", "alert_latency", "data_quality", "compliance_rate"]
+    thresholds:
+      alert_latency_ms: 1000
+      compliance_rate: 0.95
+    baseline_period: "last_30_days"
+  
+  - type: "drift"
+    drift_detection: ["sensor_calibration", "environmental_patterns", "seasonal_variations"]
+    adaptation_threshold: 0.10
+    environmental_factors: ["temperature", "seasonal_changes", "pollution_events", "climate_conditions"]
+  
+  - type: "compliance"
+    standards: ["water_quality_standards", "environmental_protection", "aquaculture_regulations"]
+    audit_requirements: ["water_quality_reports", "environmental_assessments", "compliance_documentation"]
+    reporting_frequency: "daily"
+  
+  - type: "safety"
+    safety_metrics: ["environmental_risk", "ecosystem_health", "public_health_impact"]
+    risk_assessment: ["pollution_levels", "ecosystem_sensitivity", "regulatory_thresholds"]
+    emergency_protocols: ["pollution_response", "ecosystem_protection", "public_notification"] 

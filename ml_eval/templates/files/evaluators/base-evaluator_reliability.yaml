@@ -1,0 +1,8 @@
+availability_threshold: 0.99
+slo_targets:
+  slos:
+    availability:
+      description: System availability
+      target: 0.99
+      window: 24h
+type: reliability

@@ -1,0 +1,36 @@
+collectors:
+- endpoints:
+  - http://flight-systems:8080/metrics
+  metrics:
+  - flight_path_accuracy
+  - response_time
+  - availability
+  type: online
+evaluators:
+- compliance_standards:
+  - DO-178C
+  critical_metrics:
+  - flight_path_accuracy
+  type: safety
+- critical_metrics:
+  - system_availability
+  error_budget_window: 30d
+  type: reliability
+slos:
+  flight_path_accuracy:
+    description: Accuracy of autonomous flight path predictions
+    target: 0.9999
+    window: 24h
+  system_availability:
+    description: System uptime for flight control functionality
+    target: 0.9999
+    window: 30d
+  system_response_time:
+    description: Proportion of system responses within 500ms
+    target: 0.99
+    window: 1h
+system:
+  criticality: safety_critical
+  description: Comprehensive flight control system with safety features
+  name: Advanced Aircraft Flight Control System
+  persona: Flight Crew

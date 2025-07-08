@@ -1,0 +1,32 @@
+collectors:
+- endpoints:
+  - http://maritime-monitor:8080/metrics
+  metrics:
+  - collision_detection
+  - availability
+  type: online
+evaluators:
+- compliance_standards:
+  - SOLAS
+  - COLREGS
+  critical_metrics:
+  - collision_detection_accuracy
+  type: safety
+- critical_metrics:
+  - system_availability
+  error_budget_window: 30d
+  type: reliability
+slos:
+  collision_detection_accuracy:
+    description: Accuracy of collision detection and avoidance
+    target: 0.999
+    window: 24h
+  system_availability:
+    description: System uptime for navigation functionality
+    target: 0.9999
+    window: 30d
+system:
+  criticality: safety_critical
+  description: Maritime navigation and safety system
+  name: Maritime Navigation System
+  persona: Ship Captain

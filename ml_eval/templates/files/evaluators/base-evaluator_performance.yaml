@@ -1,0 +1,8 @@
+baseline_comparison: true
+metrics:
+- accuracy
+- precision
+- recall
+- f1
+thresholds: {}
+type: performance

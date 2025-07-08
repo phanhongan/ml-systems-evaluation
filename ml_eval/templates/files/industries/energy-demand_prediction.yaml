@@ -1,0 +1,29 @@
+collectors:
+- endpoints:
+  - http://grid-monitor:8080/metrics
+  metrics:
+  - load_prediction
+  - availability
+  type: online
+evaluators:
+- metrics:
+  - load_prediction_accuracy
+  type: performance
+- critical_metrics:
+  - system_availability
+  error_budget_window: 30d
+  type: reliability
+slos:
+  load_prediction_accuracy:
+    description: Accuracy of energy demand prediction
+    target: 0.95
+    window: 24h
+  system_availability:
+    description: System uptime for grid optimization
+    target: 0.999
+    window: 30d
+system:
+  criticality: business_critical
+  description: Energy demand prediction and grid optimization system
+  name: Energy Demand Prediction System
+  persona: Grid Operator

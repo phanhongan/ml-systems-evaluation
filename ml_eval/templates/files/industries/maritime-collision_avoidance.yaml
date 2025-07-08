@@ -1,0 +1,28 @@
+collectors:
+- endpoints:
+  - http://maritime-monitor:8080/metrics
+  metrics:
+  - collision_detection
+  - response_time
+  type: online
+evaluators:
+- compliance_standards:
+  - SOLAS
+  - COLREGS
+  critical_metrics:
+  - collision_detection_accuracy
+  type: safety
+slos:
+  collision_detection_accuracy:
+    description: Accuracy of collision detection and avoidance
+    target: 0.999
+    window: 24h
+  response_time:
+    description: Proportion of collision alerts within 2 seconds
+    target: 0.99
+    window: 1h
+system:
+  criticality: safety_critical
+  description: Safety-critical collision avoidance system for maritime vessels
+  name: Maritime Collision Avoidance System
+  persona: Ship Captain

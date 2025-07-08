@@ -1,0 +1,5 @@
+format: html
+frequency: daily
+incident_reports: true
+safety_metrics: []
+type: safety

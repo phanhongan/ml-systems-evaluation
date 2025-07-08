@@ -1,0 +1,6 @@
+data_sources: []
+file_patterns:
+- '*.json'
+- '*.csv'
+parsing_rules: {}
+type: offline

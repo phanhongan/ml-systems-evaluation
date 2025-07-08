@@ -1,0 +1,5 @@
+endpoints: []
+polling_interval: 30
+retry_attempts: 3
+timeout: 10
+type: online

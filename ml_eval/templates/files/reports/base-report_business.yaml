@@ -1,0 +1,7 @@
+format: html
+frequency: weekly
+metrics:
+- revenue_impact
+- cost_savings
+- efficiency_gains
+type: business

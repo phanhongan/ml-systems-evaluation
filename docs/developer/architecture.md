@@ -76,10 +76,8 @@ The framework currently includes the following agents:
 - **User Feedback Learning**: Adapt alerting strategies based on effectiveness
 - **Multi-channel Notifications**: Email, Slack, SMS, and custom integrations
 
-> **Note:** Scheduling is a feature of the RL Agent, not a separate architectural component. In future, scheduling features could be distributed to other agents if needed.
-
 > **Extensibility:**
-> The agent layer is designed to be extensible. Additional agents can be introduced in the future to support new capabilities or domains as requirements evolve.
+> The agent layer is designed to be extensible. Additional agents can be introduced in the future to support new capabilities or domains as requirements evolve. However, new agents will be considered carefully to ensure they don't break existing safety constraints or compromise system reliability.
 
 ### **Cross-Cutting Concerns: Safety, Compliance, and Performance Constraints**
 - All agents must respect safety, compliance, and performance constraints.

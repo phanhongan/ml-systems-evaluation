@@ -120,34 +120,14 @@ System State → Adaptive Decisions → Notifications
 
 ### **Implementation Considerations**
 
-**1. RL Agent Enhanced Responsibilities**
-```python
-class RLAgent:
-    async def optimize_and_schedule(self, monitoring_data: dict) -> dict:
-        """Optimize system parameters and schedule tasks"""
-        # Adaptive optimization
-        optimal_params = await self.optimize_parameters(monitoring_data)
-        
-        # Task scheduling
-        scheduled_tasks = await self.schedule_tasks(monitoring_data)
-        
-        return {
-            "optimization": optimal_params,
-            "scheduling": scheduled_tasks
-        }
-```
+See [`ml_eval/agents/rl/agent.py`](../../ml_eval/agents/rl/agent.py) for RL Agent implementation details.
 
-**2. Simplified Agent Communication**
-```python
-# Monitoring Agent provides data
-monitoring_data = await monitoring_agent.get_system_state()
-
-# RL Agent makes decisions
-decisions = await rl_agent.optimize_and_schedule(monitoring_data)
-
-# Alerting Agent handles notifications
-await alerting_agent.process_decisions(decisions)
-```
+The RL Agent provides:
+- Adaptive decision-making with safety constraints
+- Dynamic threshold optimization
+- Resource allocation optimization
+- Alert strategy learning
+- Maintenance scheduling optimization
 
 ### **Development Roadmap**
 
@@ -187,20 +167,15 @@ await alerting_agent.process_decisions(decisions)
 
 This roadmap ensures we build the right capabilities from the start, with clear boundaries between agent intelligence and deterministic reliability.
 
-### Implemented Components
+### Component Status
 
 **Currently Available:**
 - **CLI**: Command-line interface for framework operations
 - **Configuration Management**: Loading and validation of configurations
-- **Template Engine**: Industry-specific template management
 - **Data Collection**: Collectors for various data sources
 - **Evaluation Engine**: Analysis and evaluation components
 - **Reporting Engine**: Deterministic report generation and formatting
-- **LLM Analysis Engine**: Intelligent analysis and pattern recognition
-- **LLM Assistant Engine**: Natural language configuration and assistance
-- **LLM Enhancement Engine**: LLM-powered report enhancement and insights
-
-### Planned Components
+- **LLM Integration**: Analysis, assistant, and enhancement engines
 
 **Future Releases:**
 - **Web UI**: Web-based interface for monitoring and management
@@ -279,14 +254,7 @@ See [`ml_eval/reports/`](../../ml_eval/reports/) for reporting implementation.
 - Trend forecasting and prediction
 
 **Implementation:**
-```python
-# Example: Advanced drift analysis
-analysis_engine = LLMAnalysisEngine(config)
-drift_analysis = await analysis_engine.analyze_drift_patterns(
-    metrics=current_metrics,
-    historical_data=historical_data
-)
-```
+See [`ml_eval/llm/analysis.py`](../../ml_eval/llm/analysis.py) for implementation details.
 
 ### LLM Assistant Engine
 
@@ -303,15 +271,7 @@ drift_analysis = await analysis_engine.analyze_drift_patterns(
 - Generate documentation from configurations
 
 **Implementation:**
-```python
-# Example: Configuration generation
-assistant_engine = LLMAssistantEngine(config)
-config = await assistant_engine.generate_configuration(
-    requirements="Monitor safety-critical aviation system with 99.9% uptime",
-    industry="aviation",
-    system_type="safety_critical"
-)
-```
+See [`ml_eval/llm/assistant.py`](../../ml_eval/llm/assistant.py) for implementation details.
 
 ### LLM Enhancement Engine
 
@@ -328,14 +288,7 @@ config = await assistant_engine.generate_configuration(
 - Generate executive summaries
 
 **Implementation:**
-```python
-# Example: Report enhancement
-enhancement_engine = LLMEnhancementEngine(config)
-enhanced_report = await enhancement_engine.enhance_business_report(
-    report_data=deterministic_report,
-    business_context=business_context
-)
-```
+See [`ml_eval/llm/enhancement.py`](../../ml_eval/llm/enhancement.py) for implementation details.
 
 ## Data Flow
 
@@ -428,177 +381,32 @@ LLM Enhancement Engine
 
 ## Configuration Examples
 
-### 1. Basic Configuration
-```yaml
-# config.yaml
-evaluation:
-  performance:
-    enabled: true
-    metrics: ["accuracy", "precision", "recall"]
-  
-  safety:
-    enabled: true
-    thresholds:
-      failure_probability: 0.001
-      safety_margin: 0.1
+See the following template files for configuration examples:
 
-llm:
-  enabled: true
-  provider: "openai"
-  provider_config:
-    api_key: "${OPENAI_API_KEY}"
-    model: "gpt-4"
-  
-  enhancement:
-    enabled: true
-    cache_results: true
-    confidence_threshold: 0.7
-```
-
-### 2. Safety-Critical Configuration
-```yaml
-# safety_config.yaml
-evaluation:
-  safety:
-    enabled: true
-    critical_thresholds:
-      failure_probability: 0.0001
-      safety_margin: 0.2
-
-llm:
-  enabled: false  # Disable LLM for safety-critical systems
-```
-
-### 3. Enhanced Configuration
-```yaml
-# enhanced_config.yaml
-evaluation:
-  performance:
-    enabled: true
-  safety:
-    enabled: true
-  drift:
-    enabled: true
-
-llm:
-  enabled: true
-  provider: "anthropic"
-  provider_config:
-    api_key: "${ANTHROPIC_API_KEY}"
-    model: "claude-3-sonnet-20240229"
-  
-  analysis:
-    enabled: true
-    drift_analysis: true
-    anomaly_detection: true
-  
-  assistant:
-    enabled: true
-    configuration_generation: true
-    troubleshooting: true
-  
-  enhancement:
-    enabled: true
-    business_reports: true
-    technical_reports: true
-    safety_reports: true
-    natural_language: true
-
-agents:
-  monitoring:
-    enabled: true
-    check_interval: 30
-    health_thresholds:
-      cpu: 80
-      memory: 85
-  
-  rl:
-    enabled: true
-    learning_rate: 0.01
-    exploration_rate: 0.1
-    safety_constraints:
-      max_threshold_adjustment: 0.2
-      min_safety_margin: 0.1
-      max_resource_usage: 0.8
-  
-  alerting:
-    enabled: true
-    channels: ["email", "slack"]
-    severity_levels: ["low", "medium", "high", "critical"]
-```
+- **Basic System Configuration**: [`examples/templates/basic-system.yaml`](../../examples/templates/basic-system.yaml)
+- **Safety-Critical Configuration**: [`examples/templates/safety-critical.yaml`](../../examples/templates/safety-critical.yaml)
+- **Business-Critical Configuration**: [`examples/templates/business-critical.yaml`](../../examples/templates/business-critical.yaml)
+- **RL Agent Configuration**: [`examples/templates/rl-agent-config.yaml`](../../examples/templates/rl-agent-config.yaml)
 
 ## Provider Configuration
 
-### 1. OpenAI Configuration
-```yaml
-llm:
-  provider: "openai"
-  provider_config:
-    api_key: "${OPENAI_API_KEY}"
-    model: "gpt-4"
-    max_tokens: 1000
-    temperature: 0.1
-```
+LLM provider configurations are implemented in [`ml_eval/llm/providers.py`](../../ml_eval/llm/providers.py). The framework supports:
 
-### 2. Anthropic Configuration
-```yaml
-llm:
-  provider: "anthropic"
-  provider_config:
-    api_key: "${ANTHROPIC_API_KEY}"
-    model: "claude-3-sonnet-20240229"
-    max_tokens: 1000
-    temperature: 0.1
-```
+- **OpenAI GPT**: OpenAI GPT models (gpt-4, gpt-3.5-turbo)
+- **Anthropic Claude**: Anthropic Claude models (claude-3-sonnet-20240229, claude-3-haiku-20240307)
+- **Disabled**: LLM features can be completely disabled for safety-critical systems
 
-### 3. Disabled Configuration
-```yaml
-llm:
-  enabled: false
-  # All LLM features will be disabled
-```
+See the provider implementation for configuration options and examples.
 
 ## Usage Examples
 
-### Basic Usage (Deterministic Only)
-```python
-# Generate basic business report
-business_report = BusinessImpactReport(config)
-report_data = business_report.generate(evaluation_data)
-formatted_report = business_report.format_report(report_data)
-```
+See the following for usage examples and patterns:
 
-### Enhanced Usage (with LLM)
-```python
-# Generate basic report
-business_report = BusinessImpactReport(config)
-report_data = business_report.generate(evaluation_data)
-
-# Enhance with LLM insights
-enhancement_engine = LLMEnhancementEngine(config)
-enhanced_report = await enhancement_engine.enhance_business_report(
-    report_data=report_data,
-    business_context=business_context
-)
-```
-
-### Agent Coordination (Future)
-```python
-# Initialize agents
-monitoring_agent = MonitoringAgent(config)
-rl_agent = RLAgent(config)
-alerting_agent = AlertingAgent(config)
-
-# Start autonomous operations
-await monitoring_agent.start_monitoring()
-await rl_agent.start_learning()
-await alerting_agent.start_alerting()
-
-# Agents coordinate autonomously
-monitoring_data = await monitoring_agent.get_system_state()
-decisions = await rl_agent.optimize_and_schedule(monitoring_data)
-await alerting_agent.process_decisions(decisions)
-```
+- **CLI Usage**: [`docs/user-guides/cli-reference.md`](../user-guides/cli-reference.md)
+- **Configuration Guide**: [`docs/user-guides/configuration.md`](../user-guides/configuration.md)
+- **Getting Started**: [`docs/user-guides/getting-started.md`](../user-guides/getting-started.md)
+- **Agent Implementation**: [`ml_eval/agents/`](../../ml_eval/agents/) for agent usage patterns
+- **LLM Integration**: [`ml_eval/llm/`](../../ml_eval/llm/) for LLM usage examples
 
 ## Best Practices
 

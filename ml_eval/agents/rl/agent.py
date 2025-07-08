@@ -224,7 +224,7 @@ class RLAgent:
 
     async def learn_coordination_strategy(
         self,
-        agent_states: dict[str, Any],
+        agent_states: dict[str, Any],  # noqa: ARG002
         system_performance: dict[str, Any],  # noqa: ARG002
     ) -> dict[str, Any]:
         """Learn optimal coordination strategies with other agents"""
@@ -244,15 +244,15 @@ class RLAgent:
         }
 
     def _validate_safety_constraints(
-        self, state: dict[str, Any]
-    ) -> bool:  # noqa: ARG002
+        self, state: dict[str, Any]  # noqa: ARG002
+    ) -> bool:
         """Validate state against safety constraints"""
         # Future implementation
         return True
 
     def _validate_compliance_requirements(
-        self, state: dict[str, Any]
-    ) -> bool:  # noqa: ARG002
+        self, state: dict[str, Any]  # noqa: ARG002
+    ) -> bool:
         """Validate state against compliance requirements"""
         # Future implementation
         return True
@@ -265,8 +265,8 @@ class RLAgent:
         return True
 
     def _get_safe_fallback_decision(
-        self, state: dict[str, Any]
-    ) -> dict[str, Any]:  # noqa: ARG002
+        self, state: dict[str, Any]  # noqa: ARG002
+    ) -> dict[str, Any]:
         """Get deterministic fallback decision"""
         return {
             "decision_type": "safe_fallback",
@@ -277,8 +277,8 @@ class RLAgent:
         }
 
     def _get_compliant_fallback_decision(
-        self, state: dict[str, Any]
-    ) -> dict[str, Any]:  # noqa: ARG002
+        self, state: dict[str, Any]  # noqa: ARG002
+    ) -> dict[str, Any]:
         """Get compliant fallback decision"""
         return {
             "decision_type": "compliant_fallback",

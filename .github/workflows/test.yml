@@ -8,7 +8,7 @@ on:
       - 'tests/**'
       - 'examples/**'
       - 'pyproject.toml'
-      - 'poetry.lock'
+      - 'uv.lock'
       - 'setup.py'
       - 'pytest.ini'
       - '.github/workflows/test.yml'
@@ -22,7 +22,7 @@ on:
       - 'tests/**'
       - 'examples/**'
       - 'pyproject.toml'
-      - 'poetry.lock'
+      - 'uv.lock'
       - 'setup.py'
       - 'pytest.ini'
       - '.github/workflows/test.yml'
@@ -41,21 +41,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install UV
+        uses: astral-sh/setup-uv@v1
         with:
           version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Validate pyproject.toml
-        run: |
-          poetry check
       - name: Install dependencies
         run: |
-          poetry install --extras dev
+          uv pip install --system -e ".[dev]"
       - name: Validate dependencies
         run: |
-          poetry show --tree
+          uv pip list --system
 
   lint:
     runs-on: ubuntu-latest
@@ -66,24 +61,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install UV
+        uses: astral-sh/setup-uv@v1
         with:
           version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --extras dev
+          uv pip install --system -e ".[dev]"
       - name: Lint, type check, and sort imports with Ruff
         run: |
-          poetry run ruff check .
+          ruff check .
       - name: Check formatting with black
         run: |
-          poetry run black --check .
+          black --check .
       - name: Check formatting with ruff
         run: |
-          poetry run ruff format --check .
+          ruff format --check .
 
   type-check:
     runs-on: ubuntu-latest
@@ -94,18 +87,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install UV
+        uses: astral-sh/setup-uv@v1
         with:
           version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --extras dev
+          uv pip install --system -e ".[dev]"
       - name: Type check with Ruff
         run: |
-          poetry run ruff check .
+          ruff check .
 
   build:
     runs-on: ubuntu-latest
@@ -116,18 +107,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install UV
+        uses: astral-sh/setup-uv@v1
         with:
           version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --extras dev
+          uv pip install --system -e ".[dev]"
       - name: Build package
         run: |
-          poetry build
+          uv build
 
   test:
     runs-on: ubuntu-latest
@@ -143,28 +132,25 @@ jobs:
           python-version: ${{ matrix.python-version }}
           check-latest: true
 
-      - name: Cache Poetry
+      - name: Cache UV
         uses: actions/cache@v4
         with:
           path: |
-            ~/.cache/pypoetry
-            ~/.cache/pip
+            ~/.cache/uv
             .venv
-          key: poetry-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
-            poetry-${{ runner.os }}-${{ matrix.python-version }}-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+            uv-${{ runner.os }}-${{ matrix.python-version }}-
+      - name: Install UV
+        uses: astral-sh/setup-uv@v1
         with:
           version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --extras dev
+          uv pip install --system -e ".[dev]"
       - name: Run all tests
         run: |
-          poetry run pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
+          pytest -v --cov=ml_eval --cov-report=xml --cov-report=html --cov-report=term-missing
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
@@ -179,18 +165,16 @@ jobs:
 #         uses: actions/setup-python@v5
 #         with:
 #           python-version: '3.11'
-#       - name: Install Poetry
-#         uses: snok/install-poetry@v1
+#       - name: Install UV
+#         uses: astral-sh/setup-uv@v1
 #         with:
 #           version: latest
-#           virtualenvs-create: true
-#           virtualenvs-in-project: true
 #       - name: Install dependencies
 #         run: |
-#           poetry install --extras dev,docs
+#           uv pip install --system -e ".[dev,docs]"
 #       - name: Build docs
 #         run: |
-#           poetry run mkdocs build
+#           mkdocs build
 
 #   publish:
 #     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
@@ -201,17 +185,16 @@ jobs:
 #         uses: actions/setup-python@v5
 #         with:
 #           python-version: '3.11'
-#       - name: Install Poetry
-#         uses: snok/install-poetry@v1
+#       - name: Install UV
+#         uses: astral-sh/setup-uv@v1
 #         with:
 #           version: latest
-#           virtualenvs-create: true
-#           virtualenvs-in-project: true
 #       - name: Install dependencies
 #         run: |
-#           poetry install --extras main
+#           uv pip install --system -e "."
 #       - name: Publish to PyPI
 #         env:
-#           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+#           UV_INDEX_URL: https://pypi.org/simple/
+#           UV_EXTRA_INDEX_URL: https://test.pypi.org/simple/
 #         run: |
-#           poetry publish --build
+#           uv publish

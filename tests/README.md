@@ -32,23 +32,23 @@ This directory contains tests for the ML Systems Evaluation Framework, designed 
 
 ### Prerequisites
 ```bash
-# Install all dependencies (including test dependencies)
-poetry install
+# Install dependencies
+uv sync --group dev
 
-# (Optional) Activate the Poetry-managed virtual environment
-poetry shell
+# (Optional) Activate the UV-managed virtual environment
+uv shell
 ```
 
 ### Basic Test Execution
 ```bash
 # Run all tests
-poetry run pytest
+uv run pytest
 
 # Run with verbose output
-poetry run pytest -v
+uv run pytest -v
 
 # Run with coverage report
-poetry run pytest --cov=ml_eval --cov-report=html --cov-report=term
+uv run pytest --cov=ml_eval --cov-report=html --cov-report=term
 ```
 
 ### Using the Test Runner
@@ -75,22 +75,22 @@ python tests/run_tests.py --coverage
 ### Running Specific Test Files
 ```bash
 # Run core tests only
-poetry run pytest tests/test_core.py
+uv run pytest tests/test_core.py
 
 # Run collectors tests only
-poetry run pytest tests/test_collectors.py
+uv run pytest tests/test_collectors.py
 
 # Run integration tests only
-poetry run pytest tests/test_integration.py
+uv run pytest tests/test_integration.py
 ```
 
 ### Running Specific Test Classes
 ```bash
 # Run specific test class
-poetry run pytest tests/test_core.py::TestEvaluationFramework
+uv run pytest tests/test_core.py::TestEvaluationFramework
 
 # Run specific test method
-poetry run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation
+uv run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation
 ```
 
 ## Test Categories
@@ -276,13 +276,13 @@ The test suite is designed for continuous integration with:
 ### Debugging
 ```bash
 # Run tests with debug output
-poetry run pytest -v -s
+uv run pytest -v -s
 
 # Run specific failing test
-poetry run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation -v -s
+uv run pytest tests/test_core.py::TestEvaluationFramework::test_framework_creation -v -s
 
 # Run with coverage and debug
-poetry run pytest --cov=ml_eval --cov-report=term-missing -v
+uv run pytest --cov=ml_eval --cov-report=term-missing -v
 ```
 
 ### Test Data

@@ -7,8 +7,8 @@ This guide provides comprehensive information for developers contributing to the
 ### 🔧 Prerequisites
 
 - 🐍 Python 3.11 or higher
-- 📦 Poetry package manager
 - 📥 Git for version control
+- 📦 UV package manager
 
 ### 🚀 Initial Setup
 
@@ -18,10 +18,10 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies including development tools
-poetry install
+uv sync --group dev
 
 # Activate the virtual environment
-poetry shell
+uv shell
 ```
 
 ## 🔧 Code Quality Tools
@@ -40,13 +40,13 @@ Black is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.
 
 ```bash
 # Format all Python files
-poetry run black .
+uv run black .
 
 # Check formatting without making changes
-poetry run black --check .
+uv run black --check .
 
 # Format specific files
-poetry run black ml_eval/core/ tests/
+uv run black ml_eval/core/ tests/
 ```
 
 #### 🔗 Pre-commit Hook
@@ -55,10 +55,10 @@ To automatically format code before commits, install the pre-commit hook:
 
 ```bash
 # Install pre-commit
-poetry run pre-commit install
+uv run pre-commit install
 
 # Run pre-commit on all files
-poetry run pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 ### 2. 🦊 Ruff - Linting, Type Checking, and Import Sorting
@@ -73,16 +73,16 @@ Ruff is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.r
 
 ```bash
 # Lint, type check, and sort imports in all Python files
-poetry run ruff check .
+uv run ruff check .
 
 # Auto-fix issues
-poetry run ruff check --fix .
+uv run ruff check --fix .
 
 # Format code (like black)
-poetry run ruff format .
+uv run ruff format .
 
 # Check only imports
-poetry run ruff check --select I .
+uv run ruff check --select I .
 ```
 
 #### 🔗 Pre-commit Hook
@@ -105,16 +105,16 @@ Before committing code, run all quality checks:
 
 ```bash
 # Format code
-poetry run black .
+uv run black .
 
 # Lint, type check, and sort imports
-poetry run ruff check .
+uv run ruff check .
 
 # Format code with ruff
-poetry run ruff format .
+uv run ruff format .
 
 # Run tests
-poetry run pytest
+uv run pytest
 ```
 
 ### 2. Automated Quality Checks
@@ -123,10 +123,10 @@ The project includes a script to run all quality checks:
 
 ```bash
 # Run all quality checks
-poetry run black --check .
-poetry run ruff check .
-poetry run ruff format --check .
-poetry run pytest
+uv run black --check .
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
 ```
 
 ### 3. Pre-commit Hooks
@@ -135,10 +135,10 @@ Install pre-commit hooks to automatically run quality checks:
 
 ```bash
 # Install pre-commit
-poetry run pre-commit install
+uv run pre-commit install
 
 # Run all hooks
-poetry run pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 ## 🧪 Testing
@@ -147,21 +147,21 @@ poetry run pre-commit run --all-files
 
 ```bash
 # Run all tests
-poetry run pytest
+uv run pytest
 
 # Run tests with coverage
-poetry run pytest --cov=ml_eval --cov-report=html --cov-report=term
+uv run pytest --cov=ml_eval --cov-report=html --cov-report=term
 
 # Run specific test categories
-poetry run pytest tests/test_core.py
-poetry run pytest tests/test_collectors.py
-poetry run pytest tests/test_evaluators.py
+uv run pytest tests/test_core.py
+uv run pytest tests/test_collectors.py
+uv run pytest tests/test_evaluators.py
 
 # Run tests with verbose output
-poetry run pytest -v
+uv run pytest -v
 
 # Run tests in parallel
-poetry run pytest -n auto
+uv run pytest -n auto
 ```
 
 ### Test Categories
@@ -199,18 +199,18 @@ Run the same checks locally that CI runs. See [`.github/workflows/test.yml`](../
 
 ```bash
 # Install all dependencies
-poetry install
+uv sync --group dev
 
 # Run quality checks
-poetry run black --check .
-poetry run ruff check .
-poetry run ruff format --check .
+uv run black --check .
+uv run ruff check .
+uv run ruff format --check .
 
 # Run tests
-poetry run pytest --cov=ml_eval --cov-report=xml
+uv run pytest --cov=ml_eval --cov-report=xml
 
 # Build package
-poetry build
+uv build
 ```
 
 ## 📝 Code Style Guidelines

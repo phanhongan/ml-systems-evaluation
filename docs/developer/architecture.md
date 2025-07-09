@@ -127,6 +127,107 @@ The RL Agent provides:
 - Alert strategy learning
 - Maintenance scheduling optimization
 
+### **RL Loop Steps: LLM vs Deterministic Operations**
+
+The RL Agent implements a hybrid approach where some steps use LLM intelligence while others remain deterministic for safety and reliability:
+
+#### **LLM-Enabled Steps:**
+
+1. **Action Selection (`make_decision`)**
+   - **LLM Usage**: Analyzes current state and suggests optimal actions
+   - **Purpose**: Intelligent decision-making based on complex state patterns
+   - **Fallback**: Safe deterministic action if LLM unavailable
+   - **Safety**: All LLM decisions are validated and logged
+
+2. **Policy Update (`update_policy`)**
+   - **LLM Usage**: Analyzes experience buffer to suggest policy improvements
+   - **Purpose**: Learn from experience to improve future decisions
+   - **Frequency**: Configurable (default: every 5 steps) when experience buffer has data
+   - **Safety**: Policy insights are stored but don't override safety constraints
+   - **Reasoning**: Balances learning efficiency with computational cost and LLM API usage
+
+#### **Deterministic Steps (No LLM):**
+
+1. **Environment Interaction (`env_step_fn`)**
+   - **Deterministic**: Takes actions and receives rewards from environment
+   - **Purpose**: Core RL loop execution
+   - **Safety**: Always deterministic for reliability
+
+2. **Experience Storage (`_store_experience`)**
+   - **Deterministic**: Stores (state, action, reward, next_state, done) tuples
+   - **Purpose**: Maintains experience buffer for learning
+   - **Safety**: Always deterministic for data integrity
+
+3. **Reward Calculation (`reward_fn`)**
+   - **Deterministic**: Calculates rewards based on state transitions
+   - **Purpose**: Provides feedback signal for learning
+   - **Safety**: Always deterministic for consistent learning
+
+4. **Episode Management (`run_episode`)**
+   - **Deterministic**: Orchestrates complete RL episodes
+   - **Purpose**: Runs multiple steps to completion
+   - **Safety**: Always deterministic for reliable execution
+
+#### **RL Loop Flow:**
+
+```
+┌───────────────────────────────────────────────────────────┐
+│                    RL Loop Steps                          │
+├───────────────────────────────────────────────────────────┤
+│  1. State Observation (Deterministic)                     │
+│     ↓                                                     │
+│  2. Action Selection (LLM + Fallback)                     │
+│     ↓                                                     │
+│  3. Environment Step (Deterministic)                      │
+│     ↓                                                     │
+│  4. Reward Calculation (Deterministic)                    │
+│     ↓                                                     │
+│  5. Experience Storage (Deterministic)                    │
+│     ↓                                                     │
+│  6. Policy Update (LLM, configurable frequency)           │
+│     ↓                                                     │
+│  7. Next State (Deterministic)                            │
+└───────────────────────────────────────────────────────────┘
+```
+
+#### **Safety and Reliability Guarantees:**
+
+- **Core RL Loop**: All core RL operations (environment interaction, reward calculation, experience storage) remain deterministic
+- **LLM Intelligence**: LLM is used only for intelligent decision-making and policy analysis
+- **Fallback Mechanisms**: Safe deterministic fallbacks for all LLM operations
+- **Comprehensive Logging**: All LLM prompts and responses are logged for auditability
+- **Validation**: All LLM outputs are validated before use
+- **Graceful Degradation**: System continues operating even if LLM is unavailable
+
+### **Policy Update Frequency Reasoning:**
+
+The default policy update frequency of every 5 steps is chosen to balance several factors:
+
+#### **Why Not Every Step?**
+- **Computational Cost**: LLM API calls are expensive and time-consuming
+- **Learning Efficiency**: Policy updates need sufficient experience to be meaningful
+- **Stability**: Too frequent updates can cause policy oscillation
+- **API Rate Limits**: Prevents hitting LLM provider rate limits
+
+#### **Why Not Less Frequently?**
+- **Responsiveness**: Need to learn from recent experience quickly
+- **Adaptation**: System should adapt to changing conditions
+- **Learning Speed**: Balance between learning speed and computational cost
+
+#### **Configurable Design:**
+- **High-Frequency Systems**: Set `policy_update_frequency: 1` for rapid learning
+- **Cost-Sensitive Systems**: Set `policy_update_frequency: 10` to reduce API calls
+- **Stable Systems**: Set `policy_update_frequency: 20` for conservative learning
+- **Production Systems**: Monitor and tune based on performance metrics
+
+#### **Configuration Example:**
+```yaml
+rl_agent:
+  policy_update_frequency: 5  # Update policy every 5 steps
+  experience_replay_size: 1000
+  learning_rate: 0.01
+```
+
 ### **Development Roadmap**
 
 **Phase 1: Core Agent Development**

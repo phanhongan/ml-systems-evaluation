@@ -40,6 +40,7 @@ rl_agent:
     experience_replay_size: 10000
     target_update_frequency: 1000
     exploration_decay: 0.995
+    policy_update_frequency: 5  # How often to update policy with LLM (every N steps)
     
   # Reward function configuration
   reward_function:

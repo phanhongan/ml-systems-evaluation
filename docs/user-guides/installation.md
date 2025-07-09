@@ -5,7 +5,7 @@ This guide provides detailed installation instructions for the ML Systems Evalua
 ## 🔧 Prerequisites
 
 - 🐍 Python 3.11 or higher
-- 📦 Poetry package manager (https://python-poetry.org/)
+- 📦 UV package manager (https://astral.sh/uv/)
 - 📥 Git (for cloning the repository)
 
 ## 🚀 Installation Methods
@@ -18,10 +18,10 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies and the framework
-poetry install
+uv sync --group dev
 
-# (Optional) Activate the Poetry-managed virtual environment
-poetry shell
+# (Optional) Activate the UV-managed virtual environment
+uv shell
 ```
 
 ### 🏭 Method 2: Production Installation
@@ -32,7 +32,7 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install only main dependencies (no dev tools)
-poetry install --only main
+uv sync --group main
 ```
 
 ### 🐳 Method 3: Docker Installation
@@ -72,19 +72,21 @@ export ML_EVAL_LOG_LEVEL=INFO
 export ML_EVAL_DATA_DIR=/path/to/data
 ```
 
-### 📦 Poetry Configuration
-
-If you're using Poetry, you can configure it for your project:
+### 📦 UV Configuration
+If you're using UV, you can configure it for your project:
 
 ```bash
 # Set Python version
-poetry env use python3.11
+uv python --use 3.11
 
-# Add dependencies if needed
-poetry add pandas numpy scikit-learn
+# Add additional dependencies if needed
+uv add package-name
 
-# Show installed packages
-poetry show
+# View dependency tree
+uv tree
+
+# Update dependencies
+uv update
 ```
 
 ## 🔧 Troubleshooting
@@ -92,10 +94,10 @@ poetry show
 ### ❌ Common Issues
 
 **🚨 Issue**: "Command not found: ml-eval"
-- **✅ Solution**: Ensure Poetry environment is activated: `poetry shell`
+- **✅ Solution**: Ensure UV environment is activated: `uv shell`
 
 **🚨 Issue**: "Module not found"
-- **✅ Solution**: Reinstall dependencies: `poetry install`
+- **✅ Solution**: Reinstall dependencies: `uv sync`
 
 **🚨 Issue**: "Permission denied"
 - **✅ Solution**: Check file permissions or use `sudo` if necessary

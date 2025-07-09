@@ -37,18 +37,18 @@ The framework follows a multi-layered testing approach to ensure reliability and
 
 ```bash
 # Run all tests
-poetry run pytest
+uv run pytest
 
 # Run with coverage
-poetry run pytest --cov=ml_eval --cov-report=html --cov-report=term
+uv run pytest --cov=ml_eval --cov-report=html --cov-report=term
 
 # Run specific test files
-poetry run pytest tests/test_core.py
-poetry run pytest tests/test_collectors.py
-poetry run pytest tests/test_evaluators.py
+uv run pytest tests/test_core.py
+uv run pytest tests/test_collectors.py
+uv run pytest tests/test_evaluators.py
 
 # Run with verbose output
-poetry run pytest -v
+uv run pytest -v
 ```
 
 ### Test Configuration
@@ -98,10 +98,10 @@ The project uses GitHub Actions for automated testing. See [`.github/workflows/t
 
 ```bash
 # Run the same checks as CI
-poetry run black --check .
-poetry run ruff check .
-poetry run pytest --cov=ml_eval --cov-report=xml
-poetry build
+uv run black --check .
+uv run ruff check .
+uv run pytest --cov=ml_eval --cov-report=xml
+uv build
 ```
 
 ## 📊 Test Coverage
@@ -109,7 +109,7 @@ poetry build
 The framework maintains high test coverage across all components. Run coverage reports to identify areas needing additional tests:
 
 ```bash
-poetry run pytest --cov=ml_eval --cov-report=html
+uv run pytest --cov=ml_eval --cov-report=html
 ```
 
 This will generate an HTML coverage report showing which code is tested and which areas need more test coverage.

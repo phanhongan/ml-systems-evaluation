@@ -5,7 +5,7 @@ This guide will help you quickly set up and run your first evaluation using the 
 ## 🔧 Prerequisites
 
 - 🐍 Python 3.11 or higher
-- 📦 Poetry package manager (https://python-poetry.org/)
+- 📦 UV package manager (https://astral.sh/uv/)
 - 📊 Access to your ML system's monitoring data
 - 🏗️ Basic understanding of your system's architecture
 
@@ -19,10 +19,13 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies and the framework
-poetry install
+uv sync --group dev
 
-# (Optional) Activate the Poetry-managed virtual environment
-poetry shell
+# (Optional) Activate the UV-managed virtual environment
+uv shell
+
+# For production installs (main dependencies only)
+uv sync --group main
 ```
 
 ### 2️⃣ Verify Installation
@@ -149,7 +152,7 @@ The framework automatically alerts you when:
 - **✅ Solution**: Check your evaluator configuration and thresholds
 
 **🚨 Issue**: "Template not found"
-- **✅ Solution**: Update to the latest version: `poetry update`
+- **✅ Solution**: Update to the latest version: `uv update`
 
 ### 🆘 Getting Help
 

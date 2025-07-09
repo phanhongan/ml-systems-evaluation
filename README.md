@@ -202,17 +202,17 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install in development mode
-poetry install
+uv sync --group dev
 
-# (Optional) Activate the virtual environment managed by Poetry
-poetry shell
+# (Optional) Activate the virtual environment managed by UV
+uv shell
 
 # For production installs (main dependencies only)
-# poetry install --only main
+# uv sync --group main
 
 ```
 
-**Note**: This project uses Poetry for dependency management and packaging. 
+**Note**: This project uses UV for dependency management and packaging. 
 See [pyproject.toml](./pyproject.toml) for the full, up-to-date list of dependencies.
 For detailed installation instructions, see [docs/user-guides/installation.md](./docs/user-guides/installation.md).
 
@@ -496,18 +496,18 @@ We welcome contributions! Please see our [Development Guide](docs/developer/deve
 
 ```bash
 # Install dependencies
-poetry install
+uv sync --group dev
 
 # Run code quality checks
-poetry run black .          # Format code
-poetry run ruff check .     # Lint, type check, and sort imports
-poetry run ruff format .    # Format code
+uv run black .          # Format code
+uv run ruff check .     # Lint, type check, and sort imports
+uv run ruff format .    # Format code
 
 # Run tests
-poetry run pytest
+uv run pytest
 
 # Build package
-poetry build
+uv build
 ```
 
 ### 📝 Code Quality Standards

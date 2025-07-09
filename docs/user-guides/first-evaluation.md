@@ -183,7 +183,7 @@ reports:
 - **✅ Solution**: Check your evaluator configuration and thresholds
 
 **🚨 Issue**: "Template not found"
-- **✅ Solution**: Update to the latest version: `poetry update`
+- **✅ Solution**: Update to the latest version: `uv update`
 
 ### 🆘 Getting Help
 

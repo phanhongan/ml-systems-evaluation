@@ -1,7 +1,7 @@
-"""Reinforcement Learning Agent for adaptive decision-making"""
+"""LLM-based Reinforcement Learning Agent for adaptive decision-making"""
 
-from .agent import RLAgent
+from .agent import LLMRLAgent
 
 __all__ = [
-    "RLAgent",
+    "LLMRLAgent",
 ]

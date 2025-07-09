@@ -2,10 +2,10 @@
 
 from .alerting import AlertingAgent
 from .monitoring import MonitoringAgent
-from .rl import RLAgent
+from .rl import LLMRLAgent
 
 __all__ = [
     "AlertingAgent",
+    "LLMRLAgent",
     "MonitoringAgent",
-    "RLAgent",
 ]

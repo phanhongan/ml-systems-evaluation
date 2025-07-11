@@ -7,12 +7,13 @@ This directory contains example configurations demonstrating how to use the ML S
 ### Industry Examples (`industries/`)
 Ready-to-use configurations organized by industry:
 
-- **[Aviation](./industries/aviation/)**: Safety-critical aircraft systems  
-- **[Maritime](./industries/maritime/)**: Collision avoidance and navigation safety
-- **[Manufacturing](./industries/manufacturing/)**: Predictive maintenance and demand forecasting
-- **[Semiconductor](./industries/semiconductor/)**: Digital twins and yield prediction  
 - **[Aquaculture](./industries/aquaculture/)**: Species classification and environmental monitoring
+- **[Aviation](./industries/aviation/)**: Safety-critical aircraft systems  
 - **[Cybersecurity](./industries/cybersecurity/)**: AI-driven security operations, alert triage, and incident response
+- **[Energy](./industries/energy/)**: Energy optimization recommendations and cost reduction
+- **[Manufacturing](./industries/manufacturing/)**: Predictive maintenance and demand forecasting
+- **[Maritime](./industries/maritime/)**: Collision avoidance and navigation safety
+- **[Semiconductor](./industries/semiconductor/)**: Digital twins and yield prediction
 
 Each industry directory contains:
 - Example YAML configuration files

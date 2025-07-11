@@ -189,13 +189,15 @@ The framework follows a hybrid architecture that combines deterministic componen
                                                         │
                                                         ▼
                                               ┌─────────────────┐
-                                              │  Agents (Future)│
+                                              │     Agents      │
                                               │                 │
-                                              │ • Monitoring    │
-                                              │ • Alerting      │
-                                              │ • Scheduling    │
+                                              │ • RL Agent      │
+                                              │ • Monitoring*   │
+                                              │ • Alerting*     │
                                               └─────────────────┘
 ```
+
+> **📋 Architecture Details**: For detailed technical architecture information, component interactions, and implementation specifics, see [Architecture Overview](./docs/developer/architecture.md).
 
 ## 🚀 Quick Start
 
@@ -297,10 +299,12 @@ ml-eval run examples/industries/cybersecurity/security-operations.yaml --output 
 - **🤖 LLMAssistantEngine**: Natural language configuration and troubleshooting assistance
 - **🤖 LLMEnhancementEngine**: Report enhancement and business impact translation
 
-### 🤖 Autonomous Agents (Future)
-- **🤖 MonitoringAgent**: Autonomous real-time monitoring and health checks
-- **🤖 AlertingAgent**: Alert prioritization and routing
-- **🤖 RLAgent**: Adaptive decision-making and scheduling
+### 🤖 Autonomous Agents
+- **🤖 RLAgent**: Adaptive decision-making with LLM integration and safety constraints
+- **🤖 MonitoringAgent** 🚧: Autonomous real-time monitoring and health checks _(planned)_
+- **🤖 AlertingAgent** 🚧: Alert prioritization and routing _(planned)_
+
+> **📋 Agent Details**: For comprehensive agent implementation details, RL loop architecture, and usage examples, see [Architecture Overview](./docs/developer/architecture.md#agent-implementation-status).
 
 ### 📊 Reports
 - **🛡️ ReliabilityReport**: Error budgets, SLO compliance, incident analysis
@@ -328,101 +332,35 @@ For SLO configuration guidance, see the [SLO Configuration Guide](./docs/referen
 ## 🔧 Additional Features
 
 ### 🛡️ Safety-Critical Development
-This framework enables a new approach to Industrial AI development where safety and compliance are built-in:
-
-```python
-# Define safety-critical SLOs before model development
-slos = {
-    "false_positive_rate": SLOConfig(target=0.0001, error_budget=0.0001, compliance="DO-178C"),
-    "response_time": SLOConfig(target=50, error_budget=0.001, safety_critical=True),
-    "availability": SLOConfig(target=0.99999, error_budget=0.00001, business_impact="catastrophic")
-}
-
-# Continuous evaluation during development
-from ml_eval import EvaluationFramework
-from ml_eval.collectors import OnlineCollector
-from ml_eval.evaluators import SafetyEvaluator
-
-framework = EvaluationFramework({"system": {"name": "Safety System"}})
-framework.add_collector(OnlineCollector({"endpoint": "http://safety-metrics:8080"}))
-framework.add_evaluator(SafetyEvaluator({"compliance_standards": ["DO-178C"]}))
-
-# Real-time safety validation during training
-while training:
-    result = framework.evaluate()
-    if result.safety_violations:
-        # Halt development if safety thresholds are violated
-        raise Exception("Model violates safety requirements")
-```
+The framework enables Industrial AI development with built-in safety and compliance:
+- **Safety-First SLOs**: Zero-tolerance thresholds for catastrophic failures  
+- **Real-time Validation**: Continuous safety validation during development
+- **Regulatory Compliance**: Built-in validation against industry standards (DO-178C, etc.)
+- **Emergency Protocols**: Automatic system shutdown for safety violations
 
 ### 🤖 LLM-Powered Intelligence
-The framework integrates LLM capabilities for enhanced analysis and decision support:
-
+Enhanced analysis and decision support capabilities:
 - **Pattern Recognition**: Drift detection and anomaly identification
 - **Natural Language Configuration**: Generate configurations from plain English requirements
 - **Report Enhancement**: Add business context and insights to technical reports
 - **Smart Troubleshooting**: AI-powered problem diagnosis and solution recommendations
 
-### 🤖 Autonomous Agents (Future)
-The framework is designed for future autonomous capabilities:
+### 🤖 Autonomous Agents
+**Currently Available:**
+- **🤖 RL Agent**: Adaptive decision-making, resource allocation, and threshold optimization with LLM integration
 
+**Planned Capabilities:**
 - **Proactive Monitoring**: Autonomous system health monitoring and issue detection
 - **Alert Management**: Smart alert prioritization and context-aware notifications
 - **Dynamic Scheduling**: Autonomous task scheduling and resource optimization
 
-### 🔄 Workflow Evaluation
-```python
-from ml_eval import EvaluationFramework
+### 🔌 Extensibility
+- **Custom Collectors**: Domain-specific data collection interfaces
+- **Custom Evaluators**: Specialized evaluation logic for industry requirements
+- **Custom Reports**: Tailored reporting formats and outputs
+- **LLM Integration**: Support for multiple LLM providers and custom models
 
-# Create framework for workflow evaluation
-config = {
-    "system": {
-        "name": "Workflow System",
-        "type": "workflow",
-        "stages": ["preprocessing", "inference", "postprocessing"]
-    },
-    "slos": slo_config
-}
-framework = EvaluationFramework(config)
-result = framework.evaluate()
-```
-
-### 🔌 Custom Metrics
-```python
-from ml_eval.collectors import BaseCollector
-
-class DomainSpecificCollector(BaseCollector):
-    def collect(self) -> Dict[str, float]:
-        # Custom metric collection logic
-        return {"custom_metric": value}
-```
-
-
-
-### 🛡️ Safety-Critical Continuous Improvement
-```python
-# Automated safety validation and retraining for Industrial AI
-class SafetyCriticalImprovement:
-    def __init__(self, evaluation_framework):
-        self.framework = evaluation_framework
-    
-    def check_safety_compliance(self):
-        result = self.framework.evaluate()
-        
-        if result.safety_violation_detected:
-            # Immediate system shutdown for safety
-            self.emergency_shutdown()
-            self.create_safety_incident(result)
-            
-        if result.regulatory_compliance_violated:
-            # Halt operations until compliance restored
-            self.halt_operations()
-            self.notify_regulatory_authorities(result)
-            
-        if result.environmental_conditions_changed:
-            # Adapt model for new environmental conditions
-            self.adapt_to_environment(result.environmental_data)
-```
+> **📋 Code Examples**: For detailed code examples, usage patterns, and implementation guides, see [Architecture Overview](./docs/developer/architecture.md) and [Getting Started Guide](./docs/user-guides/getting-started.md).
 
 ## 🛠️ Development
 
@@ -441,9 +379,11 @@ The framework is designed with a modular architecture for easy maintenance and e
 - **`evaluators/`**: Specialized evaluation engines for different aspects
 - **`reports/`**: Reporting for different stakeholders
 - **`llm/`**: LLM integration layer with analysis, assistant, and enhancement engines
-- **`agents/`**: Future autonomous agents for monitoring, alerting, and scheduling
+- **`agents/`**: Autonomous agents (RL Agent implemented, monitoring/alerting planned)
 - **`cli/`**: User-friendly command-line interface for system engineers
 - **`config/`**: Configuration management for complex systems
+
+> **📋 Technical Details**: For component interfaces, data flow diagrams, and extension points, see [Architecture Overview](./docs/developer/architecture.md).
 
 ### 👨‍💻 Developer-Friendly Features
 

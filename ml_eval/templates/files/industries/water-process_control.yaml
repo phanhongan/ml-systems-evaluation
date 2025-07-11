@@ -1,0 +1,100 @@
+system:
+  name: "Water Treatment Process Control System"
+  persona: "Process Control Engineer"
+  criticality: "business_critical"
+  stages: ["raw_water_intake", "chemical_treatment", "filtration", "disinfection", "distribution"]
+
+slos:
+  water_quality_compliance:
+    target: 0.99
+    window: "24h"
+    description: "Compliance rate with water quality standards and regulatory limits"
+  
+  process_control_accuracy:
+    target: 0.95
+    window: "12h"
+    description: "Accuracy of automated process control systems"
+  
+  chemical_dosing_precision:
+    target: 0.92
+    window: "6h"
+    description: "Precision of chemical dosing systems"
+  
+  turbidity_removal_efficiency:
+    target: 0.98
+    window: "4h"
+    description: "Efficiency of turbidity removal processes"
+
+operating_conditions:
+  facility_types:
+    - "drinking_water_plant"
+    - "wastewater_treatment"
+    - "industrial_treatment"
+    - "reverse_osmosis_plant"
+  
+  water_sources:
+    - "surface_water"
+    - "groundwater"
+    - "recycled_water"
+    - "industrial_wastewater"
+  
+  water_quality_ranges:
+    ph_range: [6.5, 8.5]
+    turbidity_range: [0, 4]  # NTU
+    temperature_range: [4, 35]  # celsius
+    chlorine_residual_range: [0.2, 4.0]  # mg/L
+
+collectors:
+  - type: "online"
+    endpoints: ["http://water-scada:8080/metrics"]
+    metrics:
+      - "ph_level"
+      - "turbidity"
+      - "chlorine_residual"
+      - "flow_rate"
+      - "chemical_feed_rates"
+      - "filter_performance"
+    polling_interval: 30
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["/var/log/water-treatment/"]
+    data_retention: "730d"
+  
+  - type: "regulatory"
+    compliance_standards: ["epa_drinking_water", "who_guidelines", "local_regulations"]
+    reporting_frequency: "daily"
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "water_quality_compliance": {
+        "target": 0.99,
+        "window": "24h",
+        "description": "Water quality compliance"
+      },
+      "process_control_accuracy": {
+        "target": 0.95,
+        "window": "12h",
+        "description": "Process control accuracy"
+      }
+    }
+    failure_modes: ["equipment_failure", "chemical_shortage", "sensor_malfunction"]
+  
+  - type: "performance"
+    metrics: ["treatment_efficiency", "energy_consumption", "chemical_usage"]
+    thresholds:
+      treatment_efficiency: 0.95
+      energy_consumption_kwh_per_m3: 0.8
+    baseline_period: "last_30_days"
+  
+  - type: "compliance"
+    standards: ["epa_safe_drinking_water_act", "who_water_quality_guidelines"]
+    audit_requirements: ["water_quality_reports", "process_logs"]
+    reporting_frequency: "daily"
+  
+  - type: "safety"
+    safety_metrics: ["chemical_exposure_risk", "water_safety_incidents"]
+    risk_assessment: ["chemical_hazards", "pathogen_breakthrough"]
+    emergency_protocols: ["water_quality_emergency", "chemical_spill_response"] 

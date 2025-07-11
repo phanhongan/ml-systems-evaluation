@@ -119,16 +119,31 @@ Evaluation isn't just a final checkpoint—it's a continuous feedback mechanism 
 
 The framework supports multiple industrial sectors with ready-to-use configurations and industry-specific requirements. Each industry has its own directory with detailed examples and documentation:
 
-### **🏭 Manufacturing**
-- **Predictive Maintenance**: Equipment failure prediction with VAE anomaly detection
-- **Demand Forecasting**: Supply chain optimization and production planning
-- **Key Features**: ISO compliance, cost optimization, real-time monitoring
-- **Examples**: [`examples/industries/manufacturing/`](./examples/industries/manufacturing/)
+### **🐟 Aquaculture**
+- **Species Classification**: Sonar-based fish species identification and environmental hazard detection
+- **Key Features**: Environmental monitoring, regulatory compliance, resource optimization
+- **Examples**: [`examples/industries/aquaculture/`](./examples/industries/aquaculture/)
 
 ### **✈️ Aviation**  
 - **Safety-Critical Systems**: Aircraft landing and flight control assistance
 - **Key Features**: DO-178C compliance, sub-500ms response times, environmental adaptation
 - **Examples**: [`examples/industries/aviation/`](./examples/industries/aviation/)
+
+### **🔒 Cybersecurity**
+- **Agentic Security Operations**: Multi-agent AI workflows for alert triage, investigation, and response
+- **Key Features**: Cost-optimized LLM integration, RAG-powered threat intelligence, explainable AI decisions, multi-TB data processing
+- **Examples**: [`examples/industries/cybersecurity/`](./examples/industries/cybersecurity/)
+
+### **⚡ Energy**
+- **Energy Optimization Recommendations**: ML-driven recommendations for facility energy consumption and cost reduction
+- **Key Features**: Real-time energy monitoring, cost reduction tracking, multi-facility support
+- **Examples**: [`examples/industries/energy/`](./examples/industries/energy/)
+
+### **🏭 Manufacturing**
+- **Predictive Maintenance**: Equipment failure prediction with VAE anomaly detection
+- **Demand Forecasting**: Supply chain optimization and production planning
+- **Key Features**: ISO compliance, cost optimization, real-time monitoring
+- **Examples**: [`examples/industries/manufacturing/`](./examples/industries/manufacturing/)
 
 ### **🚢 Maritime**
 - **Collision Avoidance**: Vessel collision detection and navigation safety
@@ -139,16 +154,6 @@ The framework supports multiple industrial sectors with ready-to-use configurati
 - **Digital Twins**: Manufacturing process monitoring and yield prediction
 - **Key Features**: Real-time process control, quality metrics, equipment monitoring
 - **Examples**: [`examples/industries/semiconductor/`](./examples/industries/semiconductor/)
-
-### **🐟 Aquaculture**
-- **Species Classification**: Sonar-based fish species identification and environmental hazard detection
-- **Key Features**: Environmental monitoring, regulatory compliance, resource optimization
-- **Examples**: [`examples/industries/aquaculture/`](./examples/industries/aquaculture/)
-
-### **🔒 Cybersecurity**
-- **Agentic Security Operations**: Multi-agent AI workflows for alert triage, investigation, and response
-- **Key Features**: Cost-optimized LLM integration, RAG-powered threat intelligence, explainable AI decisions, multi-TB data processing
-- **Examples**: [`examples/industries/cybersecurity/`](./examples/industries/cybersecurity/)
 
 ### 📋 Additional Examples
 

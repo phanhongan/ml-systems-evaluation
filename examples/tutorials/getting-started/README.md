@@ -113,7 +113,7 @@ See the industry-specific examples for detailed configurations:
 ### Safety-Critical Systems
 - High accuracy requirements (99.9%+)
 - Low latency requirements (<500ms)
-- Comprehensive failure mode analysis
+- Failure mode analysis
 - Regulatory compliance integration
 
 ### Business-Critical Systems

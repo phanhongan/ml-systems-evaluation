@@ -5,7 +5,7 @@ This directory contains examples for semiconductor-related ML systems with a foc
 ## Examples
 
 ### etching-digital-twins.yaml
-A comprehensive example of semiconductor etching digital twins that demonstrates:
+An example of semiconductor etching digital twins that demonstrates:
 
 - **Process monitoring**: Real-time etching process parameter tracking
 - **Quality control**: Yield prediction and defect detection
@@ -19,7 +19,7 @@ A Python implementation example showing:
 - **Digital twin simulation**: Real-time process simulation and monitoring
 - **Quality metrics**: Etch rate, uniformity, and selectivity tracking
 - **Alert generation**: Process deviation and equipment failure alerts
-- **Yield prediction**: Advanced ML models for yield forecasting
+- **Yield prediction**: ML models for yield forecasting
 - **Integration patterns**: Framework integration with semiconductor systems
 
 ## Usage

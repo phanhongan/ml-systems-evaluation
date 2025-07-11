@@ -98,17 +98,25 @@ alerts:
 
 ### ⚡ Step 4: Start Monitoring
 
-Run the monitoring service:
+Set up continuous monitoring using scheduled evaluations:
 
 ```bash
-# Start continuous monitoring
-ml-eval monitor --config monitoring-config.yaml
+# Run a single evaluation to test
+ml-eval run monitoring-config.yaml --output monitoring-results.json
 
-# Run in background
-nohup ml-eval monitor --config monitoring-config.yaml > monitoring.log 2>&1 &
+# Set up continuous monitoring with cron (every 5 minutes)
+echo "*/5 * * * * cd /path/to/ml-systems-evaluation && ml-eval run monitoring-config.yaml --output /var/log/ml-eval/results-$(date +\%Y\%m\%d-\%H\%M).json" | crontab -
 
-# Check status
-ml-eval monitor --status
+# Or use a monitoring script with scheduling
+cat > monitor.sh << 'EOF'
+#!/bin/bash
+while true; do
+    ml-eval run monitoring-config.yaml --output "results-$(date +%Y%m%d-%H%M).json"
+    sleep 300  # Wait 5 minutes
+done
+EOF
+chmod +x monitor.sh
+nohup ./monitor.sh > monitoring.log 2>&1 &
 ```
 
 ## 📈 Monitoring Dashboards

@@ -1,6 +1,6 @@
 # ⚡ Energy Industry Guide
 
-This guide provides comprehensive information for implementing ML Systems Evaluation Framework in energy environments, with a focus on grid optimization, demand prediction, and renewable energy integration.
+This guide provides information for implementing ML Systems Evaluation Framework in energy environments, with a focus on grid optimization, demand prediction, and renewable energy integration.
 
 ## ⚡ Energy Overview
 
@@ -432,7 +432,7 @@ reports:
 
 #### Energy Storage
 - Monitor battery health and performance
-- Implement optimal charge/discharge cycles
+- Implement charge/discharge cycles
 - Use storage for grid stabilization
 - Regular battery maintenance and replacement
 
@@ -487,10 +487,10 @@ reports:
    - Standard grid metrics and thresholds
    - Basic reporting and monitoring
 
-2. **Advanced Grid Optimization**
-   - Advanced grid optimization with AI
+2. **Grid Optimization**
+- Grid optimization with AI
    - Real-time monitoring and control
-   - Advanced analytics and reporting
+   - Analytics and reporting
 
 3. **Solar Power Plant Management**
    - Solar power generation monitoring
@@ -507,28 +507,16 @@ reports:
    - Storage efficiency optimization
    - Charge/discharge optimization
 
-### Using Energy Templates
+### Using Energy Examples
 
-```bash
-# List available energy templates
-ml-eval templates list --industry energy
-
-# Use grid optimization template
-ml-eval templates use energy-grid --output grid_config.yaml
-
-# Customize template for your specific needs
-ml-eval templates customize energy-grid --interactive
-
-# Validate energy configuration
-ml-eval config validate grid_config.yaml
-```
+TBD
 
 ## Energy Case Studies
 
 ### Case Study 1: Smart Grid Implementation
 
 **Challenge**: Optimizing grid efficiency and stability
-**Solution**: Implemented comprehensive grid optimization system
+**Solution**: Implemented grid optimization system
 **Results**: 15% improvement in grid efficiency, 20% reduction in energy loss
 
 ### Case Study 2: Solar Power Plant Optimization
@@ -543,4 +531,4 @@ ml-eval config validate grid_config.yaml
 **Solution**: Implemented wind farm management system
 **Results**: 20% improvement in turbine efficiency, 25% increase in power generation
 
-This energy guide provides comprehensive information for implementing ML Systems Evaluation Framework in energy environments, ensuring grid optimization, efficient renewable energy integration, and reliable power distribution. 
+This energy guide provides information for implementing ML Systems Evaluation Framework in energy environments, ensuring grid optimization, renewable energy integration, and reliable power distribution. 

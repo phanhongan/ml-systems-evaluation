@@ -5,7 +5,7 @@ This directory contains examples for maritime-related ML systems with a focus on
 ## Examples
 
 ### collision-avoidance.yaml
-A comprehensive example of a maritime collision avoidance system that demonstrates:
+An example of a maritime collision avoidance system that demonstrates:
 
 - **Real-time safety monitoring**: Continuous vessel tracking and collision prediction
 - **Vessel classification**: Accurate identification of different vessel types

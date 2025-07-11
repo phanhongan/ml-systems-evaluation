@@ -1,6 +1,6 @@
 # 📚 ML Systems Evaluation Framework Documentation
 
-This directory contains comprehensive documentation for the ML Systems Evaluation Framework, designed specifically for system engineers working with Industrial AI systems.
+This directory contains documentation for the ML Systems Evaluation Framework, designed specifically for system engineers working with Industrial AI systems.
 
 > **📝 Note**: This is the documentation index. For the main project overview, installation instructions, and quick start guide, see the [main README.md](../README.md) in the project root.
 
@@ -14,7 +14,7 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 ### 👥 User Guides
 - **[⚙️ Configuration Guide](user-guides/configuration.md)**: Detailed configuration options
 - **[🖥️ CLI Reference](user-guides/cli-reference.md)**: Complete command-line interface documentation
-- **[📋 Templates Guide](user-guides/templates.md)**: Using industry-specific templates
+- **[📋 Example Configurations Guide](user-guides/example-configurations.md)**: Using industry-specific example configurations
 - **[📊 Monitoring Setup](user-guides/monitoring.md)**: Setting up continuous monitoring
 
 ### 🏭 Industry Guides
@@ -40,7 +40,7 @@ This directory contains comprehensive documentation for the ML Systems Evaluatio
 
 ### 👨‍💻 For System Engineers (New Users)
 1. Start with [🚀 Quick Start Guide](user-guides/getting-started.md)
-2. Review [📋 Templates Guide](user-guides/templates.md) for your industry
+2. Review [📋 Example Configurations Guide](user-guides/example-configurations.md) for your industry
 3. Configure your system with [⚙️ Configuration Guide](user-guides/configuration.md)
 4. Set up monitoring with [📊 Monitoring Setup](user-guides/monitoring.md)
 

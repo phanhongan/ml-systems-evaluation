@@ -8,16 +8,16 @@ This guide walks you through running your first evaluation using the ML Systems 
 - 📊 Access to your ML system's data
 - 🏗️ Basic understanding of your system's architecture
 
-## 📋 Step 1: Choose Your Industry Template
+## 📋 Step 1: Choose Your Industry Configuration
 
-Start with a template that matches your industry:
+Start with an example configuration that matches your industry:
 
 ```bash
-# List available templates
-ml-eval templates list
+# Copy an existing example configuration
+cp examples/industries/manufacturing/predictive-maintenance.yaml config.yaml
 
-# Use a template for your industry
-ml-eval templates use manufacturing-predictive_maintenance
+# Or create a new configuration
+ml-eval create-config --output config.yaml --system-name "My System" --industry manufacturing
 ```
 
 ## 📊 Step 2: Configure Your Data Sources
@@ -85,12 +85,15 @@ slo:
 Execute the evaluation:
 
 ```bash
+# Validate configuration first
+ml-eval validate config.yaml
+
 # Run complete evaluation
-ml-eval evaluate --config config.yaml
+ml-eval run config.yaml --output results.json
 
 # Run specific components
-ml-eval collect --config config.yaml
-ml-eval evaluate --config config.yaml --evaluator performance
+ml-eval collect config.yaml --output data.json
+ml-eval evaluate config.yaml --data data.json --output evaluation.json
 ```
 
 ## 📊 Step 7: Review Results
@@ -98,11 +101,11 @@ ml-eval evaluate --config config.yaml --evaluator performance
 Check the generated reports:
 
 ```bash
-# Generate reports
-ml-eval report --config config.yaml
+# Generate reports from results
+ml-eval report config.yaml --results results.json --output reports.json
 
-# View reports in browser
-open reports/business_report.html
+# View results (results are in JSON format)
+cat reports.json
 ```
 
 ## 📈 Understanding Your Results
@@ -189,4 +192,4 @@ reports:
 
 - ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
 - 🖥️ Review [CLI Reference](cli-reference.md) for command details
-- 📋 Consult [Templates Guide](templates.md) for your specific domain 
+- 📋 Consult [Example Configurations Guide](example-configurations.md) for your specific domain 

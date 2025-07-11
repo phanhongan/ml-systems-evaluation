@@ -1,6 +1,6 @@
 # 🚢 Maritime Industry Guide
 
-This guide provides comprehensive information for implementing the ML Systems Evaluation Framework in maritime environments, with a focus on collision avoidance, navigational safety, and regulatory compliance.
+This guide provides information for implementing the ML Systems Evaluation Framework in maritime environments, with a focus on collision avoidance, navigational safety, and regulatory compliance.
 
 ## 🚢 Maritime Overview
 
@@ -27,7 +27,7 @@ Maritime systems require high levels of safety, reliability, and compliance with
 
 ### 🚢 Maritime Collision Avoidance System Example
 
-See the full template in [`docs/user-guides/templates.md`](../user-guides/templates.md) for a complete, ready-to-use configuration example.
+See the full example configuration in [`docs/user-guides/example-configurations.md`](../user-guides/example-configurations.md) for a complete, ready-to-use configuration example.
 
 Key configuration highlights:
 - **👨‍💼 Persona**: Officer of the Watch (OOW)
@@ -75,7 +75,7 @@ evaluators:
 ## 🏆 Maritime Best Practices
 
 ### 1. 🚨 Collision Avoidance Best Practices
-- 🔌 Use sensor fusion (radar, AIS, environmental) for robust risk detection
+- 🔌 Use sensor fusion (radar, AIS, environmental) for risk detection
 - 📊 Monitor both STW and SOG to avoid scenario misclassification
 - 🛡️ Set safety thresholds for navigation parameter discrepancies
 - 🚨 Provide clear, timely alerts to the OOW

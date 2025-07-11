@@ -50,14 +50,14 @@ docker run -it ml-systems-evaluation ml-eval --help
 After installation, verify that everything is working:
 
 ```bash
-# Check version
-ml-eval --version
-
 # Check available commands
 ml-eval --help
 
-# List available templates
-ml-eval templates list
+# Test basic functionality with an example
+ml-eval validate examples/industries/manufacturing/predictive-maintenance.yaml
+
+# Create a test configuration
+ml-eval create-config --output test.yaml --system-name "Test System"
 ```
 
 ## ⚙️ Configuration

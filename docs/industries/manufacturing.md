@@ -1,10 +1,10 @@
 # 🏭 Manufacturing Industry Guide
 
-This guide provides comprehensive information for implementing ML Systems Evaluation Framework in manufacturing environments, with a focus on quality control and predictive maintenance.
+This guide provides information for implementing ML Systems Evaluation Framework in manufacturing environments, with a focus on quality control and predictive maintenance.
 
 ## 🏭 Manufacturing Overview
 
-Manufacturing systems require high reliability, consistent quality, and efficient operations. The framework provides specialized components for manufacturing-specific needs including quality control, predictive maintenance, and production optimization.
+Manufacturing systems require high reliability, consistent quality, and operations. The framework provides specialized components for manufacturing-specific needs including quality control, predictive maintenance, and production optimization.
 
 ## 🎯 Key Manufacturing Challenges
 
@@ -22,7 +22,7 @@ Manufacturing systems require high reliability, consistent quality, and efficien
 
 ### 3. ⚡ Production Optimization
 - **📈 Throughput Maximization**: Optimizing production rates
-- **📦 Resource Allocation**: Efficient use of materials and equipment
+- **📦 Resource Allocation**: Use of materials and equipment
 - **⚡ Energy Efficiency**: Reducing energy consumption
 - **♻️ Waste Reduction**: Minimizing material waste
 
@@ -539,20 +539,20 @@ reports:
    - HACCP compliance
    - Temperature and hygiene monitoring
 
-### Using Manufacturing Templates
+### Using Manufacturing Examples
 
 ```bash
-# List available manufacturing templates
-ml-eval templates list --industry manufacturing
+# Use existing manufacturing examples
+cp examples/industries/manufacturing/predictive-maintenance.yaml automotive_config.yaml
 
-# Use automotive quality template
-ml-eval templates use automotive-quality --output automotive_config.yaml
-
-# Customize template for your specific needs
-ml-eval templates customize automotive-quality --interactive
+# Create new manufacturing configuration
+ml-eval create-config --output automotive_config.yaml --system-name "Automotive Quality Control" --industry manufacturing --criticality business_critical
 
 # Validate manufacturing configuration
-ml-eval config validate automotive_config.yaml
+ml-eval validate automotive_config.yaml
+
+# Run manufacturing evaluation
+ml-eval run automotive_config.yaml --output automotive_results.json
 ```
 
 ## Manufacturing Case Studies
@@ -560,7 +560,7 @@ ml-eval config validate automotive_config.yaml
 ### Case Study 1: Automotive Parts Manufacturer
 
 **Challenge**: High defect rates in engine component production
-**Solution**: Implemented comprehensive quality control system
+**Solution**: Implemented quality control system
 **Results**: 40% reduction in defect rate, 25% improvement in customer satisfaction
 
 ### Case Study 2: Electronics Manufacturer
@@ -575,4 +575,4 @@ ml-eval config validate automotive_config.yaml
 **Solution**: Implemented food safety monitoring system
 **Results**: 100% compliance with food safety standards, zero safety incidents
 
-This manufacturing guide provides comprehensive information for implementing ML Systems Evaluation Framework in manufacturing environments, ensuring quality, efficiency, and compliance with industry standards. 
+This manufacturing guide provides information for implementing ML Systems Evaluation Framework in manufacturing environments, ensuring quality, efficiency, and compliance with industry standards. 

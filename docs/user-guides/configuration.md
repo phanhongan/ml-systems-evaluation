@@ -401,7 +401,7 @@ slos:
 
 Safety-critical SLOs receive additional monitoring and stricter alerting thresholds.
 
-## Advanced Configuration
+## Additional Configuration
 
 ### Environment Variables
 

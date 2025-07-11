@@ -1,6 +1,6 @@
 # 📊 SLO Configuration Guide
 
-This guide provides comprehensive information about Service Level Objectives (SLOs) in the ML Systems Evaluation Framework, including definitions, configuration, and best practices.
+This guide provides information about Service Level Objectives (SLOs) in the ML Systems Evaluation Framework, including definitions, configuration, and best practices.
 
 **📝 Note**: Error budgets are always inferred from the SLO target and should not be specified in user configuration. For error budget monitoring and best practices, see the [Error Budget Management Guide](./error-budgets.md).
 
@@ -475,4 +475,4 @@ slo:
         duration: 300
 ```
 
-This SLO configuration guide provides comprehensive information for setting up and managing Service Level Objectives in the ML Systems Evaluation Framework, ensuring reliable and measurable system performance. 
+This SLO configuration guide provides information for setting up and managing Service Level Objectives in the ML Systems Evaluation Framework, ensuring reliable and measurable system performance. 

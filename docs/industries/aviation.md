@@ -1,6 +1,6 @@
 # ✈️ Aviation Industry Guide
 
-This guide provides comprehensive information for implementing ML Systems Evaluation Framework in aviation environments, with a focus on safety-critical systems and regulatory compliance.
+This guide provides information for implementing ML Systems Evaluation Framework in aviation environments, with a focus on safety-critical systems and regulatory compliance.
 
 ## ✈️ Aviation Overview
 
@@ -446,7 +446,7 @@ reports:
 - Implement rigorous testing procedures
 - Use formal verification methods
 - Regular code reviews and audits
-- Comprehensive documentation
+- Documentation
 
 ### 2. Regulatory Compliance Best Practices
 
@@ -557,20 +557,20 @@ reports:
    - Autonomous flight control
    - Regulatory compliance
 
-### Using Aviation Templates
+### Using Aviation Examples
 
 ```bash
-# List available aviation templates
-ml-eval templates list --industry aviation
+# Use existing aviation examples
+cp examples/industries/aviation/aircraft-landing.yaml flight_control_config.yaml
 
-# Use commercial aircraft template
-ml-eval templates use commercial-flight-control --output flight_control_config.yaml
-
-# Customize template for your specific needs
-ml-eval templates customize commercial-flight-control --interactive
+# Create new aviation configuration
+ml-eval create-config --output flight_control_config.yaml --system-name "Flight Control System" --industry aviation --criticality safety_critical
 
 # Validate aviation configuration
-ml-eval config validate flight_control_config.yaml
+ml-eval validate flight_control_config.yaml
+
+# Run aviation evaluation
+ml-eval run flight_control_config.yaml --output flight_control_results.json
 ```
 
 ## Aviation Case Studies

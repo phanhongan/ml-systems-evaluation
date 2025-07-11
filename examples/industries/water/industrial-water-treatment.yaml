@@ -15,21 +15,6 @@ slos:
     window: "24h"
     description: "Efficiency of water treatment processes in removing contaminants"
   
-  chemical_dosing_accuracy:
-    target: 0.92
-    window: "12h"
-    description: "Accuracy of automated chemical dosing systems"
-  
-  turbidity_control:
-    target: 0.98
-    window: "6h"
-    description: "Success rate in maintaining turbidity below regulatory thresholds"
-  
-  disinfection_efficacy:
-    target: 0.999
-    window: "4h"
-    description: "Effectiveness of disinfection process in pathogen removal"
-  
   system_uptime:
     target: 0.995
     window: "30d"
@@ -39,62 +24,24 @@ operating_conditions:
   treatment_facilities:
     - "municipal_plant"
     - "industrial_facility"
-    - "wastewater_treatment"
     - "drinking_water_plant"
-    - "reverse_osmosis_facility"
-    - "membrane_bioreactor"
   
   water_sources:
     - "surface_water"
     - "groundwater"
-    - "river_water"
-    - "lake_water"
-    - "recycled_water"
     - "industrial_wastewater"
-  
-  seasonal_conditions:
-    - "high_flow_season"
-    - "low_flow_season"
-    - "storm_conditions"
-    - "drought_conditions"
-    - "temperature_extremes"
   
   water_quality_parameters:
     ph_range: [6.5, 8.5]
     turbidity_range: [0, 4]  # NTU
     temperature_range: [4, 35]  # celsius
-    dissolved_oxygen_range: [4, 15]  # mg/L
-    conductivity_range: [50, 1500]  # μS/cm
     chlorine_residual_range: [0.2, 4.0]  # mg/L
     
   treatment_processes:
     - "coagulation_flocculation"
-    - "sedimentation"
     - "filtration"
     - "disinfection"
     - "ph_adjustment"
-    - "membrane_filtration"
-    - "activated_carbon"
-    - "ion_exchange"
-
-process_parameters:
-  coagulation:
-    coagulant_types: ["aluminum_sulfate", "ferric_chloride", "polyaluminum_chloride"]
-    dosing_range: [10, 100]  # mg/L
-    mixing_time: [30, 180]  # seconds
-    ph_optimization: [6.0, 7.5]
-  
-  filtration:
-    filter_types: ["sand", "multimedia", "membrane", "activated_carbon"]
-    flow_rates: [5, 25]  # m/h
-    backwash_frequency: [12, 72]  # hours
-    filter_run_time: [24, 120]  # hours
-  
-  disinfection:
-    disinfectant_types: ["chlorine", "chloramine", "ozone", "uv"]
-    contact_time: [30, 240]  # minutes
-    dosing_range: [0.5, 5.0]  # mg/L
-    ct_values: [0.5, 10.0]  # mg·min/L
 
 collectors:
   - type: "online"
@@ -105,33 +52,18 @@ collectors:
       - "chlorine_residual"
       - "flow_rate"
       - "temperature"
-      - "conductivity"
-      - "dissolved_oxygen"
-      - "chemical_feed_rates"
-      - "filter_pressure_drop"
-      - "membrane_flux"
-      - "energy_consumption"
       - "treatment_efficiency"
       - "compliance_status"
     polling_interval: 30  # seconds
     real_time: true
   
   - type: "offline"
-    log_paths: ["/var/log/water-treatment/", "/var/log/process-control/", "/var/log/laboratory-results/"]
-    data_retention: "730d"  # 2 years for regulatory compliance
-  
-  - type: "environmental"
-    sources: ["raw_water_quality", "weather_station", "flow_meters", "level_sensors"]
-    sampling_interval: 300  # seconds
+    log_paths: ["/var/log/water-treatment/"]
+    data_retention: "90d"
   
   - type: "regulatory"
-    compliance_standards: ["epa_drinking_water", "who_guidelines", "local_regulations", "iso_water_quality"]
+    compliance_standards: ["epa_drinking_water", "local_regulations"]
     reporting_frequency: "daily"
-  
-  - type: "laboratory"
-    test_parameters: ["bacteria", "viruses", "heavy_metals", "organic_compounds", "pharmaceuticals"]
-    sampling_frequency: "daily"
-    analysis_time: "24h"
 
 evaluators:
   - type: "reliability"
@@ -147,90 +79,46 @@ evaluators:
         "window": "24h",
         "description": "Treatment process efficiency"
       },
-      "disinfection_efficacy": {
-        "target": 0.999,
-        "window": "4h",
-        "description": "Disinfection effectiveness"
-      },
       "system_uptime": {
         "target": 0.995,
         "window": "30d",
         "description": "System availability"
       }
     }
-    failure_modes: ["equipment_failure", "chemical_shortage", "power_outage", "sensor_malfunction", "process_upset"]
+    failure_modes: ["equipment_failure", "chemical_shortage", "sensor_malfunction"]
   
   - type: "performance"
-    metrics: ["treatment_efficiency", "energy_consumption", "chemical_usage", "water_recovery", "response_time"]
+    metrics: ["treatment_efficiency", "energy_consumption", "response_time"]
     thresholds:
       treatment_efficiency: 0.95
       energy_consumption_kwh_per_m3: 0.8
       response_time_ms: 1000
     baseline_period: "last_30_days"
   
-  - type: "drift"
-    drift_detection: ["raw_water_quality", "process_performance", "chemical_effectiveness", "membrane_degradation"]
-    adaptation_threshold: 0.10
-    environmental_factors: ["seasonal_variations", "source_water_changes", "temperature", "flow_variations"]
-  
   - type: "compliance"
-    standards: ["epa_safe_drinking_water_act", "who_water_quality_guidelines", "iso_24512_water_services", "local_health_regulations"]
-    audit_requirements: ["water_quality_reports", "process_monitoring_logs", "chemical_usage_records", "maintenance_schedules"]
+    standards: ["epa_safe_drinking_water_act", "local_health_regulations"]
+    audit_requirements: ["water_quality_reports", "process_monitoring_logs"]
     reporting_frequency: "daily"
-  
-  - type: "safety"
-    safety_metrics: ["chemical_exposure_risk", "equipment_safety_incidents", "water_safety_breaches", "emergency_response_time"]
-    risk_assessment: ["chemical_hazards", "pathogen_breakthrough", "equipment_malfunction", "environmental_impact"]
-    emergency_protocols: ["water_quality_emergency", "chemical_spill_response", "equipment_shutdown", "public_notification"]
 
-# Business metrics (not SLOs - can have any positive values)
 business_metrics:
   operational_cost_per_m3:
     target: 0.45  # USD per cubic meter
     description: "Operational cost per cubic meter of treated water"
   
-  energy_efficiency:
-    target: 0.85
-    description: "Energy efficiency ratio of treatment processes"
-  
-  chemical_cost_optimization:
-    target: 0.20
-    description: "Cost reduction through optimized chemical dosing"
-  
-  water_recovery_rate:
-    target: 0.95
-    description: "Percentage of water recovered from treatment processes"
-  
   regulatory_compliance_rate:
     target: 0.999
     description: "Compliance rate with all regulatory requirements"
   
-  maintenance_cost_reduction:
-    target: 0.15
-    description: "Reduction in maintenance costs through predictive maintenance"
-  
   customer_satisfaction:
     target: 0.98
     description: "Customer satisfaction with water quality and service"
-  
-  environmental_impact_score:
-    target: 0.90
-    description: "Environmental sustainability score of treatment operations"
 
 alerts:
   critical:
     - "water_quality_violation"
     - "disinfection_failure"
-    - "turbidity_exceedance"
     - "chemical_feed_failure"
-    - "pathogen_detection"
   warning:
     - "ph_deviation"
     - "chlorine_residual_low"
-    - "filter_backwash_required"
-    - "chemical_inventory_low"
     - "equipment_maintenance_due"
-  info:
-    - "seasonal_adjustment_recommended"
-    - "optimization_opportunity"
-    - "performance_trend_change" 

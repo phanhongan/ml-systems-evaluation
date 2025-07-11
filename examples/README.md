@@ -8,6 +8,7 @@ This directory contains example configurations demonstrating how to use the ML S
 Ready-to-use configurations organized by industry:
 
 - **[Aviation](./industries/aviation/)**: Safety-critical aircraft systems  
+- **[Energy](./industries/energy/)**: Energy optimization recommendations and cost reduction
 - **[Maritime](./industries/maritime/)**: Collision avoidance and navigation safety
 - **[Manufacturing](./industries/manufacturing/)**: Predictive maintenance and demand forecasting
 - **[Semiconductor](./industries/semiconductor/)**: Digital twins and yield prediction  

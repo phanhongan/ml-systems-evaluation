@@ -1,0 +1,106 @@
+system:
+  name: "Energy Optimization Recommendations"
+  persona: "Energy Manager"
+  criticality: "business_critical"
+  description: "ML system for generating energy optimization recommendations and cost reduction strategies"
+
+slos:
+  recommendation_accuracy:
+    target: 0.85
+    window: "30d"
+    description: "Accuracy of energy optimization recommendations"
+  energy_cost_reduction:
+    target: 0.15
+    window: "90d"
+    description: "Achieved cost reduction from implemented recommendations"
+  system_availability:
+    target: 0.99
+    window: "24h"
+    description: "System uptime for recommendation generation"
+  response_time:
+    target: 0.95
+    window: "1h"
+    description: "Proportion of recommendations generated within 10 seconds"
+
+operating_conditions:
+  facility_types: ["office", "warehouse", "manufacturing", "retail"]
+  energy_sources: ["electricity", "natural_gas", "renewable"]
+  optimization_areas: ["hvac", "lighting", "equipment", "peak_demand"]
+
+collectors:
+  - type: "online"
+    source: "s3"
+    bucket: "energy-optimization-data"
+    prefix: "real-time/"
+    metrics: ["energy_consumption", "temperature", "occupancy", "equipment_status"]
+    polling_interval: 300  # seconds
+    format: "json"
+  - type: "offline"
+    source: "s3"
+    bucket: "energy-optimization-data"
+    prefix: "historical/"
+    data_types: ["energy_bills", "weather_data", "building_schedules", "equipment_specs"]
+    format: "parquet"
+
+evaluators:
+  - type: "performance"
+    metrics: ["recommendation_accuracy", "energy_cost_reduction"]
+    real_time_threshold: 600  # seconds
+  - type: "drift"
+    detection_methods: ["statistical"]
+    drift_metrics: ["consumption_patterns", "weather_correlations"]
+  - type: "reliability"
+    error_budget_window: "30d"
+    critical_metrics: ["system_availability", "response_time"]
+
+reports:
+  - type: "business"
+    frequency: "monthly"
+    stakeholders: ["energy_manager", "facility_manager", "finance_director"]
+  - type: "reliability"
+    frequency: "weekly"
+    stakeholders: ["operations_team"]
+
+models:
+  - name: "energy_optimization_recommender"
+    type: "recommendation"
+    algorithm: "gradient_boosting"
+    target: "optimization_score"
+    features: ["hourly_consumption", "temperature", "occupancy", "equipment_load", "time_of_day", "day_of_week"]
+    description: "Main model for generating energy optimization recommendations"
+
+training:
+  workflow:
+    step1:
+      name: "energy_optimization_recommender"
+      type: "supervised"
+      description: "Energy optimization recommendation model training"
+      data_freshness:
+        max_age: "14d"
+        description: "Maximum age of training data before retraining"
+      retraining_trigger:
+        performance_degradation: 0.05
+        time_interval: "30d"
+      validation:
+        test_size: 0.2
+        metrics: ["accuracy", "precision", "recall"]
+
+alerts:
+  - name: "high_energy_waste_detected"
+    condition: "optimization_score < 0.6"
+    severity: "high"
+    notification: ["energy_manager"]
+    action: "generate_optimization_recommendations"
+  - name: "model_performance_degraded"
+    condition: "recommendation_accuracy < 0.80"
+    severity: "warning"
+    notification: ["ml_engineer"]
+    action: "review_model_performance"
+
+monitoring:
+  dashboard:
+    url: "http://energy-dashboard:8080"
+    refresh_interval: 600
+  metrics_export:
+    format: "prometheus"
+    endpoint: "http://metrics-exporter:9090" 

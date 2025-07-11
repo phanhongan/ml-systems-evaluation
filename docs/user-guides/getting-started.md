@@ -31,21 +31,21 @@ uv sync --group main
 ### 2️⃣ Verify Installation
 
 ```bash
-ml-eval --version
+ml-eval --help
 ```
 
 ## ⚡ Quick Start: Your First Evaluation
 
-### 1️⃣ Choose a Template
+### 1️⃣ Use an Example Configuration
 
-The framework provides industry-specific templates. For your first evaluation, we recommend starting with a functional template:
+The framework provides industry-specific example configurations. For your first evaluation, we recommend starting with an existing example:
 
 ```bash
-# List available templates
-ml-eval templates list
+# Copy an example configuration for manufacturing
+cp examples/industries/manufacturing/predictive-maintenance.yaml my-config.yaml
 
-# Use a predictive maintenance template for manufacturing
-ml-eval templates use manufacturing-predictive_maintenance
+# Or create a new configuration from scratch
+ml-eval create-config --output my-config.yaml --system-name "My Production System" --industry manufacturing
 ```
 
 ### 2️⃣ Configure Your System
@@ -98,13 +98,16 @@ slo:
 ### 3️⃣ Run Your First Evaluation
 
 ```bash
+# Validate your configuration first
+ml-eval validate config.yaml
+
 # Run a complete evaluation
-ml-eval evaluate --config config.yaml
+ml-eval run config.yaml --output results.json
 
 # Run specific components
-ml-eval collect --config config.yaml
-ml-eval evaluate --config config.yaml --evaluator performance
-ml-eval report --config config.yaml --report business
+ml-eval collect config.yaml --output data.json
+ml-eval evaluate config.yaml --data data.json --output evaluation.json
+ml-eval report config.yaml --results evaluation.json --output reports.json
 ```
 
 ### 4️⃣ Review Results
@@ -158,7 +161,7 @@ The framework automatically alerts you when:
 
 - ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
 - 🖥️ Review [CLI Reference](cli-reference.md) for command details
-- 📋 Consult [Templates Guide](templates.md) for your specific domain
+- 📋 Consult [Example Configurations Guide](example-configurations.md) for your specific domain
 
 ## 💡 Example: Manufacturing Quality Control
 
@@ -211,7 +214,7 @@ slo:
 Run this evaluation with:
 
 ```bash
-ml-eval evaluate --config manufacturing-quality.yaml
+ml-eval run manufacturing-quality.yaml --output quality-results.json
 ```
 
-This will generate comprehensive reports for your PCB quality control system, helping you maintain high quality standards and meet production targets. 
+This will generate reports for your PCB quality control system, helping you maintain high quality standards and meet production targets. 

@@ -507,20 +507,21 @@ reports:
    - Storage efficiency optimization
    - Charge/discharge optimization
 
-### Using Energy Templates
+### Using Energy Examples
 
 ```bash
-# List available energy templates
-ml-eval templates list --industry energy
-
-# Use grid optimization template
-ml-eval templates use energy-grid --output grid_config.yaml
-
-# Customize template for your specific needs
-ml-eval templates customize energy-grid --interactive
+# Create new energy configuration
+ml-eval create-config --output grid_config.yaml --system-name "Smart Grid System" --industry energy --criticality business_critical
 
 # Validate energy configuration
-ml-eval config validate grid_config.yaml
+ml-eval validate grid_config.yaml
+
+# Run energy evaluation
+ml-eval run grid_config.yaml --output energy_results.json
+
+# Use examples as templates
+cp examples/industries/energy/grid-optimization.yaml my-grid-config.yaml
+ml-eval validate my-grid-config.yaml
 ```
 
 ## Energy Case Studies

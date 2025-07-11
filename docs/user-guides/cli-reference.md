@@ -212,199 +212,118 @@ ml-eval config template manufacturing --output manufacturing_config.yaml
 ml-eval config template aviation --customize
 ```
 
-## Template Commands
+## Core Commands
 
-### Templates List
+### Run
 
-List available templates.
+Run complete evaluation pipeline.
 
 ```bash
-ml-eval templates list [OPTIONS]
+ml-eval run CONFIG [OPTIONS]
 ```
 
 **Options:**
 ```bash
---industry TYPE           Filter by industry
---format FORMAT           Output format (table, json, yaml)
---details                 Show detailed information
+--output FILE             Output file for results (default: stdout)
 ```
 
 **Examples:**
 ```bash
-# List all templates
-ml-eval templates list
+# Run complete evaluation
+ml-eval run config.yaml --output results.json
 
-# List manufacturing templates
-ml-eval templates list --industry manufacturing
-
-# Show detailed information
-ml-eval templates list --details
+# Run with existing example
+ml-eval run examples/industries/manufacturing/predictive-maintenance.yaml --output manufacturing-results.json
 ```
 
-### Templates Use
+### Validate
 
-Use a specific template.
+Validate configuration file.
 
 ```bash
-ml-eval templates use [OPTIONS] TEMPLATE
+ml-eval validate CONFIG
+```
+
+**Examples:**
+```bash
+# Validate configuration
+ml-eval validate config.yaml
+
+# Validate example configuration
+ml-eval validate examples/industries/aviation/aircraft-landing.yaml
+```
+
+### List Components
+
+List configured components.
+
+```bash
+ml-eval list-collectors CONFIG
+ml-eval list-evaluators CONFIG
+ml-eval list-reports CONFIG
+```
+
+**Examples:**
+```bash
+# List collectors in configuration
+ml-eval list-collectors config.yaml
+
+# List evaluators in aviation example
+ml-eval list-evaluators examples/industries/aviation/aircraft-landing.yaml
+
+# List reports in manufacturing example
+ml-eval list-reports examples/industries/manufacturing/predictive-maintenance.yaml
+```
+
+### Health Check
+
+Perform health check on configured components.
+
+```bash
+ml-eval health CONFIG [OPTIONS]
 ```
 
 **Options:**
 ```bash
---output FILE             Output file path
---customize               Interactive customization
---overwrite               Overwrite existing file
---validate                Validate after creation
+--output FILE             Output file for health check results (default: stdout)
 ```
 
 **Examples:**
 ```bash
-# Use manufacturing template
-ml-eval templates use manufacturing-predictive_maintenance --output config.yaml
+# Run health check
+ml-eval health config.yaml
 
-# Use with customization
-ml-eval templates use aviation-safety --customize
-
-# Use and validate
-ml-eval templates use energy-grid --validate
+# Save health check results
+ml-eval health config.yaml --output health-report.json
 ```
 
-### Templates Customize
+### Create Configuration
 
-Customize an existing template.
+Create a new configuration file.
 
 ```bash
-ml-eval templates customize [OPTIONS] TEMPLATE
+ml-eval create-config [OPTIONS]
 ```
 
 **Options:**
 ```bash
---output FILE             Output file path
---interactive             Interactive mode
---preset PRESET           Use preset customization
---validate                Validate after customization
+--output FILE             Output file path (required)
+--system-name NAME        System name (required)
+--system-type TYPE        System type (single_model, workflow, ensemble)
+--criticality LEVEL       Criticality level (operational, business_critical, safety_critical)
+--industry TYPE           Industry type
 ```
 
 **Examples:**
 ```bash
-# Customize template
-ml-eval templates customize manufacturing-predictive_maintenance --output my_config.yaml
+# Create basic configuration
+ml-eval create-config --output my-system.yaml --system-name "My ML System"
 
-# Interactive customization
-ml-eval templates customize aviation-safety --interactive
+# Create business-critical manufacturing system
+ml-eval create-config --output manufacturing-system.yaml --system-name "Production Line QC" --industry manufacturing --criticality business_critical
 
-# Use preset customization
-ml-eval templates customize energy-grid --preset production
-```
-
-### Templates Create
-
-Create a new template.
-
-```bash
-ml-eval templates create [OPTIONS] NAME
-```
-
-**Options:**
-```bash
---base TEMPLATE           Base template to extend
---industry TYPE           Industry classification
---description TEXT        Template description
---output FILE             Output file path
-```
-
-**Examples:**
-```bash
-# Create new template
-ml-eval templates create my-industry --output my_template.yaml
-
-# Create based on existing template
-ml-eval templates create my-manufacturing --base manufacturing-predictive_maintenance
-
-# Create with description
-ml-eval templates create my-aviation --industry aviation --description "Custom aviation template"
-```
-
-### Templates Edit
-
-Edit an existing template.
-
-```bash
-ml-eval templates edit [OPTIONS] TEMPLATE
-```
-
-**Options:**
-```bash
---editor EDITOR           Use specific editor
---backup                 Create backup before editing
---validate               Validate after editing
-```
-
-**Examples:**
-```bash
-# Edit template
-ml-eval templates edit manufacturing-predictive_maintenance
-
-# Edit with specific editor
-ml-eval templates edit aviation-safety --editor vim
-
-# Edit with backup
-ml-eval templates edit energy-grid --backup
-```
-
-### Templates Validate
-
-Validate template files.
-
-```bash
-ml-eval templates validate [OPTIONS] TEMPLATE
-```
-
-**Options:**
-```bash
---strict                 Strict validation mode
---fix                    Auto-fix validation issues
---output FILE            Output validation results
-```
-
-**Examples:**
-```bash
-# Validate template
-ml-eval templates validate manufacturing-predictive_maintenance
-
-# Strict validation
-ml-eval templates validate aviation-safety --strict
-
-# Auto-fix issues
-ml-eval templates validate energy-grid --fix
-```
-
-### Templates Test
-
-Test template with sample data.
-
-```bash
-ml-eval templates test [OPTIONS] TEMPLATE
-```
-
-**Options:**
-```bash
---sample-data            Use sample data
---data-file FILE         Use specific data file
---dry-run               Show what would be tested
---timeout SECONDS       Set test timeout
-```
-
-**Examples:**
-```bash
-# Test with sample data
-ml-eval templates test manufacturing-predictive_maintenance --sample-data
-
-# Test with specific data
-ml-eval templates test aviation-safety --data-file test_data.csv
-
-# Dry run test
-ml-eval templates test energy-grid --dry-run
+# Create safety-critical aviation system
+ml-eval create-config --output aviation-system.yaml --system-name "Flight Control" --industry aviation --criticality safety_critical
 ```
 
 ## Data Commands
@@ -522,137 +441,97 @@ ml-eval reports generate business --config config.yaml
 ml-eval reports status --config config.yaml
 ```
 
-## Monitoring Commands
+## Data Pipeline Commands
 
-### Monitor
+### Collect
 
-Start monitoring mode.
+Collect data using configured collectors.
 
 ```bash
-ml-eval monitor [OPTIONS]
+ml-eval collect CONFIG [OPTIONS]
 ```
 
 **Options:**
 ```bash
---config, -c FILE         Configuration file path
---interval SECONDS        Monitoring interval
---duration SECONDS        Monitoring duration
---alerts                 Enable alerts
---dashboard              Start web dashboard
---port PORT              Dashboard port
+--output FILE             Output file for collected data (default: stdout)
 ```
 
 **Examples:**
 ```bash
-# Start monitoring
-ml-eval monitor --config config.yaml
+# Collect data
+ml-eval collect config.yaml --output data.json
 
-# Monitor with alerts
-ml-eval monitor --config config.yaml --alerts
-
-# Start with dashboard
-ml-eval monitor --config config.yaml --dashboard --port 8080
+# Collect from manufacturing example
+ml-eval collect examples/industries/manufacturing/predictive-maintenance.yaml --output manufacturing-data.json
 ```
 
-### Alerts
+### Evaluate
 
-Manage alerts.
+Evaluate metrics using configured evaluators.
 
 ```bash
-ml-eval alerts [COMMAND] [OPTIONS]
+ml-eval evaluate CONFIG [OPTIONS]
 ```
 
-**Subcommands:**
+**Options:**
 ```bash
-list                     List active alerts
-acknowledge              Acknowledge alert
-resolve                  Resolve alert
-history                  Show alert history
-configure                Configure alert settings
+--data FILE              Input data file (optional)
+--output FILE            Output file for results (default: stdout)
 ```
 
 **Examples:**
 ```bash
-# List alerts
-ml-eval alerts list --config config.yaml
+# Evaluate metrics
+ml-eval evaluate config.yaml --output evaluation.json
 
-# Acknowledge alert
-ml-eval alerts acknowledge ALERT_ID
+# Evaluate with specific data
+ml-eval evaluate config.yaml --data collected-data.json --output results.json
+```
 
-# Show history
-ml-eval alerts history --config config.yaml
+### Report
+
+Generate reports using configured report generators.
+
+```bash
+ml-eval report CONFIG [OPTIONS]
+```
+
+**Options:**
+```bash
+--results FILE           Input results file (optional)
+--output FILE            Output file for reports (default: stdout)
+```
+
+**Examples:**
+```bash
+# Generate reports
+ml-eval report config.yaml --output reports.json
+
+# Generate reports from specific results
+ml-eval report config.yaml --results evaluation-results.json --output final-reports.json
 ```
 
 ## Utility Commands
-
-### Version
-
-Show version information.
-
-```bash
-ml-eval version [OPTIONS]
-```
-
-**Options:**
-```bash
---verbose                Show detailed version information
---json                   Output in JSON format
-```
-
-**Examples:**
-```bash
-# Show version
-ml-eval version
-
-# Detailed version info
-ml-eval version --verbose
-```
-
-### Info
-
-Show system information.
-
-```bash
-ml-eval info [OPTIONS]
-```
-
-**Options:**
-```bash
---config FILE            Configuration file path
---detailed              Show detailed information
---json                  Output in JSON format
-```
-
-**Examples:**
-```bash
-# Show system info
-ml-eval info
-
-# Show with config
-ml-eval info --config config.yaml
-
-# Detailed info
-ml-eval info --detailed
-```
 
 ### Help
 
 Show help information.
 
 ```bash
-ml-eval help [COMMAND]
+ml-eval --help
+ml-eval [COMMAND] --help
 ```
 
 **Examples:**
 ```bash
 # Show general help
-ml-eval help
+ml-eval --help
 
 # Show command help
-ml-eval help evaluate
+ml-eval run --help
 
-# Show subcommand help
-ml-eval help templates list
+# Show create-config help
+ml-eval create-config --help
 ```
 
 ## Environment Variables
@@ -685,42 +564,51 @@ The CLI uses the following exit codes:
 ### Complete Workflow
 
 ```bash
-# 1. Create configuration from template
-ml-eval templates use manufacturing-predictive_maintenance --output config.yaml
+# 1. Create configuration
+ml-eval create-config --output config.yaml --system-name "My System" --industry manufacturing
 
-# 2. Customize configuration
-ml-eval config template manufacturing --customize
+# 2. Validate configuration
+ml-eval validate config.yaml
 
-# 3. Validate configuration
-ml-eval config validate config.yaml
+# 3. Run health check
+ml-eval health config.yaml
 
-# 4. Test configuration
-ml-eval config test config.yaml --sample-data
+# 4. Collect data
+ml-eval collect config.yaml --output data.json
 
-# 5. Run evaluation
-ml-eval evaluate --config config.yaml
+# 5. Evaluate metrics
+ml-eval evaluate config.yaml --data data.json --output results.json
 
 # 6. Generate reports
-ml-eval report --config config.yaml --format html
+ml-eval report config.yaml --results results.json --output reports.json
 
-# 7. Start monitoring
-ml-eval monitor --config config.yaml --dashboard
+# 7. Run complete pipeline
+ml-eval run config.yaml --output complete-results.json
+```
+
+### Using Example Configurations
+
+```bash
+# Copy and use existing examples
+cp examples/industries/manufacturing/predictive-maintenance.yaml my-config.yaml
+ml-eval validate my-config.yaml
+ml-eval run my-config.yaml --output manufacturing-results.json
+
+# Use aviation example
+ml-eval run examples/industries/aviation/aircraft-landing.yaml --output aviation-results.json
+
+# Use cybersecurity example
+ml-eval run examples/industries/cybersecurity/security-operations.yaml --output security-results.json
 ```
 
 ### Batch Processing
 
 ```bash
 # Run multiple evaluations
-for config in configs/*.yaml; do
-    ml-eval evaluate --config "$config" --output-dir "./results/$(basename "$config" .yaml)"
+for config in examples/industries/*/*.yaml; do
+    output_name=$(basename "$config" .yaml)
+    ml-eval run "$config" --output "./results/${output_name}-results.json"
 done
-```
-
-### Automated Monitoring
-
-```bash
-# Start continuous monitoring with alerts
-ml-eval monitor --config config.yaml --alerts --interval 300
 ```
 
 For more detailed information about specific commands, use the `--help` option:

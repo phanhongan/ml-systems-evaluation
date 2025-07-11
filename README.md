@@ -145,6 +145,11 @@ The framework supports multiple industrial sectors with ready-to-use configurati
 - **Key Features**: Environmental monitoring, regulatory compliance, resource optimization
 - **Examples**: [`examples/industries/aquaculture/`](./examples/industries/aquaculture/)
 
+### **🔒 Cybersecurity**
+- **Agentic Security Operations**: Multi-agent AI workflows for alert triage, investigation, and response
+- **Key Features**: Cost-optimized LLM integration, RAG-powered threat intelligence, explainable AI decisions, multi-TB data processing
+- **Examples**: [`examples/industries/cybersecurity/`](./examples/industries/cybersecurity/)
+
 ### 📋 Additional Examples
 
 See the [`examples/industries/`](./examples/industries/) directory for complete configuration files covering all scenarios. Each industry directory contains detailed README files with specific use cases, requirements, and implementation guidance.
@@ -219,50 +224,56 @@ For detailed installation instructions, see [docs/user-guides/installation.md](.
 ### 🎯 Getting Started (For Industrial ML Engineers)
 
 ```bash
-# 1. List available templates for your industry
-ml-eval template --industry manufacturing --type list
+# 1. Create a new configuration file
+ml-eval create-config --output my-system.yaml --system-name "My ML System" --industry manufacturing
 
-# 2. Get a specific template for your industry
-ml-eval template --industry manufacturing --type predictive_maintenance > maintenance-system.yaml
+# 2. Validate your configuration
+ml-eval validate my-system.yaml
 
-# 3. Customize your configuration
-# Edit the generated .yaml file with your specific requirements
+# 3. Run health check on your system
+ml-eval health my-system.yaml
 
-# 4. Test your configuration
-ml-eval dev --config quality-system.yaml --mode validation
+# 4. Collect data from your system
+ml-eval collect my-system.yaml --output collected-data.json
 
-# 5. Evaluate your production system
-ml-eval evaluate --config quality-system.yaml --mode single
+# 5. Evaluate your system metrics
+ml-eval evaluate my-system.yaml --data collected-data.json --output results.json
 
-# 6. Set up continuous monitoring
-ml-eval monitor --config quality-system.yaml --interval 300
+# 6. Generate reports
+ml-eval report my-system.yaml --results results.json --output reports.json
 
-# 7. Generate reports
-ml-eval report --type reliability --period 30d
+# 7. Run complete evaluation pipeline
+ml-eval run my-system.yaml --output complete-results.json
 ```
 
 ### ⚡ Quick Commands
 
 ```bash
-# Get help and examples
-ml-eval quickstart --industry aviation
-ml-eval example --type aircraft-model --detailed
-
 # Show all available commands
 ml-eval --help
 
-# Additional template examples
-ml-eval template --industry aviation --type safety_decision --output safety-system.yaml
-ml-eval template --industry semiconductor --type digital_twins --output digital-twins-system.yaml
+# Create new configurations for different industries
+ml-eval create-config --output aviation-system.yaml --system-name "Aircraft Landing System" --industry aviation --criticality safety_critical
+ml-eval create-config --output security-system.yaml --system-name "Security Operations" --industry cybersecurity --criticality business_critical
 
-# Using example configurations
-ml-eval dev --config examples/industries/aviation/aircraft-landing.yaml --mode validation --strict
-ml-eval evaluate --config examples/industries/maritime/collision-avoidance.yaml --mode single
-ml-eval monitor --config examples/industries/manufacturing/predictive-maintenance.yaml --interval 60
-ml-eval evaluate --config examples/industries/semiconductor/etching-digital-twins.yaml --mode single
+# Validate configurations (use existing example files)
+ml-eval validate examples/industries/aviation/aircraft-landing.yaml
+ml-eval validate examples/industries/maritime/collision-avoidance.yaml
+ml-eval validate examples/industries/manufacturing/predictive-maintenance.yaml
+ml-eval validate examples/industries/semiconductor/etching-digital-twins.yaml
+ml-eval validate examples/industries/cybersecurity/security-operations.yaml
 
-# Additional reporting
-ml-eval report --type safety --period 30d
+# Run health checks
+ml-eval health examples/industries/aviation/aircraft-landing.yaml
+
+# List configured components
+ml-eval list-collectors examples/industries/manufacturing/predictive-maintenance.yaml
+ml-eval list-evaluators examples/industries/cybersecurity/security-operations.yaml
+ml-eval list-reports examples/industries/aviation/aircraft-landing.yaml
+
+# Run evaluations
+ml-eval run examples/industries/aviation/aircraft-landing.yaml --output aviation-results.json
+ml-eval run examples/industries/cybersecurity/security-operations.yaml --output security-results.json
 ```
 
 ## 🔧 Core Components
@@ -439,7 +450,7 @@ The framework is designed with a modular architecture for easy maintenance and e
 The refactored framework provides several developer-friendly features:
 
 #### **🏭 Industry-Specific Templates**
-- Ready-to-use configurations for 5 industrial sectors
+- Ready-to-use configurations for 6 industrial sectors
 - Multiple template types per industry
 - Industry-specific SLOs with appropriate safety and compliance standards
 
@@ -471,8 +482,9 @@ print('✅ Framework imports successfully')
 
 # Test CLI functionality
 python -m ml_eval.cli.main --help
-python -m ml_eval.cli.main template --industry manufacturing
-python -m ml_eval.cli.main quickstart --industry aviation
+python -m ml_eval.cli.main create-config --output test.yaml --system-name "Test System" --industry manufacturing
+python -m ml_eval.cli.main validate examples/industries/aviation/aircraft-landing.yaml
+python -m ml_eval.cli.main list-collectors examples/industries/cybersecurity/security-operations.yaml
 
 # Run comprehensive tests
 pytest tests/ -v

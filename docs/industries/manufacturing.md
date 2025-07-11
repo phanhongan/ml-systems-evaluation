@@ -539,20 +539,20 @@ reports:
    - HACCP compliance
    - Temperature and hygiene monitoring
 
-### Using Manufacturing Templates
+### Using Manufacturing Examples
 
 ```bash
-# List available manufacturing templates
-ml-eval templates list --industry manufacturing
+# Use existing manufacturing examples
+cp examples/industries/manufacturing/predictive-maintenance.yaml automotive_config.yaml
 
-# Use automotive quality template
-ml-eval templates use automotive-quality --output automotive_config.yaml
-
-# Customize template for your specific needs
-ml-eval templates customize automotive-quality --interactive
+# Create new manufacturing configuration
+ml-eval create-config --output automotive_config.yaml --system-name "Automotive Quality Control" --industry manufacturing --criticality business_critical
 
 # Validate manufacturing configuration
-ml-eval config validate automotive_config.yaml
+ml-eval validate automotive_config.yaml
+
+# Run manufacturing evaluation
+ml-eval run automotive_config.yaml --output automotive_results.json
 ```
 
 ## Manufacturing Case Studies

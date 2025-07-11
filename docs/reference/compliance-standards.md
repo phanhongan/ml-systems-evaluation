@@ -614,20 +614,20 @@ compliance_alerts:
    - FAR-25 airworthiness compliance
    - Safety-critical system requirements
 
-### Using Compliance Templates
+### Using Compliance Configurations
 
 ```bash
-# List available compliance templates
-ml-eval templates list --type compliance
+# Create compliance configuration
+ml-eval create-config --output gdpr_config.yaml --system-name "GDPR Compliance System" --criticality business_critical
 
-# Use GDPR compliance template
-ml-eval templates use gdpr-compliance --output gdpr_config.yaml
-
-# Customize compliance template
-ml-eval templates customize gdpr-compliance --interactive
+# Add compliance-specific configurations manually to the YAML file
+# (compliance-specific collectors, evaluators, and reports)
 
 # Validate compliance configuration
-ml-eval config validate gdpr_config.yaml
+ml-eval validate gdpr_config.yaml
+
+# Run compliance evaluation
+ml-eval run gdpr_config.yaml --output compliance_results.json
 ```
 
 This compliance standards guide provides comprehensive information for implementing compliance monitoring and reporting in the ML Systems Evaluation Framework, ensuring adherence to industry standards and regulatory requirements. 

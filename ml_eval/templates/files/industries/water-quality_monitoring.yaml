@@ -1,0 +1,103 @@
+system:
+  name: "Water Quality Monitoring System"
+  persona: "Water Quality Manager"
+  criticality: "business_critical"
+  stages: ["sample_collection", "parameter_analysis", "quality_assessment", "compliance_reporting"]
+
+slos:
+  monitoring_accuracy:
+    target: 0.98
+    window: "24h"
+    description: "Accuracy of water quality parameter monitoring"
+  
+  regulatory_compliance:
+    target: 0.99
+    window: "24h"
+    description: "Compliance with regulatory monitoring requirements"
+  
+  alert_response_time:
+    target: 0.95
+    window: "1h"
+    description: "Timely response to quality parameter excursions"
+  
+  data_completeness:
+    target: 0.99
+    window: "24h"
+    description: "Completeness of monitoring data collection"
+
+operating_conditions:
+  monitoring_locations:
+    - "raw_water_intake"
+    - "treatment_process_points"
+    - "finished_water"
+    - "distribution_system"
+  
+  monitored_parameters:
+    - "ph"
+    - "turbidity"
+    - "chlorine_residual"
+    - "temperature"
+    - "conductivity"
+    - "dissolved_oxygen"
+    - "bacterial_indicators"
+  
+  parameter_ranges:
+    ph_range: [6.5, 8.5]
+    turbidity_range: [0, 4]  # NTU
+    temperature_range: [4, 35]  # celsius
+    chlorine_residual_range: [0.2, 4.0]  # mg/L
+
+collectors:
+  - type: "online"
+    endpoints: ["http://water-quality-monitoring:8080/metrics"]
+    metrics:
+      - "ph_measurements"
+      - "turbidity_readings"
+      - "chlorine_levels"
+      - "bacterial_counts"
+      - "compliance_status"
+    polling_interval: 15
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["/var/log/water-quality/"]
+    data_retention: "1095d"  # 3 years
+  
+  - type: "laboratory"
+    test_parameters: ["bacteria", "heavy_metals", "organic_compounds"]
+    sampling_frequency: "daily"
+    analysis_time: "24h"
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "monitoring_accuracy": {
+        "target": 0.98,
+        "window": "24h",
+        "description": "Monitoring accuracy"
+      },
+      "regulatory_compliance": {
+        "target": 0.99,
+        "window": "24h",
+        "description": "Regulatory compliance"
+      }
+    }
+    failure_modes: ["sensor_failure", "calibration_drift", "communication_loss"]
+  
+  - type: "performance"
+    metrics: ["response_time", "data_quality", "alert_accuracy"]
+    thresholds:
+      response_time_ms: 1000
+      data_quality_score: 0.95
+    baseline_period: "last_30_days"
+  
+  - type: "compliance"
+    standards: ["drinking_water_standards", "monitoring_requirements"]
+    audit_requirements: ["monitoring_reports", "calibration_records"]
+    reporting_frequency: "daily"
+  
+  - type: "safety"
+    safety_metrics: ["contamination_detection", "public_health_incidents"]
+    risk_assessment: ["pathogen_levels", "chemical_contamination"]
+    emergency_protocols: ["contamination_alert", "public_notification"] 

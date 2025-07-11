@@ -1,0 +1,124 @@
+system:
+  name: "Industrial Water Treatment Control System"
+  persona: "Water Treatment Operator"
+  criticality: "business_critical"
+  stages: ["water_intake", "pre_treatment", "primary_treatment", "secondary_treatment", "disinfection", "quality_monitoring"]
+
+slos:
+  water_quality_compliance:
+    target: 0.99
+    window: "24h"
+    description: "Compliance rate with water quality standards and regulatory limits"
+  
+  treatment_process_efficiency:
+    target: 0.95
+    window: "24h"
+    description: "Efficiency of water treatment processes in removing contaminants"
+  
+  system_uptime:
+    target: 0.995
+    window: "30d"
+    description: "Overall treatment system availability and operational uptime"
+
+operating_conditions:
+  treatment_facilities:
+    - "municipal_plant"
+    - "industrial_facility"
+    - "drinking_water_plant"
+  
+  water_sources:
+    - "surface_water"
+    - "groundwater"
+    - "industrial_wastewater"
+  
+  water_quality_parameters:
+    ph_range: [6.5, 8.5]
+    turbidity_range: [0, 4]  # NTU
+    temperature_range: [4, 35]  # celsius
+    chlorine_residual_range: [0.2, 4.0]  # mg/L
+    
+  treatment_processes:
+    - "coagulation_flocculation"
+    - "filtration"
+    - "disinfection"
+    - "ph_adjustment"
+
+collectors:
+  - type: "online"
+    endpoints: ["http://water-treatment-scada:8080/metrics"]
+    metrics:
+      - "ph_level"
+      - "turbidity"
+      - "chlorine_residual"
+      - "flow_rate"
+      - "temperature"
+      - "treatment_efficiency"
+      - "compliance_status"
+    polling_interval: 30  # seconds
+    real_time: true
+  
+  - type: "offline"
+    log_paths: ["/var/log/water-treatment/"]
+    data_retention: "90d"
+  
+  - type: "regulatory"
+    compliance_standards: ["epa_drinking_water", "local_regulations"]
+    reporting_frequency: "daily"
+
+evaluators:
+  - type: "reliability"
+    error_budget_window: "30d"
+    slos: {
+      "water_quality_compliance": {
+        "target": 0.99,
+        "window": "24h",
+        "description": "Compliance with water quality standards"
+      },
+      "treatment_process_efficiency": {
+        "target": 0.95,
+        "window": "24h",
+        "description": "Treatment process efficiency"
+      },
+      "system_uptime": {
+        "target": 0.995,
+        "window": "30d",
+        "description": "System availability"
+      }
+    }
+    failure_modes: ["equipment_failure", "chemical_shortage", "sensor_malfunction"]
+  
+  - type: "performance"
+    metrics: ["treatment_efficiency", "energy_consumption", "response_time"]
+    thresholds:
+      treatment_efficiency: 0.95
+      energy_consumption_kwh_per_m3: 0.8
+      response_time_ms: 1000
+    baseline_period: "last_30_days"
+  
+  - type: "compliance"
+    standards: ["epa_safe_drinking_water_act", "local_health_regulations"]
+    audit_requirements: ["water_quality_reports", "process_monitoring_logs"]
+    reporting_frequency: "daily"
+
+business_metrics:
+  operational_cost_per_m3:
+    target: 0.45  # USD per cubic meter
+    description: "Operational cost per cubic meter of treated water"
+  
+  regulatory_compliance_rate:
+    target: 0.999
+    description: "Compliance rate with all regulatory requirements"
+  
+  customer_satisfaction:
+    target: 0.98
+    description: "Customer satisfaction with water quality and service"
+
+alerts:
+  critical:
+    - "water_quality_violation"
+    - "disinfection_failure"
+    - "chemical_feed_failure"
+  warning:
+    - "ph_deviation"
+    - "chlorine_residual_low"
+    - "equipment_maintenance_due"

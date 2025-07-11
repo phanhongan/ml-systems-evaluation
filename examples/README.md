@@ -12,6 +12,7 @@ Ready-to-use configurations organized by industry:
 - **[Manufacturing](./industries/manufacturing/)**: Predictive maintenance and demand forecasting
 - **[Semiconductor](./industries/semiconductor/)**: Digital twins and yield prediction
 - **[Aquaculture](./industries/aquaculture/)**: Species classification and environmental monitoring
+- **[Cybersecurity](./industries/cybersecurity/)**: AI-driven security operations, alert triage, and incident response
 
 ### Templates (`templates/`)
 General-purpose configuration templates for different system types:

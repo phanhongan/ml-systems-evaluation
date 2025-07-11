@@ -5,7 +5,7 @@ This directory contains examples for aquaculture and aquatic resource management
 ## Examples
 
 ### fish-species-classification.yaml
-A comprehensive example of commercial fishing sonar classification that demonstrates:
+An example of commercial fishing sonar classification that demonstrates:
 
 - **Sonar signal processing**: Real-time fish detection from sonar signals
 - **Species classification**: Accurate fish species identification for catch management

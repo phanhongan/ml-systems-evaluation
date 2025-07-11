@@ -5,7 +5,7 @@ This directory contains examples for aviation-related ML systems with a focus on
 ## Examples
 
 ### aircraft-landing.yaml
-A comprehensive example of a safety-critical aircraft landing system that demonstrates:
+An example of a safety-critical aircraft landing system that demonstrates:
 
 - **High reliability requirements**: 99.99% accuracy targets for critical functions
 - **Safety thresholds**: Strict limits on false positive rates and response times

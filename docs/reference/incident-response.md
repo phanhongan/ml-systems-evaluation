@@ -1,10 +1,10 @@
 # Incident Response Guide
 
-This guide provides comprehensive information about incident response procedures for the ML Systems Evaluation Framework, covering both safety-critical and business-critical incidents.
+This guide provides information about incident response procedures for the ML Systems Evaluation Framework, covering both safety-critical and business-critical incidents.
 
 ## Incident Response Overview
 
-The framework provides comprehensive incident response capabilities to handle various types of incidents, from minor performance issues to critical safety events.
+The framework provides incident response capabilities to handle various types of incidents, from minor performance issues to critical safety events.
 
 ## Incident Classification
 
@@ -88,7 +88,7 @@ incident_response:
       enabled: true
 ```
 
-### Advanced Incident Response Configuration
+### Incident Response Configuration
 
 ```yaml
 incident_response:
@@ -616,7 +616,7 @@ technical_report_template:
 ### 1. Preparation
 
 #### Incident Response Plan
-- Develop comprehensive incident response plan
+- Develop incident response plan
 - Define roles and responsibilities
 - Establish communication procedures
 - Create escalation protocols
@@ -656,7 +656,7 @@ technical_report_template:
 ### 3. Recovery
 
 #### Thorough Investigation
-- Conduct comprehensive root cause analysis
+- Conduct root cause analysis
 - Document all findings and evidence
 - Identify contributing factors
 - Develop corrective actions
@@ -673,4 +673,4 @@ technical_report_template:
 - Update procedures and processes
 - Share findings with team
 
-This incident response guide provides comprehensive information for implementing effective incident response procedures in the ML Systems Evaluation Framework, ensuring rapid and effective response to both safety-critical and business-critical incidents. 
+This incident response guide provides information for implementing effective incident response procedures in the ML Systems Evaluation Framework, ensuring rapid and effective response to both safety-critical and business-critical incidents. 

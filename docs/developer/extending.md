@@ -4,7 +4,7 @@ This guide explains how to extend the ML Systems Evaluation Framework with custo
 
 ## Overview
 
-The framework is designed to be highly extensible, allowing you to create custom components that integrate seamlessly with the existing system. All custom components follow a consistent interface pattern.
+The framework is designed to be extensible, allowing you to create custom components that integrate with the existing system. All custom components follow a consistent interface pattern.
 
 ## How to Create Custom Components
 

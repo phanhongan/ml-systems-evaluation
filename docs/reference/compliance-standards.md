@@ -1,6 +1,6 @@
 # Compliance Standards Guide
 
-This guide provides comprehensive information about compliance standards and regulatory requirements supported by the ML Systems Evaluation Framework.
+This guide provides information about compliance standards and regulatory requirements supported by the ML Systems Evaluation Framework.
 
 ## Overview
 
@@ -530,7 +530,7 @@ compliance_alerts:
 ### 1. Compliance Management
 
 #### Documentation
-- Maintain comprehensive compliance documentation
+- Maintain compliance documentation
 - Regular review and updates of policies
 - Clear procedures and guidelines
 - Training materials and records
@@ -630,4 +630,4 @@ ml-eval validate gdpr_config.yaml
 ml-eval run gdpr_config.yaml --output compliance_results.json
 ```
 
-This compliance standards guide provides comprehensive information for implementing compliance monitoring and reporting in the ML Systems Evaluation Framework, ensuring adherence to industry standards and regulatory requirements. 
+This compliance standards guide provides information for implementing compliance monitoring and reporting in the ML Systems Evaluation Framework, ensuring adherence to industry standards and regulatory requirements. 

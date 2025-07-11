@@ -1,6 +1,6 @@
 # Architecture Overview
 
-This document provides a comprehensive overview of the ML Systems Evaluation Framework architecture, including deterministic components, LLM integration, and autonomous agents.
+This document describes the ML Systems Evaluation Framework architecture, including deterministic components, LLM integration, and autonomous agents.
 
 ## Scope and Intended Use
 
@@ -31,8 +31,8 @@ The framework follows a hybrid architecture that combines deterministic componen
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │  Config     │  │  Template   │  │  Validation │          │
-│  │  Manager    │  │  Engine     │  │  Engine     │          │
+│  │  Config     │  │  Config     │  │  Validation │          │
+│  │  Manager    │  │  Factory    │  │  Engine     │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
@@ -53,88 +53,52 @@ The framework follows a hybrid architecture that combines deterministic componen
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### **Current Agent Roles and Extensibility**
+### **Agent Coordination Architecture**
 
-The framework currently includes the following agents:
+**Current System:**
+- **RL Agent**: Fully operational with LLM-powered decision making and safety fallbacks
 
-**RL Agent**
-- **Adaptive Decision-Making**: Learn optimal strategies based on system performance
-- **Resource Allocation**: Optimize resource usage based on workload patterns
-- **Task Scheduling**: Intelligent task scheduling and execution (as a feature)
-- **Maintenance Planning**: Proactive maintenance scheduling based on failure patterns
-- **Threshold Optimization**: Dynamic monitoring threshold adjustment
-
-**Monitoring Agent**
-- **System Health Monitoring**: Real-time system health and performance monitoring
-- **Anomaly Detection**: Proactive issue detection and prevention
-- **Predictive Analysis**: Predictive maintenance and health forecasting
-- **Resource Monitoring**: Continuous resource usage monitoring
-
-**Alerting Agent**
-- **Intelligent Alerting**: Context-aware alert generation and routing
-- **Alert Prioritization**: Smart alert filtering and deduplication
-- **User Feedback Learning**: Adapt alerting strategies based on effectiveness
-- **Multi-channel Notifications**: Email, Slack, SMS, and custom integrations
-
-> **Extensibility:**
-> The agent layer is designed to be extensible. Additional agents can be introduced in the future to support new capabilities or domains as requirements evolve. However, new agents will be considered carefully to ensure they don't break existing safety constraints or compromise system reliability.
-
-### **Cross-Cutting Concerns: Safety, Compliance, and Performance Constraints**
-- All agents must respect safety, compliance, and performance constraints.
-- These constraints are enforced in agent logic and configuration, not as separate architectural layers.
-- This ensures the system remains reliable, auditable, and safe by design.
-
-### **Benefits of the Agent-Based Architecture**
-
-**1. Clear Separation of Concerns**
-- **RL Agent**: Adaptive optimization and scheduling
-- **Monitoring Agent**: System observation and health assessment
-- **Alerting Agent**: Communication and notification management
-
-**2. Reduced Complexity**
-- **Simpler Coordination**: Fewer inter-agent communication paths
-- **Easier Testing**: Clearer test boundaries for each agent
-- **Better Maintainability**: Simpler codebase and deployment
-
-**3. Optimal Resource Usage**
-- **Efficient Resource Allocation**: RL agent handles both optimization and scheduling
-- **Reduced Overhead**: Fewer agents mean less computational overhead
-- **Simpler State Management**: Less complex state synchronization
-
-### **Agent Coordination Strategy**
-
-**Primary Coordination Flow:**
+**Planned Multi-Agent Coordination:**
 ```
 Monitoring Agent → RL Agent → Alerting Agent
      ↓              ↓           ↓
 System State → Adaptive Decisions → Notifications
 ```
 
-**RL Agent as Coordinator:**
-- Receives monitoring data from Monitoring Agent
-- Makes adaptive decisions based on system state
-- Triggers appropriate alerts through Alerting Agent
-- Handles scheduling and resource allocation internally
+**Design Benefits:**
+- **Clear Separation**: Each agent has distinct responsibilities
+- **Simplified Coordination**: Linear flow reduces complexity  
+- **Resource Management**: Centralized decision-making through RL Agent
+- **Extensible Architecture**: New agents can be added as needed
 
-### **Implementation Considerations**
+**Cross-Cutting Concerns:**
+- All agents must respect safety, compliance, and performance constraints
+- Constraints are enforced in agent logic, not as separate layers
+- System remains reliable, auditable, and safe by design
 
-See [`ml_eval/agents/rl/agent.py`](../../ml_eval/agents/rl/agent.py) for RL Agent implementation details.
+### **Current RL Agent Implementation**
 
-The RL Agent provides:
+The RL Agent implementation in [`ml_eval/agents/rl/agent.py`](../../ml_eval/agents/rl/agent.py) provides:
 - Adaptive decision-making with safety constraints
 - Dynamic threshold optimization
 - Resource allocation optimization
 - Alert strategy learning
 - Maintenance scheduling optimization
+- RL loop with experience buffer and policy updates
+- LLM integration with deterministic fallbacks
 
-### **RL Loop Steps: LLM vs Deterministic Operations**
+**Usage Examples:**
+- **Demo**: [`ml_eval/agents/rl/demo_llmrlagent.py`](../../ml_eval/agents/rl/demo_llmrlagent.py)
+- **Tests**: [`tests/test_rl_agent.py`](../../tests/test_rl_agent.py)
+
+### **RL Loop Architecture: LLM vs Deterministic Operations**
 
 The RL Agent implements a hybrid approach where some steps use LLM intelligence while others remain deterministic for safety and reliability:
 
 #### **LLM-Enabled Steps:**
 
 1. **Action Selection (`make_decision`)**
-   - **LLM Usage**: Analyzes current state and suggests optimal actions
+   - **LLM Usage**: Analyzes current state and suggests actions
    - **Purpose**: Intelligent decision-making based on complex state patterns
    - **Fallback**: Safe deterministic action if LLM unavailable
    - **Safety**: All LLM decisions are validated and logged
@@ -195,7 +159,7 @@ The RL Agent implements a hybrid approach where some steps use LLM intelligence 
 - **Core RL Loop**: All core RL operations (environment interaction, reward calculation, experience storage) remain deterministic
 - **LLM Intelligence**: LLM is used only for intelligent decision-making and policy analysis
 - **Fallback Mechanisms**: Safe deterministic fallbacks for all LLM operations
-- **Comprehensive Logging**: All LLM prompts and responses are logged for auditability
+- **Complete Logging**: All LLM prompts and responses are logged for auditability
 - **Validation**: All LLM outputs are validated before use
 - **Graceful Degradation**: System continues operating even if LLM is unavailable
 
@@ -231,30 +195,30 @@ rl_agent:
 ### **Development Roadmap**
 
 **Phase 1: Core Agent Development**
-- **RL Agent**: Implement adaptive decision-making with safety constraints
+- **RL Agent**: ✅ **Complete** - Adaptive decision-making with safety constraints implemented
 - **Monitoring Agent**: Develop real-time system health monitoring capabilities
 - **Alerting Agent**: Build intelligent alerting and notification management
 - **Key Principle**: Agents handle adaptive optimization and communication; deterministic core handles safety-critical operations
 
 **Phase 2: Agent Coordination and Integration**
-- Implement efficient inter-agent communication protocols
-- Develop coordination strategies for optimal system performance
+- Implement inter-agent communication protocols
+- Develop coordination strategies for system performance
 - Establish clear boundaries between agent responsibilities and deterministic operations
 - **Key Principle**: Agents coordinate for optimization; deterministic systems ensure safety and compliance
 
 **Phase 3: Advanced Capabilities and Extensibility**
-- Add advanced RL capabilities for combined optimization and scheduling
-- Implement sophisticated coordination strategies across agents
+- Add RL capabilities for combined optimization and scheduling
+- Implement coordination strategies across agents
 - Develop extensible agent architecture for future capabilities
-- **Key Principle**: Agents provide intelligent automation; human oversight and deterministic fallbacks ensure reliability
+- **Key Principle**: Agents provide automation; human oversight and deterministic fallbacks ensure reliability
 
 **Agent Responsibilities: What Agents Should and Shouldn't Do**
 
 **What Agents Should Do:**
 - **Adaptive Optimization**: Learn and optimize system parameters based on performance data
-- **Resource Management**: Intelligently allocate and manage system resources
+- **Resource Management**: Allocate and manage system resources
 - **Communication**: Handle notifications, alerts, and user interactions
-- **Coordination**: Work together to achieve optimal system performance
+- **Coordination**: Work together to achieve system performance goals
 - **Learning**: Continuously improve based on feedback and historical data
 
 **What Agents Should NOT Do:**
@@ -266,6 +230,36 @@ rl_agent:
 
 This roadmap ensures we build the right capabilities from the start, with clear boundaries between agent intelligence and deterministic reliability.
 
+### **Agent Implementation Status**
+
+**Currently Implemented:**
+
+**RL Agent**
+- **Adaptive Decision-Making**: Learn strategies based on system performance
+- **Resource Allocation**: Optimize resource usage based on workload patterns
+- **Task Scheduling**: Intelligent task scheduling and execution (as a feature)
+- **Maintenance Planning**: Proactive maintenance scheduling based on failure patterns
+- **Threshold Optimization**: Dynamic monitoring threshold adjustment
+- **LLM Integration**: Hybrid LLM + deterministic approach with safety fallbacks
+- **Full RL Loop**: Experience buffer, policy updates, and episode management
+
+**Planned for Future Releases:**
+
+**Monitoring Agent**
+- **System Health Monitoring**: Real-time system health and performance monitoring
+- **Anomaly Detection**: Proactive issue detection and prevention
+- **Predictive Analysis**: Predictive maintenance and health forecasting
+- **Resource Monitoring**: Continuous resource usage monitoring
+
+**Alerting Agent**
+- **Intelligent Alerting**: Context-aware alert generation and routing
+- **Alert Prioritization**: Smart alert filtering and deduplication
+- **User Feedback Learning**: Adapt alerting strategies based on effectiveness
+- **Multi-channel Notifications**: Email, Slack, SMS, and custom integrations
+
+> **Extensibility:**
+> The agent layer is designed to be extensible. Additional agents can be introduced in the future to support new capabilities or domains as requirements evolve. However, new agents will be considered carefully to ensure they don't break existing safety constraints or compromise system reliability.
+
 ### Component Status
 
 **Currently Available:**
@@ -275,14 +269,16 @@ This roadmap ensures we build the right capabilities from the start, with clear 
 - **Evaluation Engine**: Analysis and evaluation components
 - **Reporting Engine**: Deterministic report generation and formatting
 - **LLM Integration**: Analysis, assistant, and enhancement engines
+- **RL Agent**: Reinforcement learning agent with LLM integration
 
 **Future Releases:**
+- **Template Engine**: Dynamic template management with CLI commands
 - **Web UI**: Web-based interface for monitoring and management
 - **API**: REST API for programmatic access
 - **Monitoring Agent**: Autonomous real-time monitoring and health checks
 - **Alerting Agent**: Autonomous configurable alerts and notifications
 
-*Note: Planned components are marked with asterisks (*) in the architecture diagram.*
+*Note: Future components are marked with asterisks (*) in the architecture diagram. The RL Agent is currently implemented and functional. Static configuration examples exist in `examples/` directories as documentation, not as software components.*
 
 ## Core Components
 
@@ -291,9 +287,12 @@ This roadmap ensures we build the right capabilities from the start, with clear 
 See [`ml_eval/config/`](../../ml_eval/config/) for configuration management implementation.
 
 - **Configuration Manager**: Loads and validates configuration files
-- **Template Engine**: Manages industry-specific templates
+- **Configuration Factory**: Creates and manages configuration objects using minimal defaults from `ml_eval/templates/files/`
 - **Validation Engine**: Validates configurations and data
-- **LLM Assistant Engine**: Provides intelligent configuration assistance
+
+The Configuration Factory loads minimal default configurations from `ml_eval/templates/files/` and uses the **LLM Assistant Engine** (from the LLM layer) for configuration assistance.
+
+> **Note**: The Configuration Factory loads minimal default configurations (5-10 lines each) from `ml_eval/templates/files/` and falls back to hardcoded configurations when files don't exist. These are basic defaults, not rich templates. The [Configuration Management Strategy](configuration-strategy.md) describes building a template system with CLI commands and rich templates.
 
 ### 2. Data Collection System
 
@@ -316,7 +315,7 @@ See [`ml_eval/evaluators/`](../../ml_eval/evaluators/) for evaluation implementa
 - **Reliability Evaluators**: System reliability metrics
 
 **LLM-Enhanced Evaluators:**
-- **Drift Evaluators**: Advanced pattern recognition and correlation analysis
+- **Drift Evaluators**: Pattern recognition and correlation analysis
 - **Anomaly Detectors**: Complex anomaly detection beyond statistical methods
 - **Root Cause Analyzers**: Intelligent incident analysis and correlation
 
@@ -333,7 +332,7 @@ See [`ml_eval/reports/`](../../ml_eval/reports/) for reporting implementation.
 **LLM Enhancement Layer:**
 - **Report Enhancement**: LLM-powered insights and explanations
 - **Natural Language Summaries**: Human-readable explanations of technical metrics
-- **Advanced Analysis**: Complex pattern recognition and recommendations
+- **Analysis**: Complex pattern recognition and recommendations
 - **Business Intelligence**: Translation of technical metrics to business impact
 
 ## LLM Integration Layer
@@ -341,13 +340,13 @@ See [`ml_eval/reports/`](../../ml_eval/reports/) for reporting implementation.
 ### LLM Analysis Engine
 
 **Capabilities:**
-- **Pattern Recognition**: Advanced correlation analysis across metrics
+- **Pattern Recognition**: Correlation analysis across metrics
 - **Anomaly Detection**: Complex anomaly detection using LLM reasoning
 - **Trend Analysis**: Intelligent trend identification and forecasting
 - **Cross-Metric Analysis**: Correlation analysis between different metric types
 
 **Use Cases:**
-- Advanced drift pattern recognition
+- Drift pattern recognition
 - Complex anomaly detection beyond statistical methods
 - Cross-metric correlation analysis
 - Trend forecasting and prediction
@@ -378,7 +377,7 @@ See [`ml_eval/llm/assistant.py`](../../ml_eval/llm/assistant.py) for implementat
 - **Report Enhancement**: Add LLM insights to deterministic reports
 - **Natural Language Explanations**: Human-readable explanations of technical metrics
 - **Business Impact Translation**: Translate technical findings to business impact
-- **Intelligent Recommendations**: Advanced recommendations based on analysis
+- **Intelligent Recommendations**: Recommendations based on analysis
 
 **Use Cases:**
 - Add natural language explanations to technical reports
@@ -391,58 +390,33 @@ See [`ml_eval/llm/enhancement.py`](../../ml_eval/llm/enhancement.py) for impleme
 
 ## Data Flow
 
-### 1. Configuration Loading
-```
-Configuration File → Configuration Manager → LLM Assistant Engine → Validation Engine → Loaded Configuration
-```
+The framework follows a multi-stage data processing pipeline:
 
-### 2. Data Collection
+### Core Data Processing Flow
 ```
+Configuration File → Configuration Manager → Configuration Factory → Validation Engine
+                                                    ↓
 Data Sources → Collectors → Data Processing → Data Storage
-```
-
-### 3. Evaluation Process
-```
+                                                    ↓
 Stored Data → Deterministic Evaluators → LLM Analysis Engine → Enhanced Evaluation Results
-```
-
-### 4. Reporting Process
-```
+                                                    ↓
 Evaluation Results → Reporting Engine (Deterministic) → LLM Enhancement Engine → Enhanced Reports
 ```
 
-### 5. Future Autonomous Flow
+### Multi-Agent Coordination Flow
 ```
 System State → Monitoring Agent → RL Agent → Alerting Agent → Autonomous Actions
 ```
 
-## Component Relationships
-
-### Configuration Dependencies
+### Current RL Agent Flow
 ```
-Configuration Manager
-    ↓
-Template Engine ← LLM Assistant Engine ← Validation Engine
-    ↓
-Data Sources ← Collectors ← Evaluators ← Reports
+System State → RL Agent → Adaptive Decisions and Actions
 ```
 
-### Data Flow Dependencies
-```
-Data Sources
-    ↓
-Collectors
-    ↓
-Data Storage
-    ↓
-Deterministic Evaluators
-    ↓
-LLM Analysis Engine
-    ↓
-Reporting Engine (Deterministic)
-    ↓
-LLM Enhancement Engine
-```
+### Component Integration
+- **Configuration layer** uses LLM Assistant Engine for assistance
+- **LLM Assistant Engine** is part of the LLM layer, not the configuration layer
+- **Static configuration examples** exist in `examples/` directories as documentation
 
 ## Architecture Principles
 
@@ -458,7 +432,7 @@ LLM Enhancement Engine
 **LLM Enhancement Layer:**
 - LLMs provide intelligent analysis and insights
 - Natural language explanations and recommendations
-- Advanced pattern recognition and correlation analysis
+- Pattern recognition and correlation analysis
 - Business impact translation and recommendations
 - Report enhancement and natural language summaries
 
@@ -480,12 +454,25 @@ LLM Enhancement Engine
 
 ## Configuration Examples
 
-See the following template files for configuration examples:
+The framework provides two types of configuration examples:
 
+### Static Template Files
+General-purpose configuration templates (manually copied by users):
 - **Basic System Configuration**: [`examples/templates/basic-system.yaml`](../../examples/templates/basic-system.yaml)
 - **Safety-Critical Configuration**: [`examples/templates/safety-critical.yaml`](../../examples/templates/safety-critical.yaml)
 - **Business-Critical Configuration**: [`examples/templates/business-critical.yaml`](../../examples/templates/business-critical.yaml)
 - **RL Agent Configuration**: [`examples/templates/rl-agent-config.yaml`](../../examples/templates/rl-agent-config.yaml)
+
+### Industry-Specific Examples
+Ready-to-use configurations with CLI support (see [Example Configurations Guide](../user-guides/example-configurations.md)):
+- **Aviation**: `examples/industries/aviation/aircraft-landing.yaml`
+- **Manufacturing**: `examples/industries/manufacturing/predictive-maintenance.yaml`
+- **Maritime**: `examples/industries/maritime/collision-avoidance.yaml`
+- **Semiconductor**: `examples/industries/semiconductor/etching-digital-twins.yaml`
+- **Aquaculture**: `examples/industries/aquaculture/fish-species-classification.yaml`
+- **Cybersecurity**: `examples/industries/cybersecurity/security-operations.yaml`
+
+> **Note**: Currently, users manually copy these files. A future Template Engine will provide CLI commands for template management and customization.
 
 ## Provider Configuration
 
@@ -504,6 +491,7 @@ See the following for usage examples and patterns:
 - **CLI Usage**: [`docs/user-guides/cli-reference.md`](../user-guides/cli-reference.md)
 - **Configuration Guide**: [`docs/user-guides/configuration.md`](../user-guides/configuration.md)
 - **Getting Started**: [`docs/user-guides/getting-started.md`](../user-guides/getting-started.md)
+- **RL Agent Usage**: [`ml_eval/agents/rl/demo_llmrlagent.py`](../../ml_eval/agents/rl/demo_llmrlagent.py) for working examples
 - **Agent Implementation**: [`ml_eval/agents/`](../../ml_eval/agents/) for agent usage patterns
 - **LLM Integration**: [`ml_eval/llm/`](../../ml_eval/llm/) for LLM usage examples
 
@@ -517,7 +505,7 @@ See the following for usage examples and patterns:
 
 ### 2. Performance Optimization
 - Use async/await for all LLM operations
-- Implement intelligent caching strategies
+- Implement caching strategies
 - Batch LLM requests when possible
 - Monitor LLM response times and costs
 
@@ -573,16 +561,16 @@ ml_eval/
 ├── templates/     # Template system
 ├── utils/         # Utility functions
 ├── core/          # Core framework components
+├── examples/      # Example configurations
 ├── llm/           # LLM integration layer
-│   ├── analysis/  # LLM analysis engines
-│   ├── assistant/ # LLM assistant engines
-│   ├── enhancement/ # LLM report enhancement
-│   └── providers/ # LLM provider integrations
-├── agents/        # Future autonomous agents
-│   ├── monitoring/ # Monitoring agent
-│   ├── alerting/  # Alerting agent
-│   └── rl/        # RL agent (adaptive + scheduling)
-└── safety/        # Safety-critical components
+│   ├── analysis.py   # LLM analysis engines
+│   ├── assistant.py  # LLM assistant engines
+│   ├── enhancement.py # LLM report enhancement
+│   └── providers.py  # LLM provider integrations
+└── agents/        # Autonomous agents
+    ├── monitoring/ # Monitoring agent  
+    ├── alerting/  # Alerting agent
+    └── rl/        # RL agent (implemented)
 ```
 
 ### 2. Testing Strategy
@@ -608,9 +596,9 @@ See [`docs/developer/testing.md`](testing.md) for testing approach.
 - **Edge Computing**: For local LLM inference
 
 ### 3. Autonomous Agent Development
-- **Advanced Monitoring**: Predictive maintenance and health forecasting
-- **Intelligent Alerting**: Context-aware alert generation and routing
-- **Dynamic Scheduling**: Real-time resource optimization and task scheduling
-- **System Optimization**: Autonomous performance tuning and optimization
+- **RL Agent Enhancement**: Extended capabilities building on current implementation
+- **Monitoring Agent**: Predictive maintenance and health forecasting
+- **Alerting Agent**: Context-aware alert generation and routing
+- **Agent Coordination**: Multi-agent system integration and optimization
 
-This hybrid architecture provides a robust, scalable, and intelligent foundation for ML system evaluation, combining the reliability of deterministic systems with the intelligence of LLM-powered analysis while maintaining high standards for security, performance, and reliability in industrial AI systems.
+This hybrid architecture combines deterministic systems with LLM-powered analysis for ML system evaluation. The RL Agent provides adaptive decision-making with safety constraints, maintaining security, performance, and reliability standards for industrial AI systems.

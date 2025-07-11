@@ -1,6 +1,6 @@
 # 🚨 Error Budget Management
 
-This guide provides comprehensive information about error budget management in the ML Systems Evaluation Framework, including definitions, calculation, monitoring, and best practices.
+This guide provides information about error budget management in the ML Systems Evaluation Framework, including definitions, calculation, monitoring, and best practices.
 
 ## 🎯 What are Error Budgets?
 

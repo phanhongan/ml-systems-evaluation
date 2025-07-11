@@ -5,7 +5,7 @@ This directory contains examples for manufacturing-related ML systems with a foc
 ## Examples
 
 ### predictive-maintenance.yaml
-A comprehensive example of industrial equipment predictive maintenance that demonstrates:
+An example of industrial equipment predictive maintenance that demonstrates:
 
 - **VAE anomaly detection**: Variational Autoencoder for equipment failure prediction
 - **Rule-based fault detection**: Expert rules for immediate fault identification

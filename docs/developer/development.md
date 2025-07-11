@@ -1,6 +1,6 @@
 # 🛠️ Development Guide
 
-This guide provides comprehensive information for developers contributing to the ML Systems Evaluation Framework, including code quality standards, testing practices, and development workflows.
+This guide provides information for developers contributing to the ML Systems Evaluation Framework, including code quality standards, testing practices, and development workflows.
 
 ## 🔧 Development Environment Setup
 

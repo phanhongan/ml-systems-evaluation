@@ -296,7 +296,7 @@ uv run pytest --cov=ml_eval --cov-report=term-missing -v
 When adding new tests:
 
 1. **Follow existing patterns**: Use similar structure and naming
-2. **Add comprehensive coverage**: Test all code paths
+2. **Add coverage**: Test all code paths
 3. **Include edge cases**: Test error conditions and boundaries
 4. **Update documentation**: Keep this README current
 5. **Run full test suite**: Ensure no regressions

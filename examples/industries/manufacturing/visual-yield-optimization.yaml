@@ -1,0 +1,88 @@
+system:
+  name: "Visual Yield Optimization System"
+  description: "AI-powered visual inspection system for optimizing manufacturing yield"
+  version: "1.0.0"
+  industry: "manufacturing"
+  use_case: "yield_optimization"
+  criticality: "business_critical"
+
+# Data collection
+collectors:
+  - name: "inline_vision_collector"
+    type: "environmental"
+    description: "Collects visual data at production stages"
+    config:
+      data_sources:
+        - process_monitoring_cameras
+        - dimensional_measurement_systems
+      sampling_rate: "continuous"
+      inspection_points:
+        - raw_material_input
+        - intermediate_stages
+        - final_assembly
+
+  - name: "process_parameter_collector"
+    type: "online"
+    description: "Collects process parameters affecting yield"
+    config:
+      data_sources:
+        - temperature_sensors
+        - pressure_monitors
+        - speed_controllers
+      sampling_rate: "1_second"
+
+# Model evaluation
+evaluators:
+  - name: "yield_prediction_accuracy"
+    type: "performance"
+    description: "Evaluates yield prediction model accuracy"
+    config:
+      metrics:
+        - mean_absolute_error
+        - prediction_confidence
+      thresholds:
+        max_prediction_error: 0.05
+        min_confidence: 0.85
+
+  - name: "process_optimization_effectiveness"
+    type: "performance"
+    description: "Measures optimization recommendation effectiveness"
+    config:
+      metrics:
+        - yield_improvement_rate
+        - process_stability_index
+      thresholds:
+        min_yield_improvement: 0.02
+        max_process_variation: 0.1
+
+  - name: "visual_pattern_drift"
+    type: "drift"
+    description: "Monitors visual patterns affecting yield"
+    config:
+      detection_methods:
+        - statistical_process_control
+        - image_feature_drift
+      thresholds:
+        max_drift_score: 0.2
+
+# Optimization strategies
+optimization_strategies:
+  - early_defect_detection
+  - process_parameter_adjustment
+  - yield_forecasting
+  - bottleneck_analysis
+
+# Reporting
+reports:
+  - name: "yield_optimization_report"
+    type: "business"
+    description: "Daily yield optimization performance analysis"
+    config:
+      schedule: "daily"
+      metrics:
+        - current_yield_rate
+        - yield_improvement_trends
+        - efficiency_gains
+      visualizations:
+        - yield_trend_charts
+        - process_capability_studies

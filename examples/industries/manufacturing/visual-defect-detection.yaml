@@ -1,0 +1,87 @@
+system:
+  name: "Visual Defect Detection System"
+  description: "AI-powered visual inspection system for automated defect detection in manufacturing"
+  version: "1.0.0"
+  industry: "manufacturing"
+  use_case: "visual_inspection"
+  criticality: "business_critical"
+
+# Data collection
+collectors:
+  - name: "vision_data_collector"
+    type: "environmental"
+    description: "Collects visual data from production line cameras"
+    config:
+      data_sources:
+        - high_resolution_cameras
+        - thermal_imaging
+      sampling_rate: "real_time"
+      image_resolution: "2048x2048"
+
+  - name: "production_context_collector"
+    type: "online"
+    description: "Collects production context metadata"
+    config:
+      data_sources:
+        - production_line_speed
+        - product_specifications
+        - environmental_conditions
+      sampling_rate: "continuous"
+
+# Model evaluation
+evaluators:
+  - name: "defect_detection_accuracy"
+    type: "performance"
+    description: "Evaluates defect detection model accuracy"
+    config:
+      metrics:
+        - precision
+        - recall
+        - f1_score
+      thresholds:
+        min_precision: 0.95
+        min_recall: 0.90
+
+  - name: "detection_speed"
+    type: "performance"
+    description: "Measures inference speed for real-time requirements"
+    config:
+      metrics:
+        - inference_time
+        - throughput
+      thresholds:
+        max_inference_time: 100 # milliseconds
+        min_throughput: 1000 # items per hour
+
+  - name: "visual_drift_monitor"
+    type: "drift"
+    description: "Monitors for changes in visual patterns"
+    config:
+      detection_methods:
+        - distribution_shift
+        - image_statistics
+      thresholds:
+        max_drift_score: 0.3
+
+# Defect categories
+defect_categories:
+  - scratches
+  - dents
+  - discoloration
+  - cracks
+  - missing_components
+
+# Reporting
+reports:
+  - name: "defect_detection_report"
+    type: "business"
+    description: "Daily defect detection performance report"
+    config:
+      schedule: "daily"
+      metrics:
+        - defect_rate_by_type
+        - detection_accuracy
+        - false_positive_rate
+      visualizations:
+        - defect_trends
+        - accuracy_dashboard

@@ -147,14 +147,78 @@ evaluators:
         "quality_metrics",
         "environmental_conditions",
       ]
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.8
+        decision_transparency: 0.9
+        explanation_quality: 0.8
+        human_readability: 0.8
+      explainability_metrics:
+        - "etch_parameter_decision_explainability"
+        - "quality_prediction_transparency"
+        - "defect_detection_interpretability"
+        - "process_control_justification"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.9
+        stress_test: 0.8
+        failure_recovery: 0.95
+      edge_case_scenarios:
+        - "equipment_malfunction_scenarios"
+        - "chemical_concentration_anomalies"
+        - "temperature_excursion_conditions"
+        - "pressure_system_failures"
+        - "particle_contamination_events"
+        - "power_system_interruptions"
+
   - type: "reliability"
     error_budget_window: "30d"
     critical_metrics:
       ["system_availability", "digital_twin_synchronization_latency"]
+
   - type: "safety"
-    compliance_standards: ["ISO-14644", "SEMI-S2", "OSHA-1910"]
-    critical_metrics:
-      ["chemical_exposure_alert", "temperature_excursion", "pressure_excursion"]
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      compliance_standards: ["ISO-14644", "SEMI-S2", "OSHA-1910"]
+      critical_metrics:
+        ["chemical_exposure_alert", "temperature_excursion", "pressure_excursion"]
+      safety_thresholds:
+        chemical_exposure_limit:
+          max: 0.001
+          description: "Maximum acceptable chemical exposure level"
+        temperature_excursion_limit:
+          max: 5.0
+          description: "Maximum temperature excursion from specification (degrees Celsius)"
+        pressure_excursion_limit:
+          max: 10.0
+          description: "Maximum pressure excursion from specification (PSI)"
+      safety_analysis:
+        - "chemical_safety_assessment"
+        - "equipment_safety_analysis"
+        - "process_safety_considerations"
+        - "emergency_response_safety"
+
   - type: "compliance"
     standards: ["ISO-14644", "SEMI-S2", "SEMI-S8"]
     compliance_metrics:

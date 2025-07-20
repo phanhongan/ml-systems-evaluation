@@ -66,11 +66,69 @@ collectors:
 
 evaluators:
   - type: "safety"
-    compliance_standards: ["COLREGs", "IMO Guidelines"]
-    critical_metrics: ["collision_avoidance_accuracy", "false_alarm_rate", "stw_sog_discrepancy"]
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      compliance_standards: ["COLREGs", "IMO Guidelines"]
+      critical_metrics: ["collision_avoidance_accuracy", "false_alarm_rate", "stw_sog_discrepancy"]
+      safety_thresholds:
+        stw_sog_discrepancy:
+          max: 2  # knots
+          description: "Maximum allowed difference between Speed Through Water (STW) and Speed Over Ground (SOG) before triggering a safety alert"
+        collision_detection_accuracy:
+          min: 0.999
+          description: "Minimum accuracy required for collision detection"
+        false_alarm_rate:
+          max: 0.01
+          description: "Maximum allowed false positive collision alerts"
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.9
+        decision_transparency: 0.95
+        explanation_quality: 0.9
+        human_readability: 0.9
+      explainability_metrics:
+        - "collision_decision_explainability"
+        - "vessel_classification_transparency"
+        - "distance_estimation_interpretability"
+        - "alert_justification_explanation"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.95
+        stress_test: 0.9
+        failure_recovery: 0.99
+      edge_case_scenarios:
+        - "dense_traffic_conditions"
+        - "poor_visibility_scenarios"
+        - "vessel_communication_failure"
+        - "radar_interference"
+        - "emergency_maneuver_requirements"
+        - "extreme_weather_conditions"
+
   - type: "reliability"
     error_budget_window: "30d"
     critical_metrics: ["system_availability"]
+
   - type: "performance"
     metrics: ["alert_latency"]
     real_time_threshold: 2000  # ms

@@ -1,7 +1,42 @@
 """Main CLI entry point for ML Systems Evaluation Framework"""
 
 import argparse
+import logging
 import sys
+
+
+def setup_logging(verbose: bool = False) -> None:
+    """Setup logging configuration"""
+    log_format = "%(levelname)s: %(message)s"
+
+    if verbose:
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format=log_format,
+            handlers=[
+                logging.StreamHandler(sys.stdout),
+                logging.StreamHandler(sys.stderr),
+            ],
+        )
+
+        # Filter out verbose HTTP request logs from external libraries
+        logging.getLogger("httpx").setLevel(logging.WARNING)
+        logging.getLogger("openai").setLevel(logging.WARNING)
+        logging.getLogger("stainless").setLevel(logging.WARNING)
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
+        logging.getLogger("requests").setLevel(logging.WARNING)
+
+        # Set our framework logs to DEBUG level
+        logging.getLogger("ml_eval").setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(
+            level=logging.INFO,
+            format=log_format,
+            handlers=[
+                logging.StreamHandler(sys.stdout),
+                logging.StreamHandler(sys.stderr),
+            ],
+        )
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -17,6 +52,14 @@ Examples:
   ml-eval evaluate config.yaml --data data.json --output results.json
   ml-eval report config.yaml --results results.json --output reports.json
         """,
+    )
+
+    # Add global options
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="Enable verbose output with debug logging",
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -102,9 +145,9 @@ Examples:
     )
     create_parser.add_argument(
         "--criticality",
-        default="operational",
+        default="business_critical",
         choices=["operational", "business_critical", "safety_critical"],
-        help="System criticality level (default: operational)",
+        help="System criticality level (default: business_critical)",
     )
     create_parser.add_argument("--industry", help="Industry type (optional)")
 
@@ -119,6 +162,9 @@ def main(args: list[str] | None = None) -> int:
     if not parsed_args.command:
         parser.print_help()
         return 1
+
+    # Setup logging based on verbose flag
+    setup_logging(verbose=getattr(parsed_args, "verbose", False))
 
     # Import commands here to avoid circular imports
     from .commands import (

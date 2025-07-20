@@ -46,9 +46,71 @@ evaluators:
   - type: "performance"
     metrics: ["recommendation_accuracy", "energy_cost_reduction"]
     real_time_threshold: 600  # seconds
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.7
+        decision_transparency: 0.8
+        explanation_quality: 0.7
+        human_readability: 0.8
+      explainability_metrics:
+        - "optimization_recommendation_explainability"
+        - "energy_savings_transparency"
+        - "cost_reduction_interpretability"
+        - "recommendation_justification"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.8
+        stress_test: 0.7
+        failure_recovery: 0.9
+      edge_case_scenarios:
+        - "extreme_weather_conditions"
+        - "equipment_failure_scenarios"
+        - "peak_demand_situations"
+        - "occupancy_anomalies"
+        - "energy_price_spikes"
+        - "system_overload_conditions"
+
+  - type: "safety"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      safety_thresholds:
+        critical_equipment_safety:
+          min: 0.95
+          description: "Minimum safety threshold for critical equipment operations"
+        building_comfort:
+          min: 0.8
+          description: "Minimum comfort threshold for building occupants"
+      safety_analysis:
+        - "equipment_safety_assessment"
+        - "occupant_comfort_analysis"
+        - "building_safety_considerations"
+        - "emergency_power_safety"
+
   - type: "drift"
     detection_methods: ["statistical"]
     drift_metrics: ["consumption_patterns", "weather_correlations"]
+
   - type: "reliability"
     error_budget_window: "30d"
     critical_metrics: ["system_availability", "response_time"]

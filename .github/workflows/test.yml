@@ -68,13 +68,10 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install --system -e ".[dev]"
-      - name: Lint, type check, and sort imports with Ruff
+      - name: Lint and check formatting with Ruff
         run: |
           ruff check .
-      - name: Check formatting with black
-        run: |
-          black --check .
-      - name: Check formatting with ruff
+      - name: Check formatting with Ruff
         run: |
           ruff format --check .
 

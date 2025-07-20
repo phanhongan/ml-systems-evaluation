@@ -270,6 +270,7 @@ This roadmap ensures we build the right capabilities from the start, with clear 
 - **Reporting Engine**: Deterministic report generation and formatting
 - **LLM Integration**: Analysis, assistant, and enhancement engines
 - **RL Agent**: Reinforcement learning agent with LLM integration
+- **Workflow Engine**: Advanced workflow orchestration and coordination
 
 **Future Releases:**
 - **Template Engine**: Dynamic template management with CLI commands
@@ -310,16 +311,38 @@ See [`ml_eval/evaluators/`](../../ml_eval/evaluators/) for evaluation implementa
 
 **Deterministic Evaluators:**
 - **Performance Evaluators**: Accuracy, precision, recall, latency
-- **Safety Evaluators**: Safety margins, failure probabilities
+- **Safety Evaluators**: Safety margins, failure probabilities, FMEA analysis
 - **Compliance Evaluators**: Regulatory compliance checks
 - **Reliability Evaluators**: System reliability metrics
+- **Perception Evaluators**: Multi-modal sensor fusion, object detection, cross-modal consistency
+- **Control Evaluators**: Actuator control, system response, safety mechanisms
 
 **LLM-Enhanced Evaluators:**
 - **Drift Evaluators**: Pattern recognition and correlation analysis
 - **Anomaly Detectors**: Complex anomaly detection beyond statistical methods
 - **Root Cause Analyzers**: Intelligent incident analysis and correlation
+- **Interpretability Evaluators**: Model explainability and decision transparency
+- **Edge Case Evaluators**: Systematic edge case generation and boundary testing
 
-### 4. Reporting System
+### 4. Workflow Engine
+
+See [`ml_eval/core/workflow.py`](../../ml_eval/core/workflow.py) for workflow implementation.
+
+**Capabilities:**
+- **Advanced Workflow Orchestration**: Complex multi-step evaluation workflows
+- **Dependency Management**: Automatic dependency resolution and execution ordering
+- **Conditional Execution**: Context-aware workflow steps and branching
+- **Parallel Processing**: Concurrent execution of independent workflow steps
+- **Error Handling**: Robust error recovery and retry mechanisms
+- **Resource Management**: Efficient resource allocation and cleanup
+
+**Use Cases:**
+- Complex evaluation pipelines with multiple dependencies
+- Industry-specific workflow templates (manufacturing, aviation, etc.)
+- Conditional evaluation based on system state
+- Parallel data collection and processing
+
+### 5. Reporting System
 
 See [`ml_eval/reports/`](../../ml_eval/reports/) for reporting implementation.
 
@@ -403,7 +426,7 @@ Stored Data → Deterministic Evaluators → LLM Analysis Engine → Enhanced Ev
 Evaluation Results → Reporting Engine (Deterministic) → LLM Enhancement Engine → Enhanced Reports
 ```
 
-### Multi-Agent Coordination Flow
+### Multi-Agent Coordination Flow (Planned)
 ```
 System State → Monitoring Agent → RL Agent → Alerting Agent → Autonomous Actions
 ```
@@ -568,9 +591,9 @@ ml_eval/
 │   ├── enhancement.py # LLM report enhancement
 │   └── providers.py  # LLM provider integrations
 └── agents/        # Autonomous agents
-    ├── monitoring/ # Monitoring agent  
-    ├── alerting/  # Alerting agent
-    └── rl/        # RL agent (implemented)
+    ├── monitoring/ # Monitoring agent (planned)
+    ├── alerting/   # Alerting agent (planned)
+    └── rl/         # RL agent
 ```
 
 ### 2. Testing Strategy

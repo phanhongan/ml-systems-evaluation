@@ -1,11 +1,13 @@
 """Tests for evaluators"""
 
 from ml_eval.evaluators.base import BaseEvaluator
-from ml_eval.evaluators.compliance import ComplianceEvaluator
-from ml_eval.evaluators.drift import DriftEvaluator
-from ml_eval.evaluators.performance import PerformanceEvaluator
-from ml_eval.evaluators.reliability import ReliabilityEvaluator
-from ml_eval.evaluators.safety import SafetyEvaluator
+from ml_eval.evaluators.core.compliance import ComplianceEvaluator
+from ml_eval.evaluators.core.drift import DriftEvaluator
+from ml_eval.evaluators.core.performance import PerformanceEvaluator
+from ml_eval.evaluators.core.reliability import ReliabilityEvaluator
+from ml_eval.evaluators.llm_enhanced.edge_case import EdgeCaseEvaluator
+from ml_eval.evaluators.llm_enhanced.interpretability import InterpretabilityEvaluator
+from ml_eval.evaluators.llm_enhanced.safety import SafetyEvaluator
 
 
 class TestBaseEvaluator:
@@ -506,7 +508,6 @@ class TestLLMEnabledEvaluators:
 
     def test_interpretability_evaluator_llm_disabled(self, llm_disabled_config):
         """Test interpretability evaluator with LLM disabled"""
-        from ml_eval.evaluators.interpretability import InterpretabilityEvaluator
 
         # Find interpretability evaluator config
         eval_config = None
@@ -537,7 +538,6 @@ class TestLLMEnabledEvaluators:
 
     def test_edge_case_evaluator_llm_disabled(self, llm_disabled_config):
         """Test edge case evaluator with LLM disabled"""
-        from ml_eval.evaluators.edge_case import EdgeCaseEvaluator
 
         # Find edge case evaluator config
         eval_config = None
@@ -568,7 +568,6 @@ class TestLLMEnabledEvaluators:
 
     def test_safety_evaluator_llm_disabled(self, llm_disabled_config):
         """Test safety evaluator with LLM disabled"""
-        from ml_eval.evaluators.safety import SafetyEvaluator
 
         # Find safety evaluator config
         eval_config = None
@@ -605,9 +604,6 @@ class TestLLMEnabledEvaluators:
 
     def test_evaluators_fallback_behavior(self, llm_disabled_config):
         """Test that evaluators fall back to deterministic behavior when LLM is disabled"""
-        from ml_eval.evaluators.edge_case import EdgeCaseEvaluator
-        from ml_eval.evaluators.interpretability import InterpretabilityEvaluator
-        from ml_eval.evaluators.safety import SafetyEvaluator
 
         # Test all LLM-enabled evaluators
         evaluators = [

@@ -6,9 +6,9 @@ from unittest.mock import patch
 import pytest
 
 from ml_eval.core.framework import EvaluationFramework
-from ml_eval.evaluators.edge_case import EdgeCaseEvaluator
-from ml_eval.evaluators.interpretability import InterpretabilityEvaluator
-from ml_eval.evaluators.safety import SafetyEvaluator
+from ml_eval.evaluators.llm_enhanced.edge_case import EdgeCaseEvaluator
+from ml_eval.evaluators.llm_enhanced.interpretability import InterpretabilityEvaluator
+from ml_eval.evaluators.llm_enhanced.safety import SafetyEvaluator
 
 
 class TestNewEvaluatorsIntegration:

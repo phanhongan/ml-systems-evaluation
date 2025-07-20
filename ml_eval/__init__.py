@@ -28,11 +28,11 @@ from .core.types import ComplianceStandard, CriticalityLevel
 
 # Evaluation engines
 from .evaluators.base import BaseEvaluator
-from .evaluators.compliance import ComplianceEvaluator
-from .evaluators.drift import DriftEvaluator
-from .evaluators.performance import PerformanceEvaluator
-from .evaluators.reliability import ReliabilityEvaluator
-from .evaluators.safety import SafetyEvaluator
+from .evaluators.core.compliance import ComplianceEvaluator
+from .evaluators.core.drift import DriftEvaluator
+from .evaluators.core.performance import PerformanceEvaluator
+from .evaluators.core.reliability import ReliabilityEvaluator
+from .evaluators.llm_enhanced.safety import SafetyEvaluator
 from .examples.registry import ExampleRegistry
 
 # LLM integration layer

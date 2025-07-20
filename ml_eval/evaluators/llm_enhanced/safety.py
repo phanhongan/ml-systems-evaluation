@@ -1,12 +1,4 @@
-"""Safety evaluator for ML Systems Evaluation with FMEA capabilities
-
-This evaluator handles:
-- Safety-critical system validation with zero-tolerance checks
-- Failure Mode and Effects Analysis (FMEA)
-- Automated risk assessment
-- Safety margin calculation
-- Emergency procedure validation
-"""
+"""Safety evaluator for ML Systems Evaluation"""
 
 import logging
 from datetime import datetime
@@ -14,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from .base import BaseEvaluator
+from ..base import BaseEvaluator
 
 
 class SafetyEvaluator(BaseEvaluator):
@@ -38,7 +30,7 @@ class SafetyEvaluator(BaseEvaluator):
 
         if self.use_llm:
             try:
-                from ..llm import LLMAnalysisEngine, LLMAssistantEngine
+                from ...llm import LLMAnalysisEngine, LLMAssistantEngine
 
                 self.llm_assistant = LLMAssistantEngine(self.llm_config)
                 self.llm_analyzer = LLMAnalysisEngine(self.llm_config)

@@ -11,9 +11,9 @@ from ml_eval.collectors.environmental import EnvironmentalCollector
 from ml_eval.collectors.online import OnlineCollector
 from ml_eval.core.config import MetricData
 from ml_eval.core.framework import EvaluationFramework
-from ml_eval.evaluators.performance import PerformanceEvaluator
-from ml_eval.evaluators.reliability import ReliabilityEvaluator
-from ml_eval.evaluators.safety import SafetyEvaluator
+from ml_eval.evaluators.core.performance import PerformanceEvaluator
+from ml_eval.evaluators.core.reliability import ReliabilityEvaluator
+from ml_eval.evaluators.llm_enhanced.safety import SafetyEvaluator
 
 
 class TestEndToEndEvaluation:

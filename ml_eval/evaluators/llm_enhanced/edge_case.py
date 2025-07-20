@@ -1,12 +1,4 @@
-"""Edge case evaluator for systematic testing of boundary conditions and failure scenarios
-
-This evaluator handles:
-- Systematic edge case generation
-- Boundary condition testing
-- Stress testing under extreme conditions
-- Failure scenario simulation
-- Corner case validation for safety-critical systems
-"""
+"""Edge case evaluator for ML Systems Evaluation"""
 
 import logging
 from datetime import datetime
@@ -14,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from .base import BaseEvaluator
+from ..base import BaseEvaluator
 
 
 class EdgeCaseEvaluator(BaseEvaluator):
@@ -37,7 +29,7 @@ class EdgeCaseEvaluator(BaseEvaluator):
 
         if self.use_llm:
             try:
-                from ..llm import LLMAnalysisEngine, LLMAssistantEngine
+                from ...llm import LLMAnalysisEngine, LLMAssistantEngine
 
                 self.llm_assistant = LLMAssistantEngine(self.llm_config)
                 self.llm_analyzer = LLMAnalysisEngine(self.llm_config)

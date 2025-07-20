@@ -1,16 +1,27 @@
 """Evaluation engines for ML Systems Evaluation Framework"""
 
+# Autonomous system evaluators
+from .autonomous import (
+    ControlEvaluator,
+    PerceptionEvaluator,
+    PlanningEvaluator,
+)
 from .base import BaseEvaluator
-from .compliance import ComplianceEvaluator
-from .control import ControlEvaluator
-from .drift import DriftEvaluator
-from .edge_case import EdgeCaseEvaluator
-from .interpretability import InterpretabilityEvaluator
-from .perception import PerceptionEvaluator
-from .performance import PerformanceEvaluator
-from .planning import PlanningEvaluator
-from .reliability import ReliabilityEvaluator
-from .safety import SafetyEvaluator
+
+# Core evaluators
+from .core import (
+    ComplianceEvaluator,
+    DriftEvaluator,
+    PerformanceEvaluator,
+    ReliabilityEvaluator,
+)
+
+# LLM-enhanced evaluators
+from .llm_enhanced import (
+    EdgeCaseEvaluator,
+    InterpretabilityEvaluator,
+    SafetyEvaluator,
+)
 
 __all__ = [
     "BaseEvaluator",

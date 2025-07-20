@@ -1,12 +1,4 @@
-"""Interpretability evaluator for model explainability and decision transparency
-
-This evaluator handles:
-- Model explainability assessment
-- Decision transparency evaluation
-- Feature importance analysis
-- Human-readable explanations
-- Interpretability metrics for safety-critical systems
-"""
+"""Interpretability evaluator for ML Systems Evaluation"""
 
 import logging
 from datetime import datetime
@@ -14,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from .base import BaseEvaluator
+from ..base import BaseEvaluator
 
 
 class InterpretabilityEvaluator(BaseEvaluator):
@@ -37,7 +29,7 @@ class InterpretabilityEvaluator(BaseEvaluator):
 
         if self.use_llm:
             try:
-                from ..llm import LLMAnalysisEngine, LLMAssistantEngine
+                from ...llm import LLMAnalysisEngine, LLMAssistantEngine
 
                 self.llm_assistant = LLMAssistantEngine(self.llm_config)
                 self.llm_analyzer = LLMAnalysisEngine(self.llm_config)

@@ -146,33 +146,47 @@ class EvaluationFramework:
         )  # Use config field or fallback to entire config
 
         if evaluator_type == "reliability":
-            from ..evaluators.reliability import ReliabilityEvaluator
+            from ..evaluators.core.reliability import ReliabilityEvaluator
 
             return ReliabilityEvaluator(evaluator_config)
         elif evaluator_type == "performance":
-            from ..evaluators.performance import PerformanceEvaluator
+            from ..evaluators.core.performance import PerformanceEvaluator
 
             return PerformanceEvaluator(evaluator_config)
         elif evaluator_type == "safety":
-            from ..evaluators.safety import SafetyEvaluator
+            from ..evaluators.llm_enhanced.safety import SafetyEvaluator
 
             return SafetyEvaluator(evaluator_config)
         elif evaluator_type == "compliance":
-            from ..evaluators.compliance import ComplianceEvaluator
+            from ..evaluators.core.compliance import ComplianceEvaluator
 
             return ComplianceEvaluator(evaluator_config)
         elif evaluator_type == "drift":
-            from ..evaluators.drift import DriftEvaluator
+            from ..evaluators.core.drift import DriftEvaluator
 
             return DriftEvaluator(evaluator_config)
         elif evaluator_type == "interpretability":
-            from ..evaluators.interpretability import InterpretabilityEvaluator
+            from ..evaluators.llm_enhanced.interpretability import (
+                InterpretabilityEvaluator,
+            )
 
             return InterpretabilityEvaluator(evaluator_config)
         elif evaluator_type == "edge_case":
-            from ..evaluators.edge_case import EdgeCaseEvaluator
+            from ..evaluators.llm_enhanced.edge_case import EdgeCaseEvaluator
 
             return EdgeCaseEvaluator(evaluator_config)
+        elif evaluator_type == "perception":
+            from ..evaluators.autonomous.perception import PerceptionEvaluator
+
+            return PerceptionEvaluator(evaluator_config)
+        elif evaluator_type == "control":
+            from ..evaluators.autonomous.control import ControlEvaluator
+
+            return ControlEvaluator(evaluator_config)
+        elif evaluator_type == "planning":
+            from ..evaluators.autonomous.planning import PlanningEvaluator
+
+            return PlanningEvaluator(evaluator_config)
         else:
             print(f"Unknown evaluator type: {evaluator_type}")
             return None

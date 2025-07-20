@@ -98,7 +98,7 @@ The project uses GitHub Actions for automated testing. See [`.github/workflows/t
 
 ```bash
 # Run the same checks as CI
-uv run black --check .
+uv run ruff format --check .
 uv run ruff check .
 uv run pytest --cov=ml_eval --cov-report=xml
 uv build

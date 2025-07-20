@@ -26,44 +26,11 @@ uv shell
 
 ## 🔧 Code Quality Tools
 
-The project uses several tools to maintain code quality and consistency:
+The project uses Ruff for all code quality tasks including formatting, linting, type checking, and import sorting:
 
-### 1. ⚫ Black - Code Formatting
+### 🦊 Ruff - Code Formatting, Linting, Type Checking, and Import Sorting
 
-[Black](https://black.readthedocs.io/) is an opinionated code formatter that automatically formats Python code to a consistent style.
-
-#### ⚙️ Configuration
-
-Black is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.black]` section for the current configuration.
-
-#### 💻 Usage
-
-```bash
-# Format all Python files
-uv run black .
-
-# Check formatting without making changes
-uv run black --check .
-
-# Format specific files
-uv run black ml_eval/core/ tests/
-```
-
-#### 🔗 Pre-commit Hook
-
-To automatically format code before commits, install the pre-commit hook:
-
-```bash
-# Install pre-commit
-uv run pre-commit install
-
-# Run pre-commit on all files
-uv run pre-commit run --all-files
-```
-
-### 2. 🦊 Ruff - Linting, Type Checking, and Import Sorting
-
-[Ruff](https://docs.astral.sh/ruff/) is a fast Python linter, type checker, and import sorter that replaces flake8, mypy, and isort.
+[Ruff](https://docs.astral.sh/ruff/) is a fast Python linter, formatter, type checker, and import sorter that replaces Black, flake8, mypy, and isort.
 
 #### ⚙️ Configuration
 
@@ -72,17 +39,23 @@ Ruff is configured in [`pyproject.toml`](../../pyproject.toml). See the `[tool.r
 #### 💻 Usage
 
 ```bash
+# Format all Python files
+uv run ruff format .
+
+# Check formatting without making changes
+uv run ruff format --check .
+
 # Lint, type check, and sort imports in all Python files
 uv run ruff check .
 
 # Auto-fix issues
 uv run ruff check --fix .
 
-# Format code (like black)
-uv run ruff format .
-
 # Check only imports
 uv run ruff check --select I .
+
+# Format specific files
+uv run ruff format ml_eval/core/ tests/
 ```
 
 #### 🔗 Pre-commit Hook
@@ -105,13 +78,10 @@ Before committing code, run all quality checks:
 
 ```bash
 # Format code
-uv run black .
+uv run ruff format .
 
 # Lint, type check, and sort imports
 uv run ruff check .
-
-# Format code with ruff
-uv run ruff format .
 
 # Run tests
 uv run pytest
@@ -123,9 +93,8 @@ The project includes a script to run all quality checks:
 
 ```bash
 # Run all quality checks
-uv run black --check .
-uv run ruff check .
 uv run ruff format --check .
+uv run ruff check .
 uv run pytest
 ```
 
@@ -188,7 +157,7 @@ See [`tests/test_core.py`](../../tests/test_core.py) for real test examples show
 
 The project uses GitHub Actions for continuous integration. The workflow runs:
 
-1. **Code Quality Checks**: Black, Ruff
+1. **Code Quality Checks**: Ruff (formatting, linting, type checking)
 2. **Tests**: Unit, integration, and end-to-end tests
 3. **Build**: Package building and validation
 4. **Coverage**: Test coverage reporting
@@ -202,9 +171,8 @@ Run the same checks locally that CI runs. See [`.github/workflows/test.yml`](../
 uv sync --group dev
 
 # Run quality checks
-uv run black --check .
-uv run ruff check .
 uv run ruff format --check .
+uv run ruff check .
 
 # Run tests
 uv run pytest --cov=ml_eval --cov-report=xml
@@ -215,7 +183,7 @@ uv build
 
 ## 📝 Code Style Guidelines
 
-Code style is automatically enforced by Black and Ruff. See [`pyproject.toml`](../../pyproject.toml) for configuration details.
+Code style is automatically enforced by Ruff. See [`pyproject.toml`](../../pyproject.toml) for configuration details.
 
 For examples of the project's coding patterns, see:
 - [`ml_eval/collectors/`](../../ml_eval/collectors/) for collector implementations

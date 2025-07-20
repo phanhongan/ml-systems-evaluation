@@ -23,7 +23,6 @@ dev = [
   "pytest>=7.4.0",
   "pytest-cov>=4.1.0",
   "pytest-mock>=3.11.0",
-  "black>=23.7.0",
   "ruff>=0.1.0",
   "types-PyYAML>=6.0.12",
   "types-requests>=2.31.0",
@@ -44,23 +43,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["ml_eval"]
-
-[tool.black]
-line-length = 88
-target-version = ['py39']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

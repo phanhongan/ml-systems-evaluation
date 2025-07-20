@@ -453,7 +453,7 @@ pytest tests/industry/ -v  # Industry-specific tests
 
 We welcome contributions! Please see our [Development Guide](docs/developer/development.md) for information about:
 
-- **🔧 Code Quality Tools**: Black, Ruff
+- **🔧 Code Quality Tools**: Ruff
 - **🧪 Testing Practices**: Unit, integration, and end-to-end tests
 - **🔄 Development Workflow**: Setup, coding standards, and CI/CD
 - **📝 Code Style Guidelines**: Python style, naming conventions, documentation
@@ -479,8 +479,7 @@ uv build
 
 The project enforces strict code quality standards:
 
-- **⚫ Black**: 88-character line length, opinionated formatting
-- **🦊 Ruff**: Fast linting, type checking, and import sorting
+- **🦊 Ruff**: Fast linting, formatting, type checking, and import sorting with Black-compatible settings
 
 All code must pass these checks before merging.
 

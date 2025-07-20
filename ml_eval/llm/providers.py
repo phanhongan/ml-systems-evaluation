@@ -1,6 +1,7 @@
 """LLM provider integrations for ML Systems Evaluation Framework"""
 
 import logging
+import os
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -51,7 +52,9 @@ class OpenAIProvider(LLMProvider):
         """Initialize OpenAI client"""
         api_key = self.config.get("api_key")
         if not api_key:
-            raise ValueError("OpenAI API key is required")
+            api_key = os.environ.get("OPENAI_API_KEY")
+            if not api_key:
+                raise ValueError("OpenAI API key is required")
 
         return OpenAI(api_key=api_key)
 
@@ -215,7 +218,9 @@ class AnthropicProvider(LLMProvider):
         """Initialize Anthropic client"""
         api_key = self.config.get("api_key")
         if not api_key:
-            raise ValueError("Anthropic API key is required")
+            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            if not api_key:
+                raise ValueError("Anthropic API key is required")
 
         # Import here to avoid dependency issues
         try:

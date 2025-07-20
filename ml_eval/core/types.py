@@ -46,6 +46,9 @@ class EvaluationMode(Enum):
     SINGLE = "single"
     CONTINUOUS = "continuous"
     WORKFLOW = "workflow"
+    INTERPRETABILITY = "interpretability"
+    EDGE_CASE = "edge_case"
+    FMEA = "fmea"
 
 
 class ReportType(Enum):
@@ -57,6 +60,8 @@ class ReportType(Enum):
     BUSINESS_IMPACT = "business_impact"
     TREND = "trend"
     INCIDENT = "incident"
+    INTERPRETABILITY = "interpretability"
+    EDGE_CASE = "edge_case"
 
 
 class IndustryType(Enum):

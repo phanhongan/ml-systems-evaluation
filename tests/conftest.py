@@ -55,6 +55,87 @@ def sample_config():
 
 
 @pytest.fixture
+def llm_disabled_config():
+    """Configuration with LLM explicitly disabled for testing"""
+    return {
+        "system": {
+            "name": "test_system",
+            "type": "single_model",
+            "criticality": "operational",
+        },
+        "slos": {
+            "accuracy": {
+                "target": 0.95,
+                "window": "24h",
+                "description": "Model accuracy",
+            },
+        },
+        "evaluators": [
+            {
+                "type": "interpretability",
+                "use_llm": False,  # Explicitly disable LLM
+            },
+            {
+                "type": "edge_case",
+                "use_llm": False,  # Explicitly disable LLM
+            },
+            {
+                "type": "safety",
+                "use_llm": False,  # Explicitly disable LLM
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def llm_enabled_config():
+    """Configuration with LLM enabled for testing (with mocked LLM)"""
+    return {
+        "system": {
+            "name": "test_system",
+            "type": "single_model",
+            "criticality": "operational",
+        },
+        "slos": {
+            "accuracy": {
+                "target": 0.95,
+                "window": "24h",
+                "description": "Model accuracy",
+            },
+        },
+        "evaluators": [
+            {
+                "type": "interpretability",
+                "use_llm": True,  # Enable LLM for testing
+                "llm_config": {
+                    "provider": "mock",  # Use mock provider for testing
+                    "model": "gpt-4",
+                    "temperature": 0.1,
+                },
+            },
+            {
+                "type": "edge_case",
+                "use_llm": True,  # Enable LLM for testing
+                "llm_config": {
+                    "provider": "mock",  # Use mock provider for testing
+                    "model": "gpt-4",
+                    "temperature": 0.2,
+                },
+            },
+            {
+                "type": "safety",
+                "use_llm": True,  # Enable LLM for testing
+                "llm_config": {
+                    "provider": "mock",  # Use mock provider for testing
+                    "model": "gpt-4",
+                    "temperature": 0.1,
+                },
+            },
+        ],
+    }
+
+
+@pytest.fixture
 def safety_critical_config():
     """Safety-critical configuration for testing"""
     return {
@@ -216,7 +297,6 @@ def safety_slos():
             error_budget=0.001,
             description="Safety-critical decision accuracy",
             safety_critical=True,
-            compliance_standard="DO-178C",
         )
     ]
 

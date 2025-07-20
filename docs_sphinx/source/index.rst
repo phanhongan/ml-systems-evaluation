@@ -58,9 +58,12 @@ Installation & Setup
 API Reference
 -------------
 
-.. note::
-   API documentation is auto-generated from code docstrings.
-   For comprehensive user guides and examples, see the `Markdown Documentation <../docs/README.md>`_.
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   api
+   api-usage
 
 Indices and tables
 ==================

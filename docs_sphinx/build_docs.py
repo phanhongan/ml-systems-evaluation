@@ -52,7 +52,7 @@ def build_docs(clean=False, fast=False, full=False):
         return False
 
 
-def serve_docs(port=8000, open_browser=True):
+def serve_docs(port=8080, open_browser=True):
     """Serve the documentation locally."""
     docs_dir = Path(__file__).parent
     html_dir = docs_dir / "build" / "html"
@@ -124,8 +124,8 @@ def main():
     parser.add_argument(
         "--port",
         type=int,
-        default=8000,
-        help="Port for serving documentation (default: 8000)",
+        default=8080,
+        help="Port for serving documentation (default: 8080)",
     )
     parser.add_argument(
         "--no-browser", action="store_true", help="Don't open browser when serving"

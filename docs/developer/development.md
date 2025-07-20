@@ -77,25 +77,31 @@ To automatically run ruff before commits, add ruff to your pre-commit config:
 Before committing code, run all quality checks:
 
 ```bash
-# Format code
+# Using Makefile (recommended)
+make check
+make test
+
+# Or manually
 uv run ruff format .
-
-# Lint, type check, and sort imports
 uv run ruff check .
-
-# Run tests
 uv run pytest
 ```
 
-### 2. Automated Quality Checks
+### 2. Quick Development Commands
 
-The project includes a script to run all quality checks:
+The project includes a Makefile for common development tasks:
 
 ```bash
-# Run all quality checks
-uv run ruff format --check .
-uv run ruff check .
-uv run pytest
+# See all available commands
+make help
+
+# Quick development workflow
+make format      # Format code
+make lint        # Run linting
+make test        # Run tests
+make check       # Run all quality checks
+make build       # Build package
+make clean       # Clean build artifacts
 ```
 
 ### 3. Pre-commit Hooks
@@ -115,19 +121,20 @@ uv run pre-commit run --all-files
 ### Running Tests
 
 ```bash
-# Run all tests
-uv run pytest
+# Using Makefile (recommended)
+make test
+make test-verbose
+make test-coverage
 
-# Run tests with coverage
+# Or manually
+uv run pytest
+uv run pytest -v
 uv run pytest --cov=ml_eval --cov-report=html --cov-report=term
 
 # Run specific test categories
 uv run pytest tests/test_core.py
 uv run pytest tests/test_collectors.py
 uv run pytest tests/test_evaluators.py
-
-# Run tests with verbose output
-uv run pytest -v
 
 # Run tests in parallel
 uv run pytest -n auto
@@ -167,17 +174,14 @@ The project uses GitHub Actions for continuous integration. The workflow runs:
 Run the same checks locally that CI runs. See [`.github/workflows/test.yml`](../../.github/workflows/test.yml) for the exact CI configuration:
 
 ```bash
-# Install all dependencies
-uv sync --group dev
+# Using Makefile (recommended)
+make ci-check
 
-# Run quality checks
+# Or manually
+uv sync --group dev
 uv run ruff format --check .
 uv run ruff check .
-
-# Run tests
 uv run pytest --cov=ml_eval --cov-report=xml
-
-# Build package
 uv build
 ```
 

@@ -418,24 +418,17 @@ The refactored framework provides several developer-friendly features:
 - Business impact assessment and reporting
 
 ### 🧪 Running Tests
+
 ```bash
-# Basic functionality test
-python -c "
-from ml_eval import EvaluationFramework, SLOConfig, ReliabilityReport
-print('✅ Framework imports successfully')
-"
+# Using Makefile (recommended)
+make test
+make test-verbose
+make test-coverage
 
-# Test CLI functionality
-python -m ml_eval.cli.main --help
-python -m ml_eval.cli.main create-config --output test.yaml --system-name "Test System" --industry manufacturing
-python -m ml_eval.cli.main validate examples/industries/aviation/aircraft-landing.yaml
-python -m ml_eval.cli.main list-collectors examples/industries/cybersecurity/security-operations.yaml
-
-# Run tests
+# Or manually
 pytest tests/ -v
 pytest tests/safety/ -v  # Safety-critical tests
 pytest tests/industry/ -v  # Industry-specific tests
-
 ```
 
 **Note**: For detailed testing instructions, see [docs/developer/testing.md](./docs/developer/testing.md)
@@ -452,18 +445,17 @@ We welcome contributions! Please see our [Development Guide](docs/developer/deve
 ### ⚡ Quick Development Setup
 
 ```bash
-# Install dependencies
+# Using Makefile (recommended)
+make install-dev
+make check
+make test
+make build
+
+# Or manually
 uv sync --group dev
-
-# Run code quality checks
-uv run black .          # Format code
-uv run ruff check .     # Lint, type check, and sort imports
-uv run ruff format .    # Format code
-
-# Run tests
+uv run ruff check .
+uv run ruff format .
 uv run pytest
-
-# Build package
 uv build
 ```
 

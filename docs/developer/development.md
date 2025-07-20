@@ -18,7 +18,7 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies including development tools
-uv sync --group dev
+uv sync --extra dev
 
 # Activate the virtual environment
 uv shell
@@ -178,7 +178,7 @@ Run the same checks locally that CI runs. See [`.github/workflows/test.yml`](../
 make ci-check
 
 # Or manually
-uv sync --group dev
+uv sync --extra dev
 uv run ruff format --check .
 uv run ruff check .
 uv run pytest --cov=ml_eval --cov-report=xml

@@ -9,8 +9,7 @@ help:
 	@echo "Installation:"
 	@echo "  install      Install production dependencies"
 	@echo "  install-dev  Install development dependencies"
-	@echo "  install-docs Install documentation dependencies"
-	@echo "  full-setup   Install dev + docs dependencies (recommended)"
+	@echo "  dev-setup    Install dev dependencies (recommended)"
 	@echo ""
 	@echo "Development:"
 	@echo "  test         Run tests"
@@ -30,7 +29,8 @@ help:
 	@echo ""
 	@echo "Documentation:"
 	@echo "  docs         Show documentation info"
-	@echo "  docs-sphinx  Build Sphinx documentation (if configured)"
+	@echo "  docs-sphinx  Build Sphinx documentation"
+	@echo "  docs-sphinx-serve  Build and serve Sphinx documentation"
 	@echo ""
 
 # Installation
@@ -39,9 +39,6 @@ install:
 
 install-dev:
 	uv sync --extra dev --frozen
-
-install-docs:
-	uv sync --extra docs --frozen
 
 # Testing
 test:
@@ -96,9 +93,7 @@ dev-setup: install-dev
 ci-check: check test-coverage build
 	@echo "All CI checks passed!"
 
-full-setup:
-	uv sync --extra dev --extra docs --frozen
-	@echo "Full development environment setup complete!"
+
 
 # Quick development commands
 quick-test:
@@ -110,13 +105,19 @@ quick-lint:
 quick-format:
 	uv run ruff format --fix .
 
-# Sphinx documentation (if configured)
-docs-sphinx: install-docs
-	@echo "Checking for Sphinx configuration..."
-	@if [ ! -f docs/conf.py ]; then \
-		echo "Error: Sphinx configuration not found."; \
+# Sphinx documentation
+docs-sphinx: install-dev
+	@echo "Building Sphinx documentation..."
+	@if [ -d docs_sphinx ]; then \
+		cd docs_sphinx && uv run make html; \
+		echo "Sphinx documentation built in docs_sphinx/build/html/"; \
+	else \
+		echo "Error: Sphinx documentation directory not found."; \
 		echo "This project uses Markdown documentation in the docs/ directory."; \
-		echo "To set up Sphinx documentation, create docs/conf.py first."; \
+		echo "Sphinx documentation is configured in docs_sphinx/ directory."; \
 		exit 1; \
 	fi
-	uv run sphinx-build -b html docs/ docs/_build/html
+
+docs-sphinx-serve: docs-sphinx
+	@echo "Starting Sphinx documentation server..."
+	@cd docs_sphinx && uv run make serve

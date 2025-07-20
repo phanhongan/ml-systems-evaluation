@@ -18,7 +18,7 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies and the framework
-uv sync --group dev
+uv sync --extra dev
 
 # (Optional) Activate the UV-managed virtual environment
 uv shell
@@ -32,7 +32,7 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install only main dependencies (no dev tools)
-uv sync --group main
+uv sync
 ```
 
 ### 🐳 Method 3: Docker Installation

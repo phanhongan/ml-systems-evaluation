@@ -19,7 +19,7 @@ git clone <repository-url>
 cd ml-systems-evaluation
 
 # Install dependencies and the framework
-uv sync --group dev
+uv sync --extra dev
 
 # (Optional) Activate the UV-managed virtual environment
 uv shell

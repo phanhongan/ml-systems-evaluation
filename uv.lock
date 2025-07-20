@@ -593,24 +593,22 @@ dependencies = [
 
 [package.optional-dependencies]
 dev = [
+    { name = "alabaster" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
     { name = "ruff" },
-    { name = "types-pyyaml" },
-    { name = "types-requests" },
-]
-docs = [
-    { name = "alabaster" },
     { name = "sphinx" },
     { name = "sphinx-rtd-theme" },
+    { name = "types-pyyaml" },
+    { name = "types-requests" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.12.13,<4.0.0" },
-    { name = "alabaster", marker = "extra == 'docs'", specifier = ">=1.0.0" },
+    { name = "alabaster", marker = "extra == 'dev'", specifier = ">=1.0.0" },
     { name = "anthropic", specifier = ">=0.18.0" },
     { name = "click", specifier = ">=8.2.1" },
     { name = "numpy", specifier = ">=2.3.1" },
@@ -623,12 +621,12 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0.1" },
     { name = "requests", specifier = ">=2.31.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
-    { name = "sphinx", marker = "extra == 'docs'", specifier = ">=8.2.3" },
-    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = ">=1.3.0" },
+    { name = "sphinx", marker = "extra == 'dev'", specifier = ">=8.2.3" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'dev'", specifier = ">=1.3.0" },
     { name = "types-pyyaml", marker = "extra == 'dev'", specifier = ">=6.0.12" },
     { name = "types-requests", marker = "extra == 'dev'", specifier = ">=2.31.0" },
 ]
-provides-extras = ["dev", "docs"]
+provides-extras = ["dev"]
 
 [[package]]
 name = "multidict"

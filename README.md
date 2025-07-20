@@ -370,7 +370,23 @@ Enhanced analysis and decision support capabilities:
 ## 🛠️ Development
 
 ### 📚 Documentation
-For documentation including user guides, developer guides, and industry-specific guides, see the [Documentation Index](./docs/README.md).
+The project includes comprehensive documentation in complementary formats:
+
+- **[📖 Markdown Documentation](./docs/README.md)**: Primary documentation with user guides, developer guides, and industry-specific examples
+- **[📚 Sphinx Documentation](./docs_sphinx/)**: API reference and structured documentation with search functionality
+- **[🔧 Development Guide](./docs/developer/development.md)**: Development setup and contribution guidelines
+
+**Quick Start with Documentation:**
+```bash
+# Build Sphinx documentation
+make docs-sphinx
+
+# Serve documentation locally
+make docs-sphinx-serve
+
+# View built documentation
+open docs_sphinx/build/html/index.html
+```
 
 ### 📁 Project Structure
 See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) for the most up-to-date and detailed project structure.
@@ -452,7 +468,7 @@ make test
 make build
 
 # Or manually
-uv sync --group dev
+uv sync --extra dev
 uv run ruff check .
 uv run ruff format .
 uv run pytest

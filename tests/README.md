@@ -33,7 +33,7 @@ This directory contains tests for the ML Systems Evaluation Framework, designed 
 ### Prerequisites
 ```bash
 # Install dependencies
-uv sync --group dev
+uv sync --extra dev
 
 # (Optional) Activate the UV-managed virtual environment
 uv shell

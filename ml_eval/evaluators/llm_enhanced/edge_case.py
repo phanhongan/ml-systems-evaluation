@@ -661,7 +661,9 @@ Focus on realistic scenarios that could occur in production.
                 "risk_level": (
                     "high"
                     if overall_risk < 0.7
-                    else "medium" if overall_risk < 0.9 else "low"
+                    else "medium"
+                    if overall_risk < 0.9
+                    else "low"
                 ),
             }
 
@@ -778,7 +780,9 @@ Focus on realistic scenarios that could occur in production.
                     "safety_status": (
                         "adequate"
                         if score >= 0.8
-                        else "concerning" if score >= 0.6 else "critical"
+                        else "concerning"
+                        if score >= 0.6
+                        else "critical"
                     ),
                 }
 

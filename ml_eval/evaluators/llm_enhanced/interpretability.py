@@ -196,9 +196,9 @@ class InterpretabilityEvaluator(BaseEvaluator):
                     explanation = self._generate_component_explanation(
                         component, metrics, component_scores[component]
                     )
-                    llm_enhanced["natural_language_explanations"][
-                        component
-                    ] = explanation
+                    llm_enhanced["natural_language_explanations"][component] = (
+                        explanation
+                    )
 
             # Analyze decision transparency patterns
             transparency_analysis = self._analyze_decision_transparency(metrics)

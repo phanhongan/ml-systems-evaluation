@@ -84,17 +84,75 @@ collectors:
 
 evaluators:
   - type: "safety"
-    compliance_standards: ["DO-178C", "DO-254", "ARP4754A"]
-    critical_metrics: ["landing_decision_confidence", "obstacle_detection", "false_positive_rate"]
-    safety_margins:
-      decision_confidence: 0.05  # 5% safety margin
-      response_time: 0.1  # 10% safety margin
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      compliance_standards: ["DO-178C", "DO-254", "ARP4754A"]
+      critical_metrics: ["landing_decision_confidence", "obstacle_detection", "false_positive_rate"]
+      safety_margins:
+        decision_confidence: 0.05  # 5% safety margin
+        response_time: 0.1  # 10% safety margin
+      safety_thresholds:
+        decision_confidence_threshold:
+          min: 0.95
+          description: "Minimum confidence threshold required for autonomous decisions"
+        response_time_p99:
+          max: 500  # milliseconds
+          description: "99th percentile response time for critical flight decisions"
+        false_positive_rate:
+          max: 0.001
+          description: "Maximum allowed false positive rate for safety-critical alerts"
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.9
+        decision_transparency: 0.95
+        explanation_quality: 0.9
+        human_readability: 0.9
+      explainability_metrics:
+        - "flight_path_explainability"
+        - "landing_decision_transparency"
+        - "weather_assessment_interpretability"
+        - "obstacle_detection_explanation"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.95
+        stress_test: 0.9
+        failure_recovery: 0.99
+      edge_case_scenarios:
+        - "low_visibility_landing"
+        - "crosswind_extreme_conditions"
+        - "runway_contamination"
+        - "sensor_failure_recovery"
+        - "communication_loss_handling"
+        - "emergency_landing_scenarios"
+
   - type: "reliability"
     error_budget_window: "30d"
     critical_metrics: ["system_availability", "flight_path_accuracy"]
     reliability_targets:
       mttf: "10000h"  # Mean Time To Failure
       mttr: "1h"      # Mean Time To Repair
+
   - type: "performance"
     metrics: ["system_response_time", "decision_confidence"]
     real_time_threshold: 500  # milliseconds
@@ -102,6 +160,7 @@ evaluators:
       normal_operation: 200  # ms
       degraded_operation: 500  # ms
       emergency_mode: 100  # ms
+
   - type: "drift"
     detection_methods: ["statistical", "ml_model"]
     drift_metrics: ["flight_path_accuracy", "weather_assessment", "runway_identification"]

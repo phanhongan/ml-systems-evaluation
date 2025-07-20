@@ -8,6 +8,7 @@ This directory contains example configurations demonstrating how to use the ML S
 Ready-to-use configurations organized by industry:
 
 - **[Aquaculture](./industries/aquaculture/)**: Species classification and environmental monitoring
+- **[Autonomous Vehicle](./industries/autonomous-vehicle/)**: Perception, planning, and control system evaluation
 - **[Aviation](./industries/aviation/)**: Safety-critical aircraft systems  
 - **[Cybersecurity](./industries/cybersecurity/)**: AI-driven security operations, alert triage, and incident response
 - **[Energy](./industries/energy/)**: Energy optimization recommendations and cost reduction

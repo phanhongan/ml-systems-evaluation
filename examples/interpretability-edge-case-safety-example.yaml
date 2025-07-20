@@ -1,0 +1,131 @@
+name: "Safety-Critical System Evaluation"
+description: "Evaluation system with interpretability, edge case testing, and safety capabilities"
+
+version: "2.0.0"
+domain: "safety_critical"
+
+system:
+  name: "Safety-Critical ML System"
+  type: "safety_critical"
+  components:
+    - perception
+    - decision_making
+    - output_control
+
+collectors:
+  - type: "online"
+    config:
+      metrics:
+        - "system_availability"
+        - "response_time"
+        - "accuracy"
+      collection_interval: 1.0
+
+  - type: "environmental"
+    config:
+      sensors:
+        - "temperature"
+        - "humidity"
+      thresholds:
+        temperature:
+          min: -10.0
+          max: 50.0
+
+evaluators:
+  - type: "interpretability"
+    config:
+      use_llm: false
+      thresholds:
+        overall_interpretability: 0.7
+        decision_transparency: 0.8
+        explanation_quality: 0.7
+
+  - type: "edge_case"
+    config:
+      use_llm: false
+      thresholds:
+        overall_edge_case_handling: 0.8
+        stress_test: 0.7
+        failure_recovery: 0.9
+
+  - type: "safety"
+    config:
+      use_llm: false
+      safety_thresholds:
+        system_availability:
+          min: 0.999
+          max: 1.0
+          critical: true
+        response_time:
+          min: 0.0
+          max: 100.0
+          critical: true
+        accuracy:
+          min: 0.95
+          max: 1.0
+          critical: true
+
+  - type: "performance"
+    config:
+      latency_thresholds:
+        end_to_end_latency_p95: 200.0
+
+  - type: "reliability"
+    config:
+      availability_threshold: 0.999
+      error_budget: 0.001
+
+slos:
+  system_availability:
+    target: 0.999
+    window: "24h"
+    safety_critical: true
+  
+  response_time:
+    target: 0.999
+    window: "1h"
+    safety_critical: true
+  
+  accuracy:
+    target: 0.999
+    window: "24h"
+    safety_critical: true
+
+reports:
+  safety:
+    type: "SafetyReport"
+    config:
+      report_frequency: "real_time"
+      alert_channels: ["email", "dashboard"]
+  
+  compliance:
+    type: "ComplianceReport"
+    config:
+      standards:
+        - "ISO-26262"
+        - "DO-178C"
+      report_frequency: "daily"
+  
+  business:
+    type: "BusinessReport"
+    config:
+      kpis:
+        - "safety_score"
+        - "performance_score"
+        - "reliability_score"
+      report_frequency: "weekly"
+
+monitoring:
+  real_time:
+    enabled: true
+    update_frequency: 0.1
+  
+  alerts:
+    safety_violation:
+      level: "critical"
+      channels: ["email", "dashboard"]
+      escalation: true
+    
+    performance_degradation:
+      level: "warning"
+      channels: ["email", "dashboard"]

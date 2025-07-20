@@ -84,18 +84,82 @@ evaluators:
   - type: "performance"
     metrics: ["vae_anomaly_detection_accuracy", "rule_based_fault_detection_accuracy", "ensemble_prediction_accuracy", "false_positive_rate"]
     real_time_threshold: 300  # seconds
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.7
+        decision_transparency: 0.8
+        explanation_quality: 0.7
+        human_readability: 0.8
+      explainability_metrics:
+        - "anomaly_detection_explainability"
+        - "fault_prediction_transparency"
+        - "maintenance_decision_interpretability"
+        - "equipment_health_explanation"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.8
+        stress_test: 0.7
+        failure_recovery: 0.9
+      edge_case_scenarios:
+        - "sensor_failure_scenarios"
+        - "extreme_operating_conditions"
+        - "equipment_overload_situations"
+        - "maintenance_scheduling_conflicts"
+        - "data_quality_issues"
+        - "model_drift_edge_cases"
+
+  - type: "safety"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      safety_thresholds:
+        critical_equipment_alert:
+          max: 0.05
+          description: "Maximum acceptable false negative rate for critical equipment failure predictions"
+        maintenance_window:
+          min: 4
+          description: "Minimum hours advance warning required for critical equipment maintenance"
+      safety_analysis:
+        - "equipment_failure_risk_assessment"
+        - "maintenance_safety_analysis"
+        - "operator_safety_considerations"
+        - "emergency_shutdown_safety"
+
   - type: "drift"
     detection_methods: ["statistical", "ml_model"]
     drift_metrics: ["vibration_patterns", "temperature_trends", "pressure_variations"]
+
   - type: "reliability"
     error_budget_window: "30d"
     critical_metrics: ["system_availability", "prediction_response_time"]
+
   - type: "performance"
     metrics: ["maintenance_cost_reduction", "downtime_reduction", "equipment_lifetime"]
     thresholds:
       maintenance_cost_reduction: 0.20
       downtime_reduction: 0.30
       equipment_lifetime: 8760  # hours (1 year)
+
   - type: "compliance"
     standards: ["ISO-10816", "ISO-7919"]
     compliance_metrics: ["vibration_compliance", "temperature_compliance"]

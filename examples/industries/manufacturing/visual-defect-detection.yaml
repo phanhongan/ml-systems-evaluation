@@ -53,6 +53,72 @@ evaluators:
         max_inference_time: 100 # milliseconds
         min_throughput: 1000 # items per hour
 
+  - name: "interpretability"
+    type: "interpretability"
+    description: "Evaluates model interpretability and decision transparency"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.7
+        decision_transparency: 0.8
+        explanation_quality: 0.7
+        human_readability: 0.8
+      explainability_metrics:
+        - "defect_classification_explainability"
+        - "visual_decision_transparency"
+        - "quality_assessment_interpretability"
+        - "defect_severity_explanation"
+
+  - name: "edge_case"
+    type: "edge_case"
+    description: "Evaluates system behavior under edge cases and extreme conditions"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.8
+        stress_test: 0.7
+        failure_recovery: 0.9
+      edge_case_scenarios:
+        - "poor_lighting_conditions"
+        - "partial_defect_visibility"
+        - "camera_occlusion_scenarios"
+        - "product_variation_edge_cases"
+        - "system_overload_conditions"
+        - "image_quality_degradation"
+
+  - name: "safety"
+    type: "safety"
+    description: "Evaluates safety aspects of visual inspection system"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      safety_thresholds:
+        false_negative_rate:
+          max: 0.01
+          description: "Maximum acceptable false negative rate for critical defects"
+        false_positive_rate:
+          max: 0.05
+          description: "Maximum acceptable false positive rate for defect detection"
+      safety_analysis:
+        - "critical_defect_miss_risk"
+        - "quality_control_safety"
+        - "production_line_safety"
+        - "operator_safety_considerations"
+
   - name: "visual_drift_monitor"
     type: "drift"
     description: "Monitors for changes in visual patterns"

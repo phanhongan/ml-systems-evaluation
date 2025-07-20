@@ -145,7 +145,46 @@ evaluators:
       }
     }
     failure_modes: ["sonar_signal_loss", "processing_failure", "environmental_interference", "hazard_missed", "false_positive_hazard_detection"]
-  
+
+  - type: "interpretability"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      thresholds:
+        overall_interpretability: 0.7
+        decision_transparency: 0.8
+        explanation_quality: 0.7
+        human_readability: 0.8
+      explainability_metrics:
+        - "species_classification_explainability"
+        - "hazard_detection_transparency"
+        - "catch_decision_interpretability"
+        - "gear_avoidance_justification"
+
+  - type: "edge_case"
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.2
+      thresholds:
+        overall_edge_case_handling: 0.8
+        stress_test: 0.7
+        failure_recovery: 0.9
+      edge_case_scenarios:
+        - "poor_sonar_conditions"
+        - "mixed_species_schools"
+        - "environmental_interference"
+        - "equipment_failure_scenarios"
+        - "extreme_weather_conditions"
+        - "gear_entanglement_risks"
+
   - type: "performance"
     metrics: ["accuracy", "latency", "throughput", "catch_efficiency", "hazard_detection_speed"]
     thresholds:
@@ -153,21 +192,43 @@ evaluators:
       catch_efficiency: 0.78
       hazard_detection_latency_ms: 200
     baseline_period: "last_30_days"
-  
+
   - type: "drift"
     drift_detection: ["water_conditions", "sonar_characteristics", "fish_behavior_patterns", "environmental_hazard_patterns"]
     adaptation_threshold: 0.15
     environmental_factors: ["temperature", "salinity", "turbidity", "depth", "current_patterns"]
-  
+
   - type: "compliance"
     standards: ["fishery_management", "protected_species", "catch_limits", "gear_retrieval", "marine_debris_prevention"]
     audit_requirements: ["catch_logs", "bycatch_reports", "gear_restrictions", "hazard_reports", "retrieval_efforts"]
     reporting_frequency: "daily"
-  
+
   - type: "safety"
-    safety_metrics: ["gear_entanglement_risk", "vessel_damage_risk", "crew_safety_incidents"]
-    risk_assessment: ["hazard_density", "hazard_type_risk", "environmental_conditions"]
-    emergency_protocols: ["gear_entanglement_response", "vessel_damage_mitigation", "emergency_retrieval"]
+    config:
+      use_llm: true
+      llm:
+        provider: "openai"
+        provider_config:
+          model: "gpt-4"
+          temperature: 0.1
+      safety_metrics: ["gear_entanglement_risk", "vessel_damage_risk", "crew_safety_incidents"]
+      risk_assessment: ["hazard_density", "hazard_type_risk", "environmental_conditions"]
+      emergency_protocols: ["gear_entanglement_response", "vessel_damage_mitigation", "emergency_retrieval"]
+      safety_thresholds:
+        gear_entanglement_risk:
+          max: 0.05
+          description: "Maximum acceptable gear entanglement risk"
+        vessel_damage_risk:
+          max: 0.03
+          description: "Maximum acceptable vessel damage risk"
+        crew_safety_incidents:
+          max: 0.01
+          description: "Maximum acceptable crew safety incident rate"
+      safety_analysis:
+        - "gear_safety_assessment"
+        - "vessel_safety_analysis"
+        - "crew_safety_considerations"
+        - "emergency_response_safety"
 
 # Business metrics (not SLOs - can have any positive values)
 business_metrics:

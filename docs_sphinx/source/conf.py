@@ -61,7 +61,7 @@ intersphinx_mapping = {
 }
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "*.backup.*"]
 
 language = "en"
 
@@ -73,15 +73,17 @@ html_static_path = ["_static"]
 
 # Theme options
 html_theme_options = {
-    "navigation_depth": 4,
+    "navigation_depth": 3,
     "titles_only": False,
-    "collapse_navigation": True,
+    "collapse_navigation": False,
     "sticky_navigation": True,
     "includehidden": True,
     "logo_only": False,
     "prev_next_buttons_location": "bottom",
-    "style_external_links": False,
+    "style_external_links": True,
     "style_nav_header_background": "#2980B9",
+    "canonical_url": "",
+    "analytics_id": "",
 }
 
 # HTML context

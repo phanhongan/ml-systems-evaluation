@@ -96,339 +96,118 @@ POST /config/{config_id}/validate
 }
 ```
 
-### Template Management
-
-#### List Templates
-```http
-GET /templates
-```
-
-**Query Parameters:**
-- `industry` (string): Filter by industry
-- `type` (string): Filter by template type
-- `limit` (integer): Number of results to return
-- `offset` (integer): Number of results to skip
-
-**Response:**
-```json
-{
-  "templates": [
-    {
-      "id": "manufacturing-predictive_maintenance",
-      "name": "Manufacturing Predictive Maintenance",
-      "industry": "manufacturing",
-      "description": "Manufacturing predictive maintenance template",
-      "version": "1.0.0"
-    }
-  ],
-  "total": 10,
-  "limit": 20,
-  "offset": 0
-}
-```
-
-#### Get Template
-```http
-GET /templates/{template_id}
-```
-
-#### Use Template
-```http
-POST /templates/{template_id}/use
-```
-
-**Request Body:**
-```json
-{
-  "customizations": {
-    "system.name": "My System",
-    "data_sources.0.connection": "postgresql://user:pass@localhost/db"
-  }
-}
-```
-
-### Data Collection
-
-#### Start Collection
-```http
-POST /collect
-```
-
-**Request Body:**
-```json
-{
-  "config_id": "config_123",
-  "collector_name": "quality_collector",
-  "start_date": "2024-01-01",
-  "end_date": "2024-01-31",
-  "batch_size": 10000
-}
-```
-
-#### Get Collection Status
-```http
-GET /collect/{collection_id}
-```
-
-**Response:**
-```json
-{
-  "id": "collection_123",
-  "status": "running",
-  "progress": 0.75,
-  "records_collected": 75000,
-  "started_at": "2024-01-01T00:00:00Z",
-  "estimated_completion": "2024-01-01T02:00:00Z"
-}
-```
-
-#### List Collections
-```http
-GET /collect
-```
-
-**Query Parameters:**
-- `config_id` (string): Filter by configuration
-- `status` (string): Filter by status
-- `start_date` (string): Filter by start date
-- `end_date` (string): Filter by end date
-
-### Evaluation
+### Evaluation Management
 
 #### Start Evaluation
 ```http
-POST /evaluate
+POST /evaluation
 ```
 
 **Request Body:**
 ```json
 {
   "config_id": "config_123",
-  "evaluator_name": "performance_evaluator",
-  "data_collection_id": "collection_123",
+  "evaluation_type": "full",
   "options": {
-    "parallel": true,
-    "timeout": 3600
+    "skip_collection": false,
+    "sample_data": false
   }
 }
 ```
 
 #### Get Evaluation Status
 ```http
-GET /evaluate/{evaluation_id}
-```
-
-**Response:**
-```json
-{
-  "id": "evaluation_123",
-  "status": "completed",
-  "progress": 1.0,
-  "results": {
-    "accuracy": 0.95,
-    "precision": 0.92,
-    "recall": 0.88
-  },
-  "started_at": "2024-01-01T00:00:00Z",
-  "completed_at": "2024-01-01T01:00:00Z"
-}
+GET /evaluation/{evaluation_id}
 ```
 
 #### Get Evaluation Results
 ```http
-GET /evaluate/{evaluation_id}/results
+GET /evaluation/{evaluation_id}/results
 ```
 
-**Response:**
-```json
-{
-  "evaluation_id": "evaluation_123",
-  "metrics": {
-    "accuracy": {
-      "value": 0.95,
-      "threshold": 0.90,
-      "status": "pass"
-    },
-    "precision": {
-      "value": 0.92,
-      "threshold": 0.85,
-      "status": "pass"
-    }
-  },
-  "drift_analysis": {
-    "detected": false,
-    "score": 0.05
-  },
-  "recommendations": [
-    "Consider retraining model due to slight performance degradation"
-  ]
-}
-```
-
-#### List Evaluations
+#### Download Report
 ```http
-GET /evaluate
+GET /evaluation/{evaluation_id}/report
 ```
 
-### Reporting
+### Data Collection
 
-#### Generate Report
+#### Start Data Collection
 ```http
-POST /reports
+POST /collection
 ```
 
 **Request Body:**
 ```json
 {
   "config_id": "config_123",
-  "evaluation_id": "evaluation_123",
-  "report_type": "business",
-  "format": "html",
-  "options": {
-    "include_charts": true,
-    "include_recommendations": true
+  "collection_options": {
+    "time_range": "last_24h",
+    "sample_size": 1000
   }
 }
 ```
 
-#### Get Report Status
+#### Monitor Collection Progress
 ```http
-GET /reports/{report_id}
+GET /collection/{collection_id}/progress
 ```
 
-**Response:**
-```json
-{
-  "id": "report_123",
-  "status": "completed",
-  "download_url": "https://api.ml-eval.com/reports/report_123/download",
-  "created_at": "2024-01-01T00:00:00Z"
-}
-```
-
-#### Download Report
+#### Get Collection Results
 ```http
-GET /reports/{report_id}/download
+GET /collection/{collection_id}/results
 ```
 
-#### List Reports
-```http
-GET /reports
-```
-
-### Monitoring
-
-#### Get System Status
-```http
-GET /monitor/status
-```
-
-**Response:**
-```json
-{
-  "status": "healthy",
-  "components": {
-    "database": "healthy",
-    "evaluation_engine": "healthy",
-    "reporting_engine": "healthy"
-  },
-  "metrics": {
-    "cpu_usage": 0.25,
-    "memory_usage": 0.40,
-    "disk_usage": 0.60
-  }
-}
-```
+### Monitoring & Alerts
 
 #### Get Alerts
 ```http
-GET /monitor/alerts
+GET /alerts
 ```
 
 **Query Parameters:**
-- `status` (string): Filter by alert status
-- `severity` (string): Filter by severity level
-- `start_date` (string): Filter by start date
-- `end_date` (string): Filter by end date
-
-**Response:**
-```json
-{
-  "alerts": [
-    {
-      "id": "alert_123",
-      "type": "threshold_breach",
-      "severity": "warning",
-      "message": "Accuracy below threshold",
-      "created_at": "2024-01-01T00:00:00Z",
-      "acknowledged": false
-    }
-  ]
-}
-```
+- `status`: active, resolved, acknowledged
+- `severity`: critical, warning, info
+- `time_range`: last_hour, last_day, last_week
 
 #### Acknowledge Alert
 ```http
-POST /monitor/alerts/{alert_id}/acknowledge
+POST /alerts/{alert_id}/acknowledge
 ```
 
-#### Resolve Alert
+#### Get Metrics
 ```http
-POST /monitor/alerts/{alert_id}/resolve
+GET /metrics
 ```
 
-### Data Sources
-
-#### Test Connection
-```http
-POST /data-sources/test
-```
-
-**Request Body:**
-```json
-{
-  "type": "database",
-  "connection": "postgresql://user:pass@localhost/db",
-  "options": {
-    "timeout": 30,
-    "ssl_mode": "require"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Connection successful",
-  "tables": ["quality_measurements", "defect_reports"]
-}
-```
-
-#### Get Data Source Schema
-```http
-GET /data-sources/{source_id}/schema
-```
+**Query Parameters:**
+- `metric_name`: accuracy, precision, recall, drift_score
+- `time_range`: last_hour, last_day, last_week, last_month
 
 ## Python SDK
 
-### Installation
+### Initialize Client
+```python
+from ml_eval.api import MLSystemsEvaluationClient
 
-```bash
-pip install ml-eval-sdk
+# Initialize with API key
+client = MLSystemsEvaluationClient(
+    base_url="http://localhost:8000/api/v1",
+    api_key="your_api_key"
+)
+
+# Initialize with OAuth2 token
+client = MLSystemsEvaluationClient(
+    base_url="http://localhost:8000/api/v1",
+    oauth_token="your_oauth_token"
+)
 ```
 
-### Basic Usage
-
+### Configuration Operations
 ```python
-from ml_eval import MLEvalClient
-
-# Initialize client
-client = MLEvalClient(api_key="your_api_key")
-
 # Create configuration
 config = client.create_configuration({
-    "name": "My System",
+    "name": "Production Quality Control",
     "type": "manufacturing",
     "criticality": "business-critical",
     "data_sources": [...],
@@ -438,269 +217,116 @@ config = client.create_configuration({
     "slo": {...}
 })
 
-# Start data collection
-collection = client.start_collection(
-    config_id=config["id"],
-    collector_name="quality_collector"
-)
-
-# Wait for collection to complete
-client.wait_for_collection(collection["id"])
-
-# Start evaluation
-evaluation = client.start_evaluation(
-    config_id=config["id"],
-    evaluation_id=collection["id"]
-)
-
-# Wait for evaluation to complete
-client.wait_for_evaluation(evaluation["id"])
-
-# Generate report
-report = client.generate_report(
-    config_id=config["id"],
-    evaluation_id=evaluation["id"],
-    report_type="business"
-)
-
-# Download report
-client.download_report(report["id"], "report.html")
-```
-
-### Configuration Management
-
-```python
-# List configurations
-configs = client.list_configurations()
-
 # Get configuration
 config = client.get_configuration("config_123")
 
 # Update configuration
 updated_config = client.update_configuration("config_123", {
-    "name": "Updated Name"
+    "name": "Updated Quality Control"
 })
 
 # Validate configuration
 validation = client.validate_configuration("config_123")
 ```
 
-### Template Management
-
-```python
-# List templates
-templates = client.list_templates(industry="manufacturing")
-
-# Use template
-config = client.use_template("manufacturing-predictive_maintenance", {
-    "system.name": "My System",
-    "data_sources.0.connection": "postgresql://user:pass@localhost/db"
-})
-```
-
-### Data Collection
-
-```python
-# Start collection
-collection = client.start_collection(
-    config_id="config_123",
-    collector_name="quality_collector",
-    start_date="2024-01-01",
-    end_date="2024-01-31"
-)
-
-# Monitor collection progress
-while True:
-    status = client.get_collection_status(collection["id"])
-    if status["status"] == "completed":
-        break
-    time.sleep(10)
-```
-
-### Evaluation
-
+### Evaluation Operations
 ```python
 # Start evaluation
-evaluation = client.start_evaluation(
-    config_id="config_123",
-    evaluator_name="performance_evaluator"
-)
+evaluation = client.start_evaluation("config_123")
+
+# Wait for completion
+results = client.wait_for_evaluation(evaluation["id"])
 
 # Get results
 results = client.get_evaluation_results(evaluation["id"])
 
-# Check if metrics meet thresholds
-for metric, data in results["metrics"].items():
-    if data["status"] == "fail":
-        print(f"Metric {metric} failed: {data['value']} < {data['threshold']}")
+# Download report
+report = client.download_report(evaluation["id"])
 ```
 
-### Reporting
-
+### Data Collection
 ```python
-# Generate report
-report = client.generate_report(
-    config_id="config_123",
-    evaluation_id="evaluation_123",
-    report_type="business",
-    format="html"
-)
+# Start collection
+collection = client.start_collection("config_123")
 
-# Download report
-client.download_report(report["id"], "business_report.html")
+# Monitor progress
+progress = client.get_collection_progress(collection["id"])
+
+# Get results
+results = client.get_collection_results(collection["id"])
 ```
 
 ### Monitoring
-
 ```python
-# Get system status
-status = client.get_system_status()
+# Get metrics
+metrics = client.get_metrics(
+    metric_names=["accuracy", "precision", "recall"],
+    time_range="last_24h"
+)
+
+# Check thresholds
+threshold_check = client.check_metrics_thresholds(
+    metrics=metrics,
+    thresholds={"accuracy": 0.95, "precision": 0.90}
+)
 
 # Get alerts
-alerts = client.get_alerts(status="active")
+alerts = client.get_alerts(status="active", severity="critical")
 
 # Acknowledge alert
 client.acknowledge_alert("alert_123")
 ```
 
-## Webhook Integration
-
-### Configure Webhooks
-
-```http
-POST /webhooks
-```
-
-**Request Body:**
-```json
-{
-  "url": "https://your-app.com/webhook",
-  "events": ["evaluation.completed", "alert.created"],
-  "secret": "your_webhook_secret"
-}
-```
-
-### Webhook Events
-
-#### Evaluation Completed
-```json
-{
-  "event": "evaluation.completed",
-  "timestamp": "2024-01-01T00:00:00Z",
-  "data": {
-    "evaluation_id": "evaluation_123",
-    "config_id": "config_123",
-    "status": "completed",
-    "results": {...}
-  }
-}
-```
-
-#### Alert Created
-```json
-{
-  "event": "alert.created",
-  "timestamp": "2024-01-01T00:00:00Z",
-  "data": {
-    "alert_id": "alert_123",
-    "type": "threshold_breach",
-    "severity": "warning",
-    "message": "Accuracy below threshold"
-  }
-}
-```
-
 ## Error Handling
 
-### Error Response Format
+### HTTP Status Codes
+- `200 OK`: Request successful
+- `201 Created`: Resource created successfully
+- `400 Bad Request`: Invalid request parameters
+- `401 Unauthorized`: Authentication required
+- `403 Forbidden`: Insufficient permissions
+- `404 Not Found`: Resource not found
+- `422 Unprocessable Entity`: Validation errors
+- `500 Internal Server Error`: Server error
 
+### Error Response Format
 ```json
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Invalid configuration format",
+    "message": "Invalid configuration parameters",
     "details": {
       "field": "data_sources",
-      "issue": "Missing required field 'connection'"
+      "issue": "Missing required connection string"
     }
   }
 }
 ```
 
-### Common Error Codes
+## Rate Limiting
 
-- `AUTHENTICATION_ERROR`: Invalid API key or token
-- `AUTHORIZATION_ERROR`: Insufficient permissions
-- `VALIDATION_ERROR`: Invalid request data
-- `NOT_FOUND`: Resource not found
-- `CONFLICT`: Resource conflict
-- `RATE_LIMIT_EXCEEDED`: Too many requests
-- `INTERNAL_ERROR`: Server error
-
-### Rate Limiting
-
-- **Standard Plan**: 1000 requests per hour
-- **Professional Plan**: 10000 requests per hour
+The API implements rate limiting to ensure fair usage:
+- **Standard Plan**: 100 requests per minute
+- **Professional Plan**: 1000 requests per minute
 - **Enterprise Plan**: Custom limits
 
-Rate limit headers:
+Rate limit headers are included in responses:
 ```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 999
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
 X-RateLimit-Reset: 1640995200
 ```
 
-## SDK Reference
+## SDK Installation
 
-### MLEvalClient
+```bash
+# Install Python SDK
+pip install ml-systems-evaluation-sdk
 
-#### Constructor
-```python
-MLEvalClient(api_key=None, base_url=None, timeout=30)
+# Or with UV
+uv add ml-systems-evaluation-sdk
 ```
 
-#### Methods
+## SDK Documentation
 
-##### Configuration
-- `create_configuration(config_data)`
-- `get_configuration(config_id)`
-- `update_configuration(config_id, updates)`
-- `delete_configuration(config_id)`
-- `list_configurations(**filters)`
-- `validate_configuration(config_id)`
-
-##### Templates
-- `list_templates(**filters)`
-- `get_template(template_id)`
-- `use_template(template_id, customizations=None)`
-
-##### Data Collection
-- `start_collection(config_id, collector_name, **options)`
-- `get_collection_status(collection_id)`
-- `list_collections(**filters)`
-- `wait_for_collection(collection_id, timeout=None)`
-
-##### Evaluation
-- `start_evaluation(config_id, **options)`
-- `get_evaluation_status(evaluation_id)`
-- `get_evaluation_results(evaluation_id)`
-- `list_evaluations(**filters)`
-- `wait_for_evaluation(evaluation_id, timeout=None)`
-
-##### Reporting
-- `generate_report(config_id, evaluation_id, report_type, **options)`
-- `get_report_status(report_id)`
-- `download_report(report_id, file_path)`
-- `list_reports(**filters)`
-
-##### Monitoring
-- `get_system_status()`
-- `get_alerts(**filters)`
-- `acknowledge_alert(alert_id)`
-- `resolve_alert(alert_id)`
-
-##### Data Sources
-- `test_connection(connection_data)`
-- `get_data_source_schema(source_id)`
-
-This API reference provides access to all framework functionality through both REST API and Python SDK interfaces, enabling integration with existing systems and workflows. 
+For detailed SDK documentation, see the [Python SDK Reference](../sdk/README.md). 

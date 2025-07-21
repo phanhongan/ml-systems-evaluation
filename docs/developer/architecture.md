@@ -26,7 +26,7 @@ The framework follows a hybrid architecture that combines deterministic componen
 │              ML Systems Evaluation Framework                │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
-│  │  CLI        │  │  Web UI*    │  │  API*       │          │
+│  │  CLI        │  │  Web UI*    │  │  API        │          │
 │  │             │  │             │  │             │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 ├─────────────────────────────────────────────────────────────┤
@@ -264,6 +264,7 @@ This roadmap ensures we build the right capabilities from the start, with clear 
 
 **Currently Available:**
 - **CLI**: Command-line interface for framework operations
+- **API**: REST API for programmatic access
 - **Configuration Management**: Loading and validation of configurations
 - **Data Collection**: Collectors for various data sources
 - **Evaluation Engine**: Analysis and evaluation components
@@ -275,7 +276,6 @@ This roadmap ensures we build the right capabilities from the start, with clear 
 **Future Releases:**
 - **Template Engine**: Dynamic template management with CLI commands
 - **Web UI**: Web-based interface for monitoring and management
-- **API**: REST API for programmatic access
 - **Monitoring Agent**: Autonomous real-time monitoring and health checks
 - **Alerting Agent**: Autonomous configurable alerts and notifications
 

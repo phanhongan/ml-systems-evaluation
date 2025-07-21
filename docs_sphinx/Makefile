@@ -31,8 +31,8 @@ clean-all:
 	rm -rf $(SOURCEDIR)/_autosummary
 
 serve:
-	@echo "Starting documentation server at http://localhost:8000"
-	@cd $(BUILDDIR)/html && python -m http.server 8000
+	@echo "Starting documentation server at http://localhost:8080"
+	@cd $(BUILDDIR)/html && python -m http.server 8080
 
 check:
 	@$(SPHINXBUILD) -b linkcheck "$(SOURCEDIR)" "$(BUILDDIR)/linkcheck" $(SPHINXOPTS)

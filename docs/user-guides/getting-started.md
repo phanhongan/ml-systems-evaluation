@@ -9,47 +9,38 @@ This guide will help you quickly set up and run your first evaluation using the 
 - 📊 Access to your ML system's monitoring data
 - 🏗️ Basic understanding of your system's architecture
 
-## 📦 Installation
+## 📦 Installation & Setup
 
-### 1️⃣ Install the Framework
-
+### Quick Installation
 ```bash
-# Clone the repository
+# Clone and setup
 git clone <repository-url>
 cd ml-systems-evaluation
-
-# Install dependencies and the framework
 uv sync --extra dev
-
-# (Optional) Activate the UV-managed virtual environment
 uv shell
 
-# For production installs (main dependencies only)
-uv sync --group main
+# Verify installation
+ml-eval --help
 ```
 
-### 2️⃣ Verify Installation
-
+### Production Installation
 ```bash
-ml-eval --help
+# Main dependencies only
+uv sync --group main
 ```
 
 ## ⚡ Quick Start: Your First Evaluation
 
-### 1️⃣ Use an Example Configuration
-
-The framework provides industry-specific example configurations. For your first evaluation, we recommend starting with an existing example:
-
+### 1. Use Example Configuration
 ```bash
-# Copy an example configuration for manufacturing
+# Copy an example configuration
 cp examples/industries/manufacturing/predictive-maintenance.yaml my-config.yaml
 
-# Or create a new configuration from scratch
+# Or create from scratch
 ml-eval create-config --output my-config.yaml --system-name "My Production System" --industry manufacturing
 ```
 
-### 2️⃣ Configure Your System
-
+### 2. Configure Your System
 Create a configuration file for your system:
 
 ```yaml
@@ -95,126 +86,44 @@ slo:
   latency_p95: 100  # milliseconds
 ```
 
-### 3️⃣ Run Your First Evaluation
-
+### 3. Run Evaluation
 ```bash
-# Validate your configuration first
-ml-eval validate config.yaml
-
-# Run a complete evaluation
-ml-eval run config.yaml --output results.json
+# Run complete evaluation
+ml-eval evaluate --config my-config.yaml
 
 # Run specific components
-ml-eval collect config.yaml --output data.json
-ml-eval evaluate config.yaml --data data.json --output evaluation.json
-ml-eval report config.yaml --results evaluation.json --output reports.json
+ml-eval collect --config my-config.yaml
+ml-eval evaluate --config my-config.yaml --skip-collection
+ml-eval report --config my-config.yaml
 ```
 
-### 4️⃣ Review Results
+## 🔧 Configuration Options
 
-Check the generated reports in the `./reports/` directory:
-
-- **📊 Business Report**: High-level metrics and recommendations
-- **📈 Performance Report**: Detailed performance analysis
-- **📋 Compliance Report**: Regulatory compliance status
-
-## 📊 Understanding Your Results
-
-### 🎯 Key Metrics to Monitor
-
-1. **📊 Accuracy**: Overall prediction accuracy
-2. **🎯 Precision**: True positive rate
-3. **🔍 Recall**: Sensitivity of the model
-4. **📈 Drift Score**: Data distribution changes
-5. **⚡ Latency**: Response time percentiles
-
-### 🚨 Alert Thresholds
-
-The framework automatically alerts you when:
-- 📉 Performance metrics fall below thresholds
-- 📊 Data drift is detected
-- 🔴 System availability drops
-- 📋 Compliance violations occur
-
-## 🎯 Next Steps
-
-1. **⚙️ Customize Configuration**: Adapt the template to your specific needs
-2. **📊 Set Up Monitoring**: Configure continuous monitoring
-3. **📋 Define SLOs**: Establish Service Level Objectives
-4. **📈 Create Dashboards**: Visualize your metrics
-5. **🚨 Set Up Alerts**: Configure notification systems
-
-## 🔧 Troubleshooting
-
-### ❌ Common Issues
-
-**🚨 Issue**: "No data found"
-- **✅ Solution**: Verify your data source configuration and connection
-
-**🚨 Issue**: "Evaluation failed"
-- **✅ Solution**: Check your evaluator configuration and thresholds
-
-**🚨 Issue**: "Template not found"
-- **✅ Solution**: Update to the latest version: `uv update`
-
-### 🆘 Getting Help
-
-- ⚙️ Check the [Configuration Guide](configuration.md) for detailed options
-- 🖥️ Review [CLI Reference](cli-reference.md) for command details
-- 📋 Consult [Example Configurations Guide](example-configurations.md) for your specific domain
-
-## 💡 Example: Manufacturing Quality Control
-
-Here's a complete example for a manufacturing quality control system:
-
-```yaml
-# manufacturing-quality.yaml
-system:
-  name: "PCB Quality Control"
-  criticality: "business-critical"
-
-data_sources:
-  - name: "quality_data"
-    type: "database"
-    connection: "postgresql://user:pass@localhost/pcb_quality"
-    tables: ["inspection_results", "defect_logs"]
-
-collectors:
-  - name: "quality_metrics"
-    type: "offline"
-    data_source: "quality_data"
-    metrics: ["accuracy", "false_positive_rate", "false_negative_rate"]
-
-evaluators:
-  - name: "quality_performance"
-    type: "performance"
-    thresholds:
-      accuracy: 0.98
-      false_positive_rate: 0.01
-      false_negative_rate: 0.005
-
-  - name: "quality_drift"
-    type: "drift"
-    detection_method: "ks_test"
-    features: ["component_size", "solder_quality", "placement_accuracy"]
-
-reports:
-  - name: "quality_report"
-    type: "business"
-    format: "html"
-    output_path: "./quality_reports/"
-
-slo:
-  availability: 0.9995
-  accuracy: 0.98
-  false_positive_rate: 0.01
-  false_negative_rate: 0.005
-```
-
-Run this evaluation with:
-
+### Environment Overrides
 ```bash
-ml-eval run manufacturing-quality.yaml --output quality-results.json
+# Test with sample data
+ml-eval evaluate --config my-config.yaml --sample-data
+
+# Generate template
+ml-eval create-config --template manufacturing --output template.yaml
 ```
 
-This will generate reports for your PCB quality control system, helping you maintain high quality standards and meet production targets. 
+## 📊 Monitoring Setup
+
+### Continuous Monitoring
+```bash
+# Set up cron job (every 5 minutes)
+*/5 * * * * cd /path/to/project && ml-eval evaluate --config production-config.yaml
+
+# Or use monitoring script
+ml-eval monitor --config production-config.yaml --interval 300
+```
+
+## 🚀 Next Steps
+
+1. **Review Results**: Check the generated reports in `./reports/`
+2. **Adjust Configuration**: Modify thresholds and settings based on results
+3. **Set Up Monitoring**: Configure continuous monitoring for production
+4. **Industry Guides**: See industry-specific guides for domain expertise
+
+For detailed configuration options, see the [Configuration Guide](configuration.md). 

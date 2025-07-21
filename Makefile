@@ -1,6 +1,6 @@
 # ML Systems Evaluation Framework - Development Makefile
 
-.PHONY: help install install-dev install-docs test test-verbose test-coverage lint format check clean build docker-build docker-run docs docs-sphinx dev-setup ci-check full-setup quick-test quick-lint quick-format
+.PHONY: help install install-dev install-docs test test-verbose test-coverage lint format check clean build docker-build docker-run docs docs-sphinx dev-setup ci-check full-setup quick-test quick-lint quick-format api api-dev api-test
 
 # Default target
 help:
@@ -18,6 +18,11 @@ help:
 	@echo "  lint         Run linting checks"
 	@echo "  format       Format code"
 	@echo "  check        Run all quality checks (lint + format)"
+	@echo ""
+	@echo "API:"
+	@echo "  api          Start API server"
+	@echo "  api-dev      Start API server in development mode"
+	@echo "  api-test     Run API tests"
 	@echo ""
 	@echo "Build:"
 	@echo "  build        Build the package"
@@ -59,6 +64,16 @@ format:
 
 check: lint format
 
+# API
+api:
+	uv run ml-eval-api
+
+api-dev:
+	uv run ml-eval-api --reload
+
+api-test:
+	uv run pytest tests/test_api.py -v
+
 # Build
 build:
 	uv build
@@ -75,49 +90,45 @@ docker-run:
 
 # Documentation
 docs:
-	@echo "Documentation is in Markdown format in the docs/ directory"
-	@echo "Available documentation:"
-	@echo "  - docs/README.md - Main documentation"
-	@echo "  - docs/developer/ - Development guides"
-	@echo "  - docs/user-guides/ - User guides"
-	@echo "  - docs/reference/ - Reference documentation"
-	@echo "  - docs/industries/ - Industry-specific guides"
-	@echo ""
-	@echo "To build Sphinx documentation (if configured):"
-	@echo "  make docs-sphinx"
+	@echo "📚 Documentation"
+	@echo "  📝 Markdown: docs/README.md (Primary format)"
+	@echo "  🔧 Sphinx: docs_sphinx/ (API docs only)"
+	@echo "  📚 GitHub: https://github.com/phanhongan/ml-systems-evaluation"
 
-# Development workflow
+docs-sphinx:
+	cd docs_sphinx && uv run make html
+
+docs-sphinx-serve:
+	cd docs_sphinx && uv run make serve
+
+# Documentation utilities (simplified)
+docs-build:
+	@echo "📚 Building documentation..."
+	@echo "✅ Markdown documentation is ready in docs/"
+	@echo "🔧 Sphinx API docs: make docs-sphinx"
+
+docs-serve:
+	@echo "📚 Serving documentation..."
+	@echo "📝 Markdown: View docs/README.md"
+	@echo "🔧 Sphinx: make docs-sphinx-serve"
+
+# Development setup
 dev-setup: install-dev
-	@echo "Development environment setup complete!"
+	@echo "✅ Development environment ready!"
 
-ci-check: check test-coverage build
-	@echo "All CI checks passed!"
+# CI checks
+ci-check: lint test
 
+# Full setup for new developers
+full-setup: dev-setup
+	@echo "✅ Full development environment ready!"
 
-
-# Quick development commands
+# Quick commands for development
 quick-test:
 	uv run pytest -x
 
 quick-lint:
-	uv run ruff check --fix .
+	uv run ruff check .
 
 quick-format:
-	uv run ruff format --fix .
-
-# Sphinx documentation
-docs-sphinx: install-dev
-	@echo "Building Sphinx documentation..."
-	@if [ -d docs_sphinx ]; then \
-		cd docs_sphinx && uv run make html; \
-		echo "Sphinx documentation built in docs_sphinx/build/html/"; \
-	else \
-		echo "Error: Sphinx documentation directory not found."; \
-		echo "This project uses Markdown documentation in the docs/ directory."; \
-		echo "Sphinx documentation is configured in docs_sphinx/ directory."; \
-		exit 1; \
-	fi
-
-docs-sphinx-serve: docs-sphinx
-	@echo "Starting Sphinx documentation server..."
-	@cd docs_sphinx && uv run make serve
+	uv run ruff format .

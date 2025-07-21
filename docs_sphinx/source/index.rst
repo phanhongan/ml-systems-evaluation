@@ -1,74 +1,126 @@
-ML Systems Evaluation Framework
-===============================
-
-A comprehensive framework for evaluating machine learning systems across various industries and use cases.
-
-.. image:: https://img.shields.io/badge/python-3.11+-blue.svg
-   :target: https://www.python.org/downloads/
-   :alt: Python 3.11+
-
-.. image:: https://img.shields.io/badge/license-MIT-green.svg
-   :target: https://opensource.org/licenses/MIT
-   :alt: MIT License
-
-Overview
---------
-
-The ML Systems Evaluation Framework provides a comprehensive toolkit for evaluating machine learning systems across various industries including aviation, energy, manufacturing, maritime, and more. It offers standardized evaluation metrics, safety assessments, and compliance checks to ensure ML systems meet industry standards and regulatory requirements.
-
-Key Features
-------------
-
-* **Multi-Industry Support**: Pre-configured evaluations for aviation, energy, manufacturing, maritime, and other industries
-* **Safety-Critical Evaluations**: Specialized assessments for safety-critical applications
-* **Compliance Checking**: Built-in regulatory compliance validation
-* **Custom Evaluators**: Extensible framework for custom evaluation metrics
-* **Real-time Monitoring**: Live system monitoring and alerting capabilities
-* **Comprehensive Reporting**: Detailed reports for stakeholders and regulators
-
-Quick Start
------------
-
-.. code-block:: bash
-
-   # Install the framework
-   pip install ml-systems-evaluation
-
-   # Run a basic evaluation
-   ml-eval evaluate --config examples/templates/basic-system.yaml
-
-   # Run industry-specific evaluation
-   ml-eval evaluate --config examples/industries/aviation/aircraft-landing.yaml
-
-Installation & Setup
---------------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Installation & Setup
-
-   installation
-   configuration
-   getting-started
+ML Systems Evaluation Framework Documentation
+=============================================
 
 .. note::
-   For detailed user guides, developer documentation, and industry-specific guides,
-   see the `Markdown Documentation <../docs/README.md>`_.
 
-API Reference
--------------
+   **📚 Documentation Migration Complete**
+   
+   This project has migrated to a simplified documentation strategy using **Markdown as the primary format**.
+   Sphinx is now used only for auto-generated API documentation.
+
+   **🔗 Main Documentation**: `docs/README.md <https://github.com/phanhongan/ml-systems-evaluation/blob/main/docs/README.md>`_
+   
+   **📚 GitHub Repository**: `https://github.com/phanhongan/ml-systems-evaluation <https://github.com/phanhongan/ml-systems-evaluation>`_
+
+Documentation Strategy
+----------------------
+
+This project uses a simplified documentation approach:
+
+* **📝 Markdown**: Primary documentation format (25 files)
+* **🔧 Sphinx**: Auto-generated API documentation only
+* **📚 GitHub Repository**: Source documentation
+* **🔄 Single Source**: No more dual documentation complexity
+
+Benefits
+--------
+
+* **✅ Simpler Maintenance**: Single format to maintain
+* **✅ Better Performance**: Faster builds and less overhead
+* **✅ Improved Experience**: Easier for contributors
+* **✅ Reduced Complexity**: No sync issues or conversion problems
+
+Quick Links
+-----------
+
+* `📚 Main Documentation <https://github.com/phanhongan/ml-systems-evaluation/blob/main/docs/README.md>`_
+* `🚀 Getting Started <https://github.com/phanhongan/ml-systems-evaluation/blob/main/docs/user-guides/getting-started.md>`_
+* `⚙️ Configuration <https://github.com/phanhongan/ml-systems-evaluation/blob/main/docs/user-guides/configuration.md>`_
+* `🏭 Industry Guides <https://github.com/phanhongan/ml-systems-evaluation/tree/main/docs/industries>`_
+* `🔧 Developer Guide <https://github.com/phanhongan/ml-systems-evaluation/tree/main/docs/developer>`_
+
+API Documentation
+------------------
+
+Auto-generated API documentation will be available here when implemented.
+
+.. note::
+
+   API documentation will be auto-generated from docstrings when the API is implemented.
+
+Documentation Sections
+---------------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: API Reference
+   :caption: Documentation
 
-   api
-   api-usage
+   user-guides/index
+   developer/index
+   industries/index
+   reference/index
+   integration/index
 
-Indices and tables
-==================
+User Guides
+-----------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 2
+   :caption: User Guides
+
+   user-guides/getting-started
+   user-guides/installation
+   user-guides/configuration
+   user-guides/monitoring
+   user-guides/cli-reference
+   user-guides/first-evaluation
+   user-guides/example-configurations
+
+Developer Guide
+--------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Developer Guide
+
+   developer/development
+   developer/architecture
+   developer/testing
+   developer/extending
+   developer/api-reference
+   developer/configuration-strategy
+
+Industry Guides
+--------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Industry Guides
+
+   industries/manufacturing
+   industries/aviation
+   industries/energy
+   industries/maritime
+
+Reference
+---------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Reference
+
+   reference/compliance-standards
+   reference/slo-configuration
+   reference/error-budgets
+   reference/incident-response
+
+Integration Guides
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Integration Guides
+
+   integration/llm-integration
+   integration/logging
 

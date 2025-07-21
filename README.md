@@ -370,10 +370,10 @@ Enhanced analysis and decision support capabilities:
 ## 🛠️ Development
 
 ### 📚 Documentation
-The project includes comprehensive documentation in complementary formats:
+The project includes comprehensive documentation in a simplified format:
 
 - **[📖 Markdown Documentation](./docs/README.md)**: Primary documentation with user guides, developer guides, and industry-specific examples
-- **[📚 Sphinx Documentation](./docs_sphinx/)**: API reference and structured documentation with search functionality
+- **[🔧 Sphinx Documentation](./docs_sphinx/)**: Auto-generated API documentation and navigation
 - **[🔧 Development Guide](./docs/developer/development.md)**: Development setup and contribution guidelines
 
 **Quick Start with Documentation:**

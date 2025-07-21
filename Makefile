@@ -91,15 +91,26 @@ docker-run:
 # Documentation
 docs:
 	@echo "📚 Documentation"
-	@echo "  Markdown: docs/README.md"
-	@echo "  Sphinx: docs_sphinx/ (served on port 8080)"
-	@echo "  API: ml_eval/api/README.md (served on port 8000)"
+	@echo "  📝 Markdown: docs/README.md (Primary format)"
+	@echo "  🔧 Sphinx: docs_sphinx/ (API docs only)"
+	@echo "  📚 GitHub: https://github.com/phanhongan/ml-systems-evaluation"
 
 docs-sphinx:
 	cd docs_sphinx && uv run make html
 
 docs-sphinx-serve:
-	cd docs_sphinx && uv run make html && cd build/html && python -m http.server 8080
+	cd docs_sphinx && uv run make serve
+
+# Documentation utilities (simplified)
+docs-build:
+	@echo "📚 Building documentation..."
+	@echo "✅ Markdown documentation is ready in docs/"
+	@echo "🔧 Sphinx API docs: make docs-sphinx"
+
+docs-serve:
+	@echo "📚 Serving documentation..."
+	@echo "📝 Markdown: View docs/README.md"
+	@echo "🔧 Sphinx: make docs-sphinx-serve"
 
 # Development setup
 dev-setup: install-dev

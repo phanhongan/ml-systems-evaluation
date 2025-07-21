@@ -6,16 +6,14 @@ This directory contains documentation for the ML Systems Evaluation Framework, d
 
 ## 📁 Documentation Structure
 
-### 🚀 Getting Started
-- **[🚀 Quick Start Guide](user-guides/getting-started.md)**: Set up and run your first evaluation
-- **[📦 Installation Guide](user-guides/installation.md)**: Detailed installation instructions
-- **[🎯 First Evaluation](user-guides/first-evaluation.md)**: Step-by-step walkthrough
-
-### 👥 User Guides
-- **[⚙️ Configuration Guide](user-guides/configuration.md)**: Detailed configuration options
-- **[🖥️ CLI Reference](user-guides/cli-reference.md)**: Complete command-line interface documentation
-- **[📋 Example Configurations Guide](user-guides/example-configurations.md)**: Using industry-specific example configurations
-- **[📊 Monitoring Setup](user-guides/monitoring.md)**: Setting up continuous monitoring
+### 🚀 User Guide
+- **[🚀 Getting Started](user-guides/getting-started.md)**: Installation, setup, and first evaluation
+- **[📦 Installation](user-guides/installation.md)**: Installation and setup instructions
+- **[⚙️ Configuration](user-guides/configuration.md)**: Configuration options, CLI reference, and examples
+- **[📊 Monitoring](user-guides/monitoring.md)**: Setting up continuous monitoring
+- **[🔧 CLI Reference](user-guides/cli-reference.md)**: Command-line interface reference
+- **[📋 First Evaluation](user-guides/first-evaluation.md)**: Running your first evaluation
+- **[📝 Example Configurations](user-guides/example-configurations.md)**: Ready-to-use configuration examples
 
 ### 🏭 Industry Guides
 - **[🏭 Manufacturing](industries/manufacturing.md)**: Quality control and predictive maintenance
@@ -23,39 +21,43 @@ This directory contains documentation for the ML Systems Evaluation Framework, d
 - **[⚡ Energy](industries/energy.md)**: Grid optimization and demand prediction
 - **[🚢 Maritime](industries/maritime.md)**: Navigation and collision avoidance
 
-### 🔧 Developer Guides
-- **[🛠️ Development Guide](developer/development.md)**: Code quality tools, testing practices, and development workflows
-- **[🏗️ Architecture Overview](developer/architecture.md)**: System design and component relationships
+### 🔧 Developer Guide
+- **[🛠️ Development](developer/development.md)**: Setup, workflows, and code quality standards
+- **[🏗️ Architecture](developer/architecture.md)**: System design, component relationships, and API reference
+- **[🧪 Testing](developer/testing.md)**: Testing strategies and best practices
+- **[🔌 Extending](developer/extending.md)**: How to extend the framework
 - **[📖 API Reference](developer/api-reference.md)**: Complete API documentation
-- **[🔌 Extending the Framework](developer/extending.md)**: How to add custom collectors and evaluators
-- **[🧪 Testing Guide](developer/testing.md)**: Testing strategies and best practices
+- **[⚙️ Configuration Strategy](developer/configuration-strategy.md)**: Configuration management approach
 
-### 📋 Reference Materials
-- **[📊 SLO Configuration](reference/slo-configuration.md)**: Service Level Objective definitions
-- **[📋 Compliance Standards](reference/compliance-standards.md)**: Industry-specific compliance requirements
-- **[🚨 Error Budgets](reference/error-budgets.md)**: Error budget management and policies
-- **[🚨 Incident Response](reference/incident-response.md)**: Handling safety and business-critical incidents
+### 📋 Reference
+- **[📋 Standards & Compliance](reference/compliance-standards.md)**: Industry-specific compliance requirements
+- **[📊 SLO Configuration](reference/slo-configuration.md)**: Service Level Objectives setup
+- **[🚨 Error Budgets](reference/error-budgets.md)**: Error budget management
+- **[🚨 Incident Response](reference/incident-response.md)**: Incident handling procedures
+
+### 🔗 Integration Guides
+- **[🤖 LLM Integration](llm-integration-guide.md)**: Integrating with Large Language Models
+- **[📝 Logging Guide](logging-guide.md)**: Logging configuration and best practices
 
 ## 🧭 Quick Navigation
 
 ### 👨‍💻 For System Engineers (New Users)
-1. Start with [🚀 Quick Start Guide](user-guides/getting-started.md)
-2. Review [📋 Example Configurations Guide](user-guides/example-configurations.md) for your industry
-3. Configure your system with [⚙️ Configuration Guide](user-guides/configuration.md)
-4. Set up monitoring with [📊 Monitoring Setup](user-guides/monitoring.md)
+1. Start with [🚀 Getting Started](user-guides/getting-started.md)
+2. Install the framework with [📦 Installation](user-guides/installation.md)
+3. Configure your system with [⚙️ Configuration](user-guides/configuration.md)
+4. Run your [📋 First Evaluation](user-guides/first-evaluation.md)
+5. Set up monitoring with [📊 Monitoring](user-guides/monitoring.md)
 
 ### 👨‍💻 For System Engineers (Experienced Users)
-1. Use [🖥️ CLI Reference](user-guides/cli-reference.md) for command details
-2. Review [🏭 Industry Guides](industries/) for domain-specific best practices
-3. Configure [📊 SLOs](reference/slo-configuration.md) and [🚨 Error Budgets](reference/error-budgets.md)
-4. Set up [🚨 Incident Response](reference/incident-response.md) procedures
+1. Review [🏭 Industry Guides](industries/) for domain-specific best practices
+2. Configure [📋 Standards & Compliance](reference/compliance-standards.md)
+3. Set up [📊 SLOs](reference/slo-configuration.md) and [🚨 Error Budgets](reference/error-budgets.md)
 
 ### 👨‍💻 For Developers
-1. Read the [🛠️ Development Guide](developer/development.md) for code quality standards and workflows
+1. Read the [🛠️ Development](developer/development.md) guide
 2. Understand the [🏗️ Architecture](developer/architecture.md)
-3. Review the [📖 API Reference](developer/api-reference.md)
-4. Learn to [🔌 Extend the Framework](developer/extending.md)
-5. Follow [🧪 Testing Guidelines](developer/testing.md)
+3. Follow [🧪 Testing](developer/testing.md) guidelines
+4. Learn how to [🔌 Extend](developer/extending.md) the framework
 
 ### 🏭 For Industry Specialists
 - **🏭 Manufacturing**: [Manufacturing Guide](industries/manufacturing.md)
